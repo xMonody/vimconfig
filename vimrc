@@ -1,11 +1,12 @@
 runtime! debian.vim
 if has("syntax")
   syntax on
-
+"设置弹窗颜色
 highlight PMenu                 ctermfg=0 ctermbg=242 
 highlight PMenuSel              ctermfg=242 ctermbg=8 
-set cursorline
+设置
 highlight CursorLine           cterm=bold,italic ctermbg=8
+设置当前行颜色
 highlight CursorLineNr         cterm=bold,italic ctermfg=159 ctermbg=236
 
 set fileencodings=ucs-bom,utf-8,gb18030,default
@@ -26,7 +27,6 @@ set autoindent
 set cindent
 set expandtab
 set mouse-=a
-au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
 
 imap jj <Esc>
 inoremap <C-h> <Left>
@@ -39,25 +39,40 @@ inoremap( ()<Left>
 inoremap< <><Left>
 inoremap' ''<Left>
 inoremap" ""<Left>
-autocmd BufNewFile *.h 0r /home/one/.vim/template/c.h
-autocmd BufNewFile *.c 0r /home/one/.vim/template/c.c
-autocmd BufNewFile *.cpp 0r /home/one/.vim/template/c.cpp
+let g:mapleader = ","
+let   mapleader=","
 
-
-
-""indentLine 
+""缩进线                       
 let g:indentLine_noConcealCursor = 1
 let g:indentLine_color_term = 0
 let g:indentLine_char = '|'
 
-let g:mapleader = ","
-let   mapleader=","
-""nnoremap <silent> <f5> :NERDTree<CR>
-""nnoremap <silent> <f6> :NERDTreeToggle <CR>
-autocmd vimEnter * NERDTree
+"状态栏主题
+let g:airline_theme='cobalt2' "powerline
+"let g:airline_theme='powerlineish'
+
+
+
+"打开文件上一次位置
+au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
+
+
+"如果剩余窗口不是编辑窗口者关闭
+autocmd BufEnter * if 0 == len(filter(range(1, winnr('$')), 'empty(getbufvar(winbufnr(v:val), "&bt"))')) | qa! | endif
+"设置NERDTree窗口宽度
+autocmd vimEnter * NERDTree "自动启动nerdtree
+let g:NERDTreeDirArrowExpandable = '+'
+let g:NERDTreeDirArrowCollapsible = '-'
+let g:NERDTreeWinPos='left'
+let g:NERDTreeWinSize=17
+let g:NERDTreeSize=20
+
+"模板
+autocmd BufNewFile *.h 0r ~/.vim/template/c.h
+autocmd BufNewFile *.c 0r ~/.vim/template/c.c
+autocmd BufNewFile *.cpp 0r ~/.vim/template/c.cpp
+
 set nocompatible
-
-
 
 call plug#begin('~/.vim/plugged')
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -68,7 +83,8 @@ call plug#begin('~/.vim/plugged')
 	Plug 'octol/vim-cpp-enhanced-highlight'
 	Plug 'preservim/nerdcommenter' "注释
     Plug 'mg979/vim-visual-multi', {'branch': 'master'} "多光标
-    Plug 'honza/vim-snippets' "撸代码更快
+    Plug 'honza/vim-snippets' "撸管代码更快
+    Plug 'Xuyuanp/nerdtree-git-plugin'
     "vim-gitgutterf   "git
 call plug#end()
 
