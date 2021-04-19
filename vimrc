@@ -1,16 +1,16 @@
 runtime! debian.vim
 if has("syntax")
   syntax on
-"设置弹窗颜色
+"set signcolumn=yes
+"colorscheme delek
 highlight PMenu                 ctermfg=0 ctermbg=242 
 highlight PMenuSel              ctermfg=242 ctermbg=8 
-设置
+set cursorline
 highlight CursorLine           cterm=bold,italic ctermbg=8
-设置当前行颜色
 highlight CursorLineNr         cterm=bold,italic ctermfg=159 ctermbg=236
 
 set fileencodings=ucs-bom,utf-8,gb18030,default
-autocmd! bufwritepost .vimrc source % " vimrc文件修改之后自动加载
+autocmd! bufwritepost ~/.config/nvim/init.vim source % " vimrc文件修改之后自动加载
 set autoread " 文件修改之后自动载入。
 set shortmess=atI " 启动的时候不显示那个援助索马里儿童的提示
 set noerrorbells
@@ -27,8 +27,11 @@ set autoindent
 set cindent
 set expandtab
 set mouse-=a
+set nocompatible
+"set cmdheight=1
+au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
 
-imap jj <Esc>
+inoremap jj <Esc>
 inoremap <C-h> <Left>
 inoremap <C-j> <Down>
 inoremap <C-k> <Up>
@@ -39,46 +42,62 @@ inoremap( ()<Left>
 inoremap< <><Left>
 inoremap' ''<Left>
 inoremap" ""<Left>
+    
+nnoremap X "_X
+nnoremap x "_x
+nnoremap f "_dd
+nnoremap F "_d
+vnoremap f "_d
+ 
+"map <C-r> :call CompileRunGun()
+"func! CompileRunGun()
+"    exec "w"
+"    exec "!make"
+"    exec "!./Project"
+"endfunc
 let g:mapleader = ","
 let   mapleader=","
 
-""缩进线                       
+
+
+""indentLine                            
 let g:indentLine_noConcealCursor = 1
 let g:indentLine_color_term = 0
-let g:indentLine_char = '|'
-
-"状态栏主题
-let g:airline_theme='cobalt2' "powerline
-"let g:airline_theme='powerlineish'
-
-
-
-"打开文件上一次位置
-au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
-
-
-"如果剩余窗口不是编辑窗口者关闭
+let g:indentLine_char = ':'
+"let g:airline_theme='cobalt2' "powerline
+let g:airline_theme='powerlineish'
+let g:NERDTreeIndicatorMapCustom = {
+        \ "Modified"  : "✹",
+        \ "Staged"    : "✚",
+        \ "Untracked" : "✭",
+        \ "Renamed"   : "➜",
+        \ "Unmerged"  : "═",
+        \ "Deleted"   : "✖",
+        \ "Dirty"     : "✗",
+        \ "Clean"     : "✔︎",
+        \ "Unknown"   : "?"
+        \ }
 autocmd BufEnter * if 0 == len(filter(range(1, winnr('$')), 'empty(getbufvar(winbufnr(v:val), "&bt"))')) | qa! | endif
-"设置NERDTree窗口宽度
-autocmd vimEnter * NERDTree "自动启动nerdtree
+autocmd vimEnter * NERDTree
 let g:NERDTreeDirArrowExpandable = '+'
 let g:NERDTreeDirArrowCollapsible = '-'
 let g:NERDTreeWinPos='left'
 let g:NERDTreeWinSize=17
 let g:NERDTreeSize=20
+let g:NERDTreeShowHidden=1 
 
-"模板
 autocmd BufNewFile *.h 0r ~/.vim/template/c.h
 autocmd BufNewFile *.c 0r ~/.vim/template/c.c
 autocmd BufNewFile *.cpp 0r ~/.vim/template/c.cpp
 
-set nocompatible
 
 call plug#begin('~/.vim/plugged')
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
 	Plug 'vim-airline/vim-airline-themes' "状态栏美化
 	Plug 'vim-airline/vim-airline'
-	Plug 'preservim/nerdtree' "目录树
+    Plug 'preservim/nerdtree' "目录树
+
+
 	Plug 'Yggdroot/indentLine' "缩进线
 	Plug 'octol/vim-cpp-enhanced-highlight'
 	Plug 'preservim/nerdcommenter' "注释
@@ -100,7 +119,7 @@ set nobackup
 set nowritebackup
 
 " Give more space for displaying messages.
-set cmdheight=2
+set cmdheight=1
 
 " Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
 " delays and poor user experience.
@@ -114,8 +133,8 @@ set shortmess+=c
 if has("patch-8.1.1564")
   " Recently vim can merge signcolumn and number column into one
   set signcolumn=number
-else
-  set signcolumn=yes
+  else
+  set signcolumn=no
 endif
 
 " Use tab for trigger completion with characters ahead and navigate.
