@@ -2,6 +2,9 @@ runtime! debian.vim
 syntax on
 set mouse-=a
 "colorscheme delek
+"export http_proxy='http://proxy.xxx.com:8080'
+"git config --global http.proxy http://192.168.49.1:8282
+"sudo apt-get -o Acquire::http::proxy="http://127.0.0.1:18088/" update
 highlight PMenu                 cterm=bold ctermfg=255 ctermbg=239
 highlight PMenuSel              ctermfg=255 ctermbg=235
 set cursorline
