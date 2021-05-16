@@ -36,7 +36,6 @@ au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|
 
 "set airline && airthemes 状态栏美化
 "let g:airline_theme="bubblegum"
-let g:airline_theme='powerlineish'
 let g:cpp_no_function_highlight = 1
 let g:cpp_concepts_highlight = 1
 let g:cpp_experimental_template_highlight = 1
@@ -115,6 +114,17 @@ vnoremap B ge
 let &t_SI.="\e[5 q" "SI = INSERT mode
 let &t_SR.="\e[4 q" "SR = REPLACE mode
 let &t_EI.="\e[1 q" "EI = NORMAL mode (ELSE)
+set statusline=%1*\%<%.50F\             "显示文件名和文件路径 (%<应该可以去掉)
+set statusline+=%=%2*\%y%m%r%h%w\ %*        "显示文件类型及文件状态
+set statusline+=%3*\%{&ff}\[%{&fenc}]\ %*   "显示文件编码类型
+set statusline+=%4*\ row:%l/%L,col:%c\ %*   "显示光标所在行和列
+set statusline+=%5*\%3p%%\%*            "显示光标前文本所占总文本的比例
+hi User1 cterm=none ctermfg=25 ctermbg=0
+hi User2 cterm=none ctermfg=208 ctermbg=0
+hi User3 cterm=none ctermfg=169 ctermbg=0
+hi User4 cterm=none ctermfg=100 ctermbg=0
+hi User5 cterm=none ctermfg=green ctermbg=0
+
 
 "inoremap<C-d> <Del>
 "inoremap<C-b> <BS>
