@@ -114,23 +114,32 @@ vnoremap B ge
 let &t_SI.="\e[5 q" "SI = INSERT mode
 let &t_SR.="\e[4 q" "SR = REPLACE mode
 let &t_EI.="\e[1 q" "EI = NORMAL mode (ELSE)
-set statusline=%1*\%<%.50F\             "显示文件名和文件路径 (%<应该可以去掉)
-set statusline+=%=%2*\%y%m%r%h%w\ %*        "显示文件类型及文件状态
-set statusline+=%3*\%{&ff}\[%{&fenc}]\ %*   "显示文件编码类型
-set statusline+=%4*\ row:%l/%L,col:%c\ %*   "显示光标所在行和列
-set statusline+=%5*\%3p%%\%*            "显示光标前文本所占总文本的比例
-hi User1 cterm=none ctermfg=25 ctermbg=0
-hi User2 cterm=none ctermfg=208 ctermbg=0
-hi User3 cterm=none ctermfg=169 ctermbg=0
-hi User4 cterm=none ctermfg=100 ctermbg=0
-hi User5 cterm=none ctermfg=green ctermbg=0
-
 syn match cFunctions "\<[a-zA-Z_][a-zA-Z_0-9]*\>[^()]*)("me=e-2
 syn match cFunctions "\<[a-zA-Z_][a-zA-Z_0-9]*\>\s*("me=e-1
 hi cFunctions term=underline cterm=bold ctermfg=14
 syn match cClass "\<[a-zA-Z_][a-zA-Z_0-9]*\>::"me=e-2
 hi cClass term=underline cterm=bold ctermfg=14
 
+
+set statusline=%1*\%<%.50F\             "显示文件名和文件路径 (%<应该可以去掉) 
+set statusline+=%=%2*\%y%m%r%h%w\ %*        "显示文件类型及文件状态            
+set statusline+=%3*\%{&ff}\[%{&fenc}]\ %*   "显示文件编码类型                  
+set statusline+=%4*\ row:%l/%L,col:%c\ %*   "显示光标所在行和列                
+set statusline+=%5*\%3p%%\%*            "显示光标前文本所占总文本的比例        
+hi User1 cterm=none,bold ctermfg=160 ctermbg=0                                 
+hi User2 cterm=none,bold ctermfg=198 ctermbg=0                                 
+hi User3 cterm=none,bold ctermfg=169 ctermbg=0                                 
+hi User4 cterm=none,bold ctermfg=14 ctermbg=0                                  
+hi User5 cterm=none,bold ctermfg=226 ctermbg=0                                 
+function! InsertStatuslineColor(mode)                                          
+if a:mode != 'i'                                                               
+    hi User1 cterm=none,bold ctermfg=160 ctermbg=0                             
+else                                                                           
+    hi User1 cterm=none,bold ctermfg=41 ctermbg=0                              
+endif                                                                          
+endfunction                                                                    
+au InsertEnter * call InsertStatuslineColor(v:insertmode)
+au InsertLeave * hi User1 cterm=none,bold ctermfg=160 ctermbg=0
 
 
 "inoremap<C-d> <Del>
