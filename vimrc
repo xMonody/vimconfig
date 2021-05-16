@@ -125,16 +125,23 @@ hi User3 cterm=none ctermfg=169 ctermbg=0
 hi User4 cterm=none ctermfg=100 ctermbg=0
 hi User5 cterm=none ctermfg=green ctermbg=0
 
+syn match cFunctions "\<[a-zA-Z_][a-zA-Z_0-9]*\>[^()]*)("me=e-2
+syn match cFunctions "\<[a-zA-Z_][a-zA-Z_0-9]*\>\s*("me=e-1
+hi cFunctions term=underline cterm=bold ctermfg=14
+syn match cClass "\<[a-zA-Z_][a-zA-Z_0-9]*\>::"me=e-2
+hi cClass term=underline cterm=bold ctermfg=14
+
+
 
 "inoremap<C-d> <Del>
 "inoremap<C-b> <BS>
 
 call plug#begin('~/.vim/plugged')
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
-	Plug 'vim-airline/vim-airline-themes' "状态栏美化
-	Plug 'vim-airline/vim-airline'
+	"Plug 'vim-airline/vim-airline-themes' "状态栏美化
+	"Plug 'vim-airline/vim-airline'
     Plug 'preservim/nerdtree' "目录树
-	Plug 'Yggdroot/indentLine' "缩进线
+	"Plug 'Yggdroot/indentLine' "缩进线
 	Plug 'octol/vim-cpp-enhanced-highlight'
     Plug 'preservim/nerdcommenter' "注释
     Plug 'mg979/vim-visual-multi', {'branch': 'master'} "多光标
