@@ -78,13 +78,23 @@ let NERDTreeIgnore=['\.pyc','\~$','\.swp']
 " 显示书签列表
 let NERDTreeShowBookmarks=1
 autocmd bufenter * if(winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+autocmd VimEnter * NERDTree      
+wincmd w                         
+autocmd VimEnter * wincmd w      
+nnoremap <C-c> :NERDTreeClose<CR>
+nnoremap <C-o> :NERDTree<CR>     
+
 
 "set indentLine 缩进线
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_theme='ctrlspace'
+let g:airline_powerline_fonts = 1
 let g:indentLine_char='┆'
 let g:indentLine_enabled = 1
 let g:indentLine_noConcealCursor = 1
 let g:indentLine_color_term = 0
 let g:rainbow_active = 1
+
 
 "set nerd commenter
 let mapleader=","
@@ -109,6 +119,8 @@ nnoremap x "_x
 nnoremap dd "_dd
 nnoremap s dd
 nnoremap d "_d
+nnoremap z. <C-w>3>
+nnoremap z, <C-w>3<
 vnoremap B ge
 
 let &t_SI.="\e[5 q" "SI = INSERT mode
