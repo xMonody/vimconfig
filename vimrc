@@ -161,3 +161,4 @@ nnoremap n o<Esc>k
 nnoremap N O<Esc>j
 nnoremap z. <C-w>3>
 nnoremap z, <C-w>3<
+nnoremap <expr>m col(".")+1==col("$")?"^":"$"
