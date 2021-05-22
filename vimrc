@@ -1,51 +1,3 @@
-runtime! debian.vim
-syntax on
-set mouse-=a
-"colorscheme delek
-"export http_proxy='http://proxy.xxx.com:8080'
-"git config --global http.proxy http://192.168.49.1:8282
-"sudo apt-get -o Acquire::http::proxy="http://192.168.49.1:8282/" update
-highlight PMenu                 cterm=bold ctermfg=255 ctermbg=239
-highlight PMenuSel              ctermfg=255 ctermbg=235
-set cursorline
-highlight CursorLine           cterm=bold ctermbg=8
-highlight CursorLineNr         cterm=bold,italic ctermfg=159 ctermbg=236
-set fileencodings=ucs-bom,utf-8,gb18030,default
-set shortmess=atI " 启动的时候不显示那个援助索马里儿童的提示
-set scrolloff=5
-set noerrorbells
-set novisualbell 
-set t_vb=
-set tm=500
-set number
-set relativenumber
-set ts=4
-set shiftwidth=4
-set softtabstop=4
-set tabstop=4
-set autoindent
-set cindent
-set expandtab
-set mouse-=a
-set nocompatible
-set cmdheight=2
-set hlsearch
-set backspace=indent,eol,start
-au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
-
-
-"set airline && airthemes 状态栏美化
-"let g:airline_theme="bubblegum"
-let g:cpp_no_function_highlight = 1
-let g:cpp_concepts_highlight = 1
-let g:cpp_experimental_template_highlight = 1
-let g:cpp_experimental_simple_template_highlight = 1
-let g:cpp_posix_standard = 1
-let g:cpp_class_decl_highlight = 1
-let g:cpp_member_variable_highlight = 1
-let g:cpp_class_scope_highlight = 1
-
-"set nerdtree 目录树
 let g:NERDTreeIndicatorMapCustom = {
     \ "Modified"  : "✹",
     \ "Staged"    : "✚",
@@ -65,7 +17,7 @@ let g:NERDTreeDirArrowCollapsible = '-'
 let NERDTreeShowLineNumbers=1
 let NERDTreeAutoCenter=1
 " 是否显示隐藏文件
-let NERDTreeShowHidden=1
+let NERDTreeShowHidden=0
 " 设置宽度
 let g:NERDTreeWinSize=17
 let NERDTreeWinSize=25
@@ -78,26 +30,109 @@ let NERDTreeIgnore=['\.pyc','\~$','\.swp']
 " 显示书签列表
 let NERDTreeShowBookmarks=1
 autocmd bufenter * if(winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-autocmd VimEnter * NERDTree      
-wincmd w                         
-autocmd VimEnter * wincmd w      
+autocmd VimEnter * NERDTree
+wincmd w
+autocmd VimEnter * wincmd w
 nnoremap <C-c> :NERDTreeClose<CR>
-nnoremap <C-o> :NERDTree<CR>     
+nnoremap <C-o> :NERDTree<CR>
+
+"set statusline=%1*\%<%.50F\             "显示文件名和文件路径 (%<应该可以去掉)
+"set statusline+=%=%2*\%y%m%r%h%w\ %*        "显示文件类型及文件状态
+"set statusline+=%3*\%{&ff}\[%{&fenc}]\ %*   "显示文件编码类型
+"set statusline+=%4*\Row:%l/%L:Col:%c\ %*  "显示光标所在行和列
+"set statusline+=%5*\%3p%%\%*            "显示光标前文本所占总文本的比例
+"hi User1 cterm=none,bold ctermfg=160 ctermbg=0
+"hi User2 cterm=none,bold ctermfg=119 ctermbg=0
+"hi User3 cterm=none,bold ctermfg=169 ctermbg=0
+"hi User4 cterm=none,bold ctermfg=14 ctermbg=0
+"hi User5 cterm=none,bold ctermfg=226 ctermbg=0
+"function! InsertStatuslineColor(mode)
+    "if a:mode != 'i'
+            "hi User1 cterm=none,bold ctermfg=160 ctermbg=0
+        "else
+                "hi User1 cterm=none,bold ctermfg=41 ctermbg=0
+        "endif
+    "endfunction
+"au InsertEnter * call InsertStatuslineColor(v:insertmode)
+"au InsertLeave * hi User1 cterm=none,bold ctermfg=160 ctermbg=0
+
+"set airline && airthemes 状态栏美化
+"let g:airline_theme="bubblegum"
 
 
 "set indentLine 缩进线
 let g:airline#extensions#tabline#enabled = 1
-let g:airline_theme='ctrlspace'
+let g:airline_theme="understated"
 let g:airline_powerline_fonts = 1
 let g:indentLine_char='┆'
 let g:indentLine_enabled = 1
 let g:indentLine_noConcealCursor = 1
 let g:indentLine_color_term = 0
 let g:rainbow_active = 1
+"--------------------------------------------------------------------------------------"
+call plug#begin('~/.vim/plugged')
+	Plug 'vim-airline/vim-airline'
+	Plug 'vim-airline/vim-airline-themes' "状态栏美化
+	Plug 'neoclide/coc.nvim',{'branch':'release'}
+	Plug 'preservim/nerdtree' "目录树
+    "Plug 'Yggdroot/indentLine' "缩进线
+	Plug 'octol/vim-cpp-enhanced-highlight'
+	Plug 'preservim/nerdcommenter' "注释
+	Plug 'mg979/vim-visual-multi', {'branch':'master'} "多光标
+	Plug 'honza/vim-snippets' "撸管代码更快
+	"Plug 'Xuyuanp/nerdtree-git-plugin'
+	Plug 'ryanoasis/vim-devicons'
+	Plug 'vim/killersheep'
+	"Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+call plug#end()
+
+"-------------------------------------------------------------------------------------------"
+"coc
 
 
-"set nerd commenter
+
+
+"-------------------------------------------------------------------------------------------"
+"函数高亮
+syn match cFunctions "\<[a-zA-Z_][a-zA-Z_0-9]*\>[^()]*)("me=e-2 
+syn match cFunctions "\<[a-zA-Z_][a-zA-Z_0-9]*\>\s*("me=e-1
+hi cFunctions term=underline cterm=bold ctermfg=14
+syn match cClass "\<[a-zA-Z_][a-zA-Z_0-9]*\>::"me=e-2
+hi cClass term=underline cterm=bold ctermfg=14
+
+highlight PMenu              cterm=bold ctermfg=255 ctermbg=239
+highlight PMenuSel           ctermfg=255 ctermbg=235
+set cursorline
+highlight CursorLine         cterm=bold ctermbg=8
+highlight CursorLineNr       cterm=bold,italic ctermfg=159 ctermbg=236
+set fileencodings=ucs-bom,utf-8,gb18030,default
+set shortmess=atI " 启动的时候不显示那个援助索马里儿童的提示
+set scrolloff=5
+set noerrorbells "关闭提示音
+set novisualbell
+set t_vb=
+set tm=500
+set number
+set relativenumber
+set autoindent
+set ts=4
+set shiftwidth=4
+set softtabstop=4
+set tabstop=4
+set cindent
+set expandtab "设置tab=space
+"set noexpandtab "设置spce=tab
+set mouse-=a
+set nocompatible"不兼容vi模式
+set cmdheight=1
+set hlsearch
+set backspace=indent,eol,start "设置back键
+au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif 
 let mapleader=","
+
+let &t_SI.="\e[5 q" "SI = INSERT mode
+let &t_SR.="\e[4 q" "SR = REPLACE mode
+let &t_EI.="\e[1 q" "EI = NORMAL mode (ELSE)
 
 inoremap jj <Esc>
 inoremap <C-v> <Esc>v
@@ -106,71 +141,23 @@ inoremap <C-j> <Down>
 inoremap <C-k> <Up>
 inoremap <C-l> <Right>
 inoremap{ {}<Left>
-inoremap{<CR> {}<ESC>i<CR><ESC>O
+inoremap{<CR> {}<ESC>i<CR><ESC>O  
 inoremap[ []<Left>
 inoremap( ()<Left>
 inoremap<> <><Left>
 inoremap<< <<
-nnoremap <expr>m col(".")+1==col("$")?"^":"$"
-
+inoremap ' ''<Left>
 inoremap" ""<Left>
 nnoremap X "_X
 nnoremap x "_x
 nnoremap dd "_dd
 nnoremap s dd
 nnoremap d "_d
+nnoremap dl d$
+nnoremap dh d^
+nnoremap yl y$
+nnoremap yh y^
+nnoremap n o<Esc>k
+nnoremap N O<Esc>j
 nnoremap z. <C-w>3>
 nnoremap z, <C-w>3<
-vnoremap B ge
-
-let &t_SI.="\e[5 q" "SI = INSERT mode
-let &t_SR.="\e[4 q" "SR = REPLACE mode
-let &t_EI.="\e[1 q" "EI = NORMAL mode (ELSE)
-syn match cFunctions "\<[a-zA-Z_][a-zA-Z_0-9]*\>[^()]*)("me=e-2
-syn match cFunctions "\<[a-zA-Z_][a-zA-Z_0-9]*\>\s*("me=e-1
-hi cFunctions term=underline cterm=bold ctermfg=14
-syn match cClass "\<[a-zA-Z_][a-zA-Z_0-9]*\>::"me=e-2
-hi cClass term=underline cterm=bold ctermfg=14
-
-set statusline=%1*\%<%.50F\             "显示文件名和文件路径 (%<应该可以去掉)
-set statusline+=😤%=%2*🤔\%y%m%r%h%w\ 🥺%*        "显示文件类型及文件状态
-set statusline+=%3*\%{&ff}\[%{&fenc}]\ %*   "显示文件编码类型
-set statusline+=%4*\Row:🙄%l/%L:Col:😦%c\ %*  "显示光标所在行和列
-set statusline+=%5*\%3p%%\%*            "显示光标前文本所占总文本的比例
-hi User1 cterm=none,bold ctermfg=160 ctermbg=0
-hi User2 cterm=none,bold ctermfg=119 ctermbg=0
-hi User3 cterm=none,bold ctermfg=169 ctermbg=0
-hi User4 cterm=none,bold ctermfg=14 ctermbg=0
-hi User5 cterm=none,bold ctermfg=226 ctermbg=0
-function! InsertStatuslineColor(mode)
-if a:mode != 'i'
-    hi User1 cterm=none,bold ctermfg=160 ctermbg=0
-else
-    hi User1 cterm=none,bold ctermfg=41 ctermbg=0
-endif
-endfunction
-au InsertEnter * call InsertStatuslineColor(v:insertmode)
-au InsertLeave * hi User1 cterm=none,bold ctermfg=160 ctermbg=0
-
-
-
-"inoremap<C-d> <Del>
-"inoremap<C-b> <BS>
-
-call plug#begin('~/.vim/plugged')
-    Plug 'neoclide/coc.nvim', {'branch': 'release'}
-	"Plug 'vim-airline/vim-airline-themes' "状态栏美化
-	"Plug 'vim-airline/vim-airline'
-    Plug 'preservim/nerdtree' "目录树
-	"Plug 'Yggdroot/indentLine' "缩进线
-	Plug 'octol/vim-cpp-enhanced-highlight'
-    Plug 'preservim/nerdcommenter' "注释
-    Plug 'mg979/vim-visual-multi', {'branch': 'master'} "多光标
-    Plug 'honza/vim-snippets' "撸管代码更快
-    "Plug 'Xuyuanp/nerdtree-git-plugin'
-    Plug 'ryanoasis/vim-devicons'
-    "Plug 'luochen1990/rainbow'
-    "Plug 'airblade/vim-gitgutterf'   "git
-    "Plug 'tpope/vim-surround'
-
-call plug#end()
