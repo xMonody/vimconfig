@@ -137,8 +137,8 @@ set tabstop=4
 set cindent
 set expandtab "设置tab=space
 "set noexpandtab "设置spce=tab
-browsedir=buffer – 用当前文件所在目录；
-browsedir=current – 用当前工作目录    
+browsedir=buffer  "用当前文件所在目录；
+browsedir=current "用当前工作目录    
 set mouse-=a
 set nocompatible"不兼容vi模式
 set cmdheight=1
@@ -165,19 +165,26 @@ inoremap<> <><Left>
 inoremap<< <<
 inoremap ' ''<Left>
 inoremap" ""<Left>
-nnoremap X "_X
-nnoremap x "_x
-nnoremap dd "_dd
-nnoremap s dd
-nnoremap d "_d
-nnoremap dl d$
-nnoremap dh d^
-nnoremap yl y$
-nnoremap yh y^
-nnoremap n o<Esc>k   
-nnoremap N a<CR><Esc>k
-nnoremap K 3k
-nnoremap H J
+nnoremap X "_X                                
+nnoremap x "_x                                
+nnoremap dd "_dd                              
+nnoremap ss dd                                
+nnoremap s d                                  
+vnoremap s d                                  
+vnoremap d "_d                                
+nnoremap d "_d                                
+nnoremap dl d$                                
+nnoremap dh d^                                
+nnoremap yl y$                                
+nnoremap yh y^                                
+nnoremap vl v$                                
+nnoremap vh v^                                
+nnoremap n o<Esc>k                            
+nnoremap N a<CR><Esc>k                        
+nnoremap K 3k                                 
+nnoremap H J                                  
+nnoremap J 3j
 nnoremap z. <C-w>3>
 nnoremap z, <C-w>3<
 nnoremap <expr>m col(".")+1==col("$")?"^":"$"
+
