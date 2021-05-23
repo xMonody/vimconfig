@@ -75,7 +75,7 @@ call plug#begin('~/.vim/plugged')
 	Plug 'vim-airline/vim-airline-themes' "状态栏美化
 	Plug 'neoclide/coc.nvim',{'branch':'release'}
 	Plug 'preservim/nerdtree' "目录树
-    "Plug 'Yggdroot/indentLine' "缩进线
+        "Plug 'Yggdroot/indentLine' "缩进线
 	Plug 'octol/vim-cpp-enhanced-highlight'
 	Plug 'preservim/nerdcommenter' "注释
 	Plug 'mg979/vim-visual-multi', {'branch':'master'} "多光标
@@ -83,7 +83,11 @@ call plug#begin('~/.vim/plugged')
 	"Plug 'Xuyuanp/nerdtree-git-plugin'
 	Plug 'ryanoasis/vim-devicons'
 	Plug 'vim/killersheep'
-	"Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+	"git
+	"plug 'gitgutter'
+	"Plug 'tpope/vim-fugitive'
+	"Plug 'junegunn/gv.vim'   
+
 call plug#end()
 
 "-------------------------------------------------------------------------------------------"
@@ -100,11 +104,22 @@ hi cFunctions term=underline cterm=bold ctermfg=14
 syn match cClass "\<[a-zA-Z_][a-zA-Z_0-9]*\>::"me=e-2
 hi cClass term=underline cterm=bold ctermfg=14
 
+highlight GitGutterAdd    guifg=#009900 ctermfg=46
+highlight GitGutterChange guifg=#bbbb00 ctermfg=214
+highlight GitGutterDelete guifg=#ff2222 ctermfg=196
+let g:gitgutter_sign_added = 'a'
+let g:gitgutter_sign_modified = 'm'
+let g:gitgutter_sign_removed = 'd'
+let g:gitgutter_sign_removed_first_line = '^'
+let g:gitgutter_sign_removed_above_and_below = '-'
+let g:gitgutter_sign_modified_removed = 'v'
+
 highlight PMenu              cterm=bold ctermfg=255 ctermbg=239
 highlight PMenuSel           ctermfg=255 ctermbg=235
 set cursorline
 highlight CursorLine         cterm=bold ctermbg=8
 highlight CursorLineNr       cterm=bold,italic ctermfg=159 ctermbg=236
+set numberwidth=3
 set fileencodings=ucs-bom,utf-8,gb18030,default
 set shortmess=atI " 启动的时候不显示那个援助索马里儿童的提示
 set scrolloff=5
