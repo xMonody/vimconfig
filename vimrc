@@ -76,7 +76,6 @@ call plug#begin('~/.vim/plugged')
 	Plug 'neoclide/coc.nvim',{'branch':'release'}
 	Plug 'preservim/nerdtree' "目录树
         Plug 'Yggdroot/indentLine' "缩进线
-	Plug 'octol/vim-cpp-enhanced-highlight'
 	Plug 'preservim/nerdcommenter' "注释
 	Plug 'mg979/vim-visual-multi', {'branch':'master'} "多光标
 	Plug 'honza/vim-snippets' "撸管代码更快
@@ -87,8 +86,10 @@ call plug#begin('~/.vim/plugged')
 	"Plug 'tpope/vim-fugitive'
 	"Plug 'junegunn/gv.vim'
 	"nvim
+	
 	"Plug 'prabirshrestha/vim-lsp',{'for':['c,cpp']}
 	"Plug 'jackguo380/vim-lsp-cxx-highlight',{'for':['c,cpp']}
+	"Plug 'octol/vim-cpp-enhanced-highlight'
 
 call plug#end()
 
@@ -119,8 +120,8 @@ let g:gitgutter_sign_modified_removed = 'v'
 highlight PMenu              cterm=bold ctermfg=255 ctermbg=239
 highlight PMenuSel           ctermfg=255 ctermbg=235
 set cursorline
-highlight CursorLine         cterm=bold ctermbg=8
-highlight CursorLineNr       cterm=bold,italic ctermfg=159 ctermbg=236
+highlight CursorLine         cterm=bold ctermbg=237
+highlight CursorLineNr       cterm=bold,italic ctermfg=255 ctermbg=237
 hi SignColumn ctermbg=none
 "nvim
 "/home/one/.config/nvim/autoload/plug.vim
@@ -146,8 +147,8 @@ set tabstop=4
 set cindent
 set expandtab "设置tab=space
 "set noexpandtab "设置spce=tab
-browsedir=buffer  "用当前文件所在目录；
-browsedir=current "用当前工作目录    
+"browsedir=buffer  "用当前文件所在目录；
+"browsedir=current "用当前工作目录    
 set mouse-=a
 set nocompatible"不兼容vi模式
 set cmdheight=1
@@ -174,24 +175,24 @@ inoremap<> <><Left>
 inoremap<< <<
 inoremap ' ''<Left>
 inoremap" ""<Left>
-nnoremap X "_X                                
-nnoremap x "_x                                
-nnoremap dd "_dd                              
-nnoremap ss dd                                
-nnoremap s d                                  
-vnoremap s d                                  
-vnoremap d "_d                                
-nnoremap d "_d                                
-nnoremap dl d$                                
-nnoremap dh d^                                
-nnoremap yl y$                                
-nnoremap yh y^                                
-nnoremap vl v$                                
-nnoremap vh v^                                
-nnoremap n o<Esc>k                            
-nnoremap N a<CR><Esc>k                        
-nnoremap K 3k                                 
-nnoremap H J                                  
+nnoremap X "_X
+nnoremap x "_x
+nnoremap dd "_dd
+nnoremap ss dd
+nnoremap s d
+vnoremap s d
+vnoremap d "_d
+nnoremap d "_d
+nnoremap dl d$
+nnoremap dh d^
+nnoremap yl y$
+nnoremap yh y^
+nnoremap vl v$
+nnoremap vh v^
+nnoremap n o<Esc>k
+nnoremap N a<CR><Esc>k
+nnoremap K 3k
+nnoremap H J
 nnoremap J 3j
 nnoremap z. <C-w>3>
 nnoremap z, <C-w>3<
