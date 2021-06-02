@@ -75,7 +75,7 @@ call plug#begin('~/.vim/plugged')
 	Plug 'vim-airline/vim-airline-themes' "状态栏美化
 	Plug 'neoclide/coc.nvim',{'branch':'release'}
 	Plug 'preservim/nerdtree' "目录树
-        Plug 'Yggdroot/indentLine' "缩进线
+	Plug 'Yggdroot/indentLine' "缩进线
 	Plug 'preservim/nerdcommenter' "注释
 	Plug 'mg979/vim-visual-multi', {'branch':'master'} "多光标
 	Plug 'honza/vim-snippets' "撸管代码更快
