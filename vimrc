@@ -75,18 +75,20 @@ call plug#begin('~/.vim/plugged')
 	Plug 'vim-airline/vim-airline-themes' "状态栏美化
 	Plug 'neoclide/coc.nvim',{'branch':'release'}
 	Plug 'preservim/nerdtree' "目录树
-        "Plug 'Yggdroot/indentLine' "缩进线
+        Plug 'Yggdroot/indentLine' "缩进线
 	Plug 'octol/vim-cpp-enhanced-highlight'
 	Plug 'preservim/nerdcommenter' "注释
 	Plug 'mg979/vim-visual-multi', {'branch':'master'} "多光标
 	Plug 'honza/vim-snippets' "撸管代码更快
 	"Plug 'Xuyuanp/nerdtree-git-plugin'
 	Plug 'ryanoasis/vim-devicons'
-	Plug 'vim/killersheep'
 	"git
 	"plug 'gitgutter'
 	"Plug 'tpope/vim-fugitive'
-	"Plug 'junegunn/gv.vim'   
+	"Plug 'junegunn/gv.vim'
+	"nvim
+	"Plug 'prabirshrestha/vim-lsp',{'for':['c,cpp']}
+	"Plug 'jackguo380/vim-lsp-cxx-highlight',{'for':['c,cpp']}
 
 call plug#end()
 
@@ -98,11 +100,11 @@ call plug#end()
 
 "-------------------------------------------------------------------------------------------"
 "函数高亮
-syn match cFunctions "\<[a-zA-Z_][a-zA-Z_0-9]*\>[^()]*)("me=e-2 
-syn match cFunctions "\<[a-zA-Z_][a-zA-Z_0-9]*\>\s*("me=e-1
-hi cFunctions term=underline cterm=bold ctermfg=14
-syn match cClass "\<[a-zA-Z_][a-zA-Z_0-9]*\>::"me=e-2
-hi cClass term=underline cterm=bold ctermfg=14
+"syn match cFunctions "\<[a-zA-Z_][a-zA-Z_0-9]*\>[^()]*)("me=e-2 
+"syn match cFunctions "\<[a-zA-Z_][a-zA-Z_0-9]*\>\s*("me=e-1
+"hi cFunctions term=underline cterm=bold ctermfg=14
+"syn match cClass "\<[a-zA-Z_][a-zA-Z_0-9]*\>::"me=e-2
+"hi cClass term=underline cterm=bold ctermfg=14
 
 highlight GitGutterAdd    guifg=#009900 ctermfg=46
 highlight GitGutterChange guifg=#bbbb00 ctermfg=214
@@ -119,6 +121,13 @@ highlight PMenuSel           ctermfg=255 ctermbg=235
 set cursorline
 highlight CursorLine         cterm=bold ctermbg=8
 highlight CursorLineNr       cterm=bold,italic ctermfg=159 ctermbg=236
+hi SignColumn ctermbg=none
+"nvim
+"/home/one/.config/nvim/autoload/plug.vim
+"/home/one/.config/nvim/init.vim
+"highlight LspCxxHlSymFunction cterm=none
+"highlight LspCxxHlGroupMemberVariable ctermfg=87
+
 set numberwidth=3
 set fileencodings=ucs-bom,utf-8,gb18030,default
 set shortmess=atI " 启动的时候不显示那个援助索马里儿童的提示
