@@ -168,7 +168,7 @@ inoremap <C-j> <Down>
 inoremap <C-k> <Up>
 inoremap <C-l> <Right>
 inoremap{ {}<Left>
-inoremap{<CR> {}<ESC>i<CR><ESC>O  
+inoremap{<CR> {}<ESC>i<CR><ESC>O
 inoremap[ []<Left>
 inoremap( ()<Left>
 inoremap<> <><Left>
