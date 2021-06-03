@@ -1,3 +1,7 @@
+export http_proxy="http://192.168.49.1:8282"
+export https_proxy="http://192.168.49.1:8282"
+"Acquire::http::Proxy "http://192.168.49.1:8282";
+
 let g:NERDTreeIndicatorMapCustom = {
     \ "Modified"  : "✹",
     \ "Staged"    : "✚",
