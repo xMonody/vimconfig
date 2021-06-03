@@ -79,6 +79,7 @@ let g:indentLine_color_term = 0
 let g:rainbow_active = 1
 "--------------------------------------------------------------------------------------"
 call plug#begin('~/.vim/plugged')
+"call plug#begin('~/.config/nvim/plugged')
 	Plug 'vim-airline/vim-airline'
 	Plug 'vim-airline/vim-airline-themes' "状态栏美化
 	Plug 'neoclide/coc.nvim',{'branch':'release'}"代码补全
@@ -89,9 +90,9 @@ call plug#begin('~/.vim/plugged')
 	Plug 'honza/vim-snippets' "片段补全
 	Plug 'ryanoasis/vim-devicons' "美化
 	"git
-	"plug 'gitgutter'
-	"Plug 'tpope/vim-fugitive'
-	"Plug 'junegunn/gv.vim'
+	plug '/airblade/vim-gitgutter'
+	Plug 'tpope/vim-fugitive'
+	Plug 'junegunn/gv.vim'
 	"nvim
 	"高亮
 	"Plug 'prabirshrestha/vim-lsp',{'for':['c,cpp']}
