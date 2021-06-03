@@ -2,6 +2,9 @@
 "export https_proxy="http://192.168.49.1:8282"
 "add  apt-get proxy /etc/apt/apt.conf
 "Acquire::http::Proxy "http://192.168.49.1:8282";
+"git
+"git config --global http.proxy 'http://192.168.49.1:8282'
+"git config --global https.proxy 'http://192.168.49.1:8282'
 
 let g:NERDTreeIndicatorMapCustom = {
     \ "Modified"  : "✹",
