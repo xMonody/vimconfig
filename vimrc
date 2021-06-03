@@ -1,5 +1,6 @@
-export http_proxy="http://192.168.49.1:8282"
-export https_proxy="http://192.168.49.1:8282"
+"export http_proxy="http://192.168.49.1:8282"
+"export https_proxy="http://192.168.49.1:8282"
+"add  apt-get proxy /etc/apt/apt.conf
 "Acquire::http::Proxy "http://192.168.49.1:8282";
 
 let g:NERDTreeIndicatorMapCustom = {
@@ -77,20 +78,19 @@ let g:rainbow_active = 1
 call plug#begin('~/.vim/plugged')
 	Plug 'vim-airline/vim-airline'
 	Plug 'vim-airline/vim-airline-themes' "状态栏美化
-	Plug 'neoclide/coc.nvim',{'branch':'release'}
+	Plug 'neoclide/coc.nvim',{'branch':'release'}"代码补全
 	Plug 'preservim/nerdtree' "目录树
 	Plug 'Yggdroot/indentLine' "缩进线
 	Plug 'preservim/nerdcommenter' "注释
 	Plug 'mg979/vim-visual-multi', {'branch':'master'} "多光标
-	Plug 'honza/vim-snippets' "撸管代码更快
-	"Plug 'Xuyuanp/nerdtree-git-plugin'
-	Plug 'ryanoasis/vim-devicons'
+	Plug 'honza/vim-snippets' "片段补全
+	Plug 'ryanoasis/vim-devicons' "美化
 	"git
 	"plug 'gitgutter'
 	"Plug 'tpope/vim-fugitive'
 	"Plug 'junegunn/gv.vim'
 	"nvim
-	
+	"高亮
 	"Plug 'prabirshrestha/vim-lsp',{'for':['c,cpp']}
 	"Plug 'jackguo380/vim-lsp-cxx-highlight',{'for':['c,cpp']}
 	"Plug 'octol/vim-cpp-enhanced-highlight'
@@ -114,9 +114,9 @@ call plug#end()
 highlight GitGutterAdd    guifg=#009900 ctermfg=46
 highlight GitGutterChange guifg=#bbbb00 ctermfg=214
 highlight GitGutterDelete guifg=#ff2222 ctermfg=196
-let g:gitgutter_sign_added = 'a'
-let g:gitgutter_sign_modified = 'm'
-let g:gitgutter_sign_removed = 'd'
+let g:gitgutter_sign_added = '+'
+let g:gitgutter_sign_modified = '~'
+let g:gitgutter_sign_removed = '-'
 let g:gitgutter_sign_removed_first_line = '^'
 let g:gitgutter_sign_removed_above_and_below = '-'
 let g:gitgutter_sign_modified_removed = 'v'
@@ -127,9 +127,12 @@ set cursorline
 highlight CursorLine         cterm=bold ctermbg=237
 highlight CursorLineNr       cterm=bold,italic ctermfg=255 ctermbg=237
 hi SignColumn ctermbg=none
+
 "nvim
-"/home/one/.config/nvim/autoload/plug.vim
-"/home/one/.config/nvim/init.vim
+"~/.config/nvim/autoload/plug.vim   
+"~/.config/nvim/init.vim   // ~/.config/nvim/plugged 
+
+" nvim add 
 "highlight LspCxxHlSymFunction cterm=none
 "highlight LspCxxHlGroupMemberVariable ctermfg=87
 
