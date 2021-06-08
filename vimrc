@@ -84,11 +84,12 @@ call plug#begin('~/.vim/plugged')
 	Plug 'vim-airline/vim-airline-themes' "状态栏美化
 	Plug 'neoclide/coc.nvim',{'branch':'release'}"代码补全
 	Plug 'preservim/nerdtree' "目录树
-	Plug 'Yggdroot/indentLine' "缩进线
+	Plug 'Yggdroot/indentLine'{'for':['c,cpp']} "缩进线
 	Plug 'preservim/nerdcommenter' "注释
 	Plug 'mg979/vim-visual-multi', {'branch':'master'} "多光标
 	Plug 'honza/vim-snippets' "片段补全
 	Plug 'ryanoasis/vim-devicons' "美化
+
 	"git
 	plug '/airblade/vim-gitgutter'
 	Plug 'tpope/vim-fugitive'
@@ -97,16 +98,24 @@ call plug#begin('~/.vim/plugged')
 	"高亮
 	"Plug 'prabirshrestha/vim-lsp',{'for':['c,cpp']}
 	"Plug 'jackguo380/vim-lsp-cxx-highlight',{'for':['c,cpp']}
-	"Plug 'octol/vim-cpp-enhanced-highlight'
+	"Plug 'octol/vim-cpp-enhanced-highlight',{'for':['c,cpp']}
 
 call plug#end()
-
 "-------------------------------------------------------------------------------------------"
 "coc
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
 
-
-
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 "-------------------------------------------------------------------------------------------"
 "函数高亮
 "syn match cFunctions "\<[a-zA-Z_][a-zA-Z_0-9]*\>[^()]*)("me=e-2 
@@ -198,8 +207,6 @@ nnoremap dl d$
 nnoremap dh d^
 nnoremap yl y$
 nnoremap yh y^
-nnoremap vl v$
-nnoremap vh v^
 nnoremap n o<Esc>k
 nnoremap N a<CR><Esc>k
 nnoremap K 3k
