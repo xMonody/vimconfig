@@ -208,7 +208,9 @@ nnoremap dl d$
 nnoremap dh d^
 nnoremap sl y$
 nnoremap sh y^
-nnoremap <C-p> :bn<CR>
+nnoremap <C-j> :bn<CR>
+nnoremap <C-k> :bp<CR>
+nnoremap <C-d> :bd<CR>
 nnoremap <C-y> "+yy
 nnoremap <C-p> "+p
 nnoremap K 3k
