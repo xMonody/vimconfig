@@ -206,8 +206,8 @@ vnoremap d "_d
 nnoremap d "_d
 nnoremap dl d$
 nnoremap dh d^
-nnoremap yl y$
-nnoremap yh y^
+nnoremap sl y$
+nnoremap sh y^
 nnoremap <C-p> :bn<CR>
 nnoremap <C-y> "+yy
 nnoremap <C-p> "+p
