@@ -153,7 +153,7 @@ hi SignColumn ctermbg=none
 set numberwidth=3
 set fileencodings=ucs-bom,utf-8,gb18030,default
 set shortmess=atI " 启动的时候不显示那个援助索马里儿童的提示
-set scrolloff=5
+set scrolloff=3
 set noerrorbells "关闭提示音
 set novisualbell
 set t_vb=
@@ -209,6 +209,8 @@ nnoremap dh d^
 nnoremap yl y$
 nnoremap yh y^
 nnoremap <C-p> :bn<CR>
+nnoremap <C-y> "+yy
+nnoremap <C-p> "+p
 nnoremap K 3k
 nnoremap H J
 nnoremap J 3j
