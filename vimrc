@@ -208,8 +208,8 @@ nnoremap dl d$
 nnoremap dh d^
 nnoremap sl y$
 nnoremap sh y^
-nnoremap <C-j> :bn<CR>
-nnoremap <C-k> :bp<CR>
+nnoremap <C-l> :bn<CR>
+nnoremap <C-h> :bp<CR>
 nnoremap <C-d> :bd<CR>
 nnoremap <C-y> "+yy
 nnoremap <C-p> "+p
