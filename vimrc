@@ -96,6 +96,7 @@ call plug#begin('~/.vim/plugged')
 	Plug 'junegunn/gv.vim'
 	"nvim
 	"高亮
+	"Plug 'kevinhwang91/rnvimr'
 	"Plug 'prabirshrestha/vim-lsp',{'for':['c,cpp']}
 	"Plug 'jackguo380/vim-lsp-cxx-highlight',{'for':['c,cpp']}
 	"Plug 'octol/vim-cpp-enhanced-highlight',{'for':['c,cpp']}
@@ -207,8 +208,7 @@ nnoremap dl d$
 nnoremap dh d^
 nnoremap yl y$
 nnoremap yh y^
-nnoremap n o<Esc>k
-nnoremap N a<CR><Esc>k
+nnoremap <C-p> :bn<CR>
 nnoremap K 3k
 nnoremap H J
 nnoremap J 3j
