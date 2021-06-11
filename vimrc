@@ -18,7 +18,7 @@ let g:NERDTreeIndicatorMapCustom = {
     \ "Unknown"   : "?"
     \ }
 "autocmd vimenter * if !argc()|NERDTree|
-autocmd vimenter * NERDTree
+"autocmd vimenter * NERDTree
 let g:NERDTreeDirArrowExpandable = '+'
 let g:NERDTreeDirArrowCollapsible = '-'
 " 显示行号
@@ -38,7 +38,7 @@ let NERDTreeIgnore=['\.pyc','\~$','\.swp']
 " 显示书签列表
 let NERDTreeShowBookmarks=1
 autocmd bufenter * if(winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-autocmd VimEnter * NERDTree
+"autocmd VimEnter * NERDTree
 wincmd w
 autocmd VimEnter * wincmd w
 nnoremap <C-c> :NERDTreeClose<CR>
