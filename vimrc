@@ -1,3 +1,4 @@
+"sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv
 "export http_proxy="http://192.168.49.1:8282"
 "export https_proxy="http://192.168.49.1:8282"
 "add  apt-get proxy /etc/apt/apt.conf
