@@ -1,18 +1,22 @@
 #!/bin/bash
-grep "proxy" ~/.zshrc >/dev/null
-if [ $? -eq 0 ]; then
-    sed -i '/proxy/d' ~/.zshrc
-else
+if [ "yes" == $1 ]
+then
     echo 'export http_proxy="http://192.168.49.1:8282"' >> ~/.zshrc
     echo 'export https_proxy="http://192.168.49.1:8282"' >> ~/.zshrc
-fi
-
-sudo grep "Acquire" /etc/apt/apt.conf >/dev/null
-if [ $? -eq 0 ]; then
-    sudo sed -i '/Acquire/d' /etc/apt/apt.conf
-else
     sudo echo 'Acquire::http::Proxy "http://192.168.49.1:8282";' >> /etc/apt/apt.conf
 fi
 
-sudo systemctl restart networking.service
+if [ "no" == $1 ]
+then
+    grep "proxy" ~/.zshrc >/dev/null
+    if [ $? -eq 0 ]; then
+        sed -i '/proxy/d' ~/.zshrc
+    fi
 
+    grep "Acquire" /etc/apt/apt.conf >/dev/null
+    if [ $? -eq 0 ]; then
+        sudo sed -i '/Acquire/d' /etc/apt/apt.conf
+    fi
+    unset https_proxy
+    unset http_proxy
+fi

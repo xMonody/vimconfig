@@ -1,0 +1,12 @@
+#!/usr/bin/bash
+mkdir -p ~/.vim
+mkdir -p ~/.vim/autoload
+
+mkdir -p ~/.config/nvim
+mkdir -p ~/.config/nvim/autoload
+
+ln -s ./plug.vim ~/.vim/autoload/plug.vim
+ln -s ./plug.vim ~/.config/nvim/autoload/plug.vim
+
+cp ./vimrc ~/.vimrc
+cp ./vimrc ~/.config/nvim/init.vim

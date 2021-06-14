@@ -26,7 +26,7 @@ let g:NERDTreeDirArrowCollapsible = '-'
 let NERDTreeShowLineNumbers=1
 let NERDTreeAutoCenter=1
 " 是否显示隐藏文件
-let NERDTreeShowHidden=0
+let NERDTreeShowHidden=1
 " 设置宽度
 let g:NERDTreeWinSize=17
 let NERDTreeWinSize=25
@@ -154,7 +154,7 @@ hi SignColumn ctermbg=none
 set numberwidth=3
 set fileencodings=ucs-bom,utf-8,gb18030,default
 set shortmess=atI " 启动的时候不显示那个援助索马里儿童的提示
-set scrolloff=3
+set scrolloff=2
 set noerrorbells "关闭提示音
 set novisualbell
 set t_vb=
@@ -204,6 +204,7 @@ nnoremap ss dd
 nnoremap s d
 vnoremap s d
 vnoremap d "_d
+vnoremap q <Esc>
 nnoremap d "_d
 nnoremap dl d$
 nnoremap dh d^
@@ -214,6 +215,7 @@ nnoremap <C-h> :bp<CR>
 nnoremap <C-d> :bd<CR>
 nnoremap <C-y> "+yy
 nnoremap <C-p> "+p
+
 nnoremap K 3k
 nnoremap H J
 nnoremap J 3j
