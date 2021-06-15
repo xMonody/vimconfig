@@ -97,10 +97,12 @@ call plug#begin('~/.vim/plugged')
 	Plug 'junegunn/gv.vim'
 	"nvim
 	"高亮
-	"Plug 'kevinhwang91/rnvimr'
-	"Plug 'prabirshrestha/vim-lsp',{'for':['c,cpp']}
-	"Plug 'jackguo380/vim-lsp-cxx-highlight',{'for':['c,cpp']}
-	"Plug 'octol/vim-cpp-enhanced-highlight',{'for':['c,cpp']}
+	if has('nvim')
+	Plug 'kevinhwang91/rnvimr'
+	Plug 'prabirshrestha/vim-lsp',{'for':['c,cpp']}
+	Plug 'jackguo380/vim-lsp-cxx-highlight',{'for':['c,cpp']}
+	Plug 'octol/vim-cpp-enhanced-highlight',{'for':['c,cpp']}
+	endif
 
 call plug#end()
 "-------------------------------------------------------------------------------------------"
@@ -121,6 +123,7 @@ inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
 "-------------------------------------------------------------------------------------------"
 "nvim add
 "-----------------------------------------------------------------------------------------------------------------"
+if has('nvim')
 let g:rnvimr_enable_ex = 1
 let g:rnvimr_enable_picker = 1
 let g:rnvimr_draw_border = 0
@@ -166,6 +169,9 @@ let g:rnvimr_presets = [
             \ {'width': 1.000, 'height': 0.500, 'col': 0, 'row': 0},
             \ {'width': 1.000, 'height': 0.500, 'col': 0, 'row': 0.5}
             \ ]
+highlight LspCxxHlSymFunction cterm=none
+highlight LspCxxHlGroupMemberVariable ctermfg=87
+endif
 "------------------------------------------------------------------------------------------
 
 "函数高亮
@@ -196,9 +202,6 @@ hi SignColumn ctermbg=none
 "~/.config/nvim/autoload/plug.vim   
 "~/.config/nvim/init.vim   // ~/.config/nvim/plugged 
 
-" nvim add 
-"highlight LspCxxHlSymFunction cterm=none
-"highlight LspCxxHlGroupMemberVariable ctermfg=87
 
 set numberwidth=3
 set fileencodings=ucs-bom,utf-8,gb18030,default
