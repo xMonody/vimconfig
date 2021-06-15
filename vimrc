@@ -85,7 +85,7 @@ call plug#begin('~/.vim/plugged')
 	Plug 'vim-airline/vim-airline-themes' "状态栏美化
 	Plug 'neoclide/coc.nvim',{'branch':'release'}"代码补全
 	Plug 'preservim/nerdtree' "目录树
-	Plug 'Yggdroot/indentLine'{'for':['c,cpp']} "缩进线
+	Plug 'Yggdroot/indentLine',{'for':['c,cpp']} "缩进线
 	Plug 'preservim/nerdcommenter' "注释
 	Plug 'mg979/vim-visual-multi', {'branch':'master'} "多光标
 	Plug 'honza/vim-snippets' "片段补全
@@ -101,6 +101,7 @@ call plug#begin('~/.vim/plugged')
 	Plug 'kevinhwang91/rnvimr'
 	Plug 'prabirshrestha/vim-lsp',{'for':['c,cpp']}
 	Plug 'jackguo380/vim-lsp-cxx-highlight',{'for':['c,cpp']}
+	else
 	Plug 'octol/vim-cpp-enhanced-highlight',{'for':['c,cpp']}
 	endif
 
