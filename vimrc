@@ -93,7 +93,7 @@ call plug#begin('~/.vim/plugged')
 	Plug 'ryanoasis/vim-devicons' "美化
 
 	"git
-	plug '/airblade/vim-gitgutter'
+	Plug '/airblade/vim-gitgutter'
 	Plug 'tpope/vim-fugitive'
 	Plug 'junegunn/gv.vim'
 	"nvim
