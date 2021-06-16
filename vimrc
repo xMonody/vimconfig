@@ -6,6 +6,7 @@
 "git
 "git config --global http.proxy 'http://192.168.49.1:8282'
 "git config --global https.proxy 'http://192.168.49.1:8282'
+"./configure --prefix=/usr --with-x -with-features=huge --enable-multibyte --enable-rubyinterp=yes --enable-pythoninterp=yes --enable-python3interp=yes
 
 let g:NERDTreeIndicatorMapCustom = {
     \ "Modified"  : "✹",
