@@ -1,0 +1,32 @@
+{
+  "Creates a do...qt5": {
+    "prefix": "qt5",
+    "body": [
+      "cmake_minimum_required(VERSION 3.16)",
+      "project(${1:main} LANGUAGES CXX)\n",
+      "set(CMAKE_AUTOMOC ON)",
+      "set(CMAKE_AUTOUIC ON)",
+      "set(CMAKE_AUTOMOC ON)",
+      "set(CMAKE_AUTORCC ON)",
+      "set(CMAKE_PREFIX_PATH D:/Library/qt5/lib/cmake)",
+      "set(CMAKE_PREFIX_PATH D:/Library/qt5/lib/cmake/Qt5)",
+      "set(CMAKE_CXX_FLAGS -mwindows)\n",
+      "set(CMAKE_EXE_LINKER_FLAGS \"-static\")",
+      "set(CMAKE_CXX_COMPILE g++)",
+      "set(CMAKE_EXPORT_COMPILE_COMMANDS 1)\n",
+      "find_package(Qt5 REQUIRED COMPONENTS Core Gui Widgets)\n",
+      "add_executable(${${PROJECT_NAME}}",
+      "\tWidget.cpp ",
+      "\tmain.cpp",
+      "\tWidget.h",
+      "   ${2}",
+      ")\n",
+      "target_link_libraries(${${PROJECT_NAME}} PUBLIC",
+      "\tQt::Core",
+      "\tQt::Gui",
+      "\tQt::Widgets",
+      ")"
+    ],
+    "description": "Creates a do...qt5"
+  }
+}

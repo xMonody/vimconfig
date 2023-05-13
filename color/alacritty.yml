@@ -1,0 +1,75 @@
+colors:
+  bright:
+    black: '#414868'
+    blue: '#7aa2f7'
+    cyan: '#7dcfff'
+    green: '#9ece6a'
+    magenta: '#bb9af7'
+    red: '#f7768e'
+    white: '#c0caf5'
+    yellow: '#e0af68'
+  cursor:
+    cursor: '#c0caf5'
+    text: '#1d202f'
+  normal:
+    black: '#1d202f'
+    blue: '#7aa2f7'
+    cyan: '#7dcfff'
+    green: '#9ece6a'
+    magenta: '#bb9af7'
+    red: '#f7768e'
+    white: '#a9b1d6'
+    yellow: '#e0af68'
+  primary:
+    background: '#24283b'
+    foreground: '#c0caf5'
+  selection:
+    background: '#364a82'
+    text: '#c0caf5'
+
+font:
+  size: 17
+  offset:
+    x: 0
+    y: 0
+
+  glyph_offset:
+    x: 0
+    y: 0
+
+  normal:
+    family: SauceCodePro Nerd Font Mono
+    style:  Regular
+
+    italic:
+      family: SauceCodePro Nerd Font Mono
+      style:  Italic
+
+    bold:
+      family: SauceCodePro Nerd Font Mono
+      style:  Bold
+
+    bold_italic:
+      family: SauceCodePro Nerd Font Mono
+      style:  "Bold Italic"
+
+
+key_bindings:
+  - { key: V,        mods: Alt,       action: Paste             }
+  - { key: C,        mods: Alt,       action: Copy              }
+
+window:
+  dynamic_title: false
+  dynamic_padding: false
+  opacity: 0.9
+
+
+  padding:
+    x: 0
+    y: 0
+
+    startup_mode: Windowed
+    opacity: 
+      # shell:
+      # program: powershell
+

@@ -1,0 +1,105 @@
+{
+    "suggest.completionItemKindLabels":
+    {
+        "class": "ﴯ",
+        "color": "",
+        "constant": "",
+        "default": "",
+        "enum": "",
+        "enumMember": "",
+        "event": "",
+        "field": "",
+        "file": "",
+        "folder": "",
+        "function": "",
+        "interface": "",
+        "keyword": "",
+        "method": "",
+        "module": "",
+        "operator": "",
+        "property": "ﰠ",
+        "reference": "",
+        "snippet": "",
+        "struct": "",
+        "text": "",
+        "typeParameter": "",
+        "unit": "",
+        "value": "",
+        "variable": ""
+    },
+    "diagnostic.errorSign": "",
+    "diagnostic.warningSign": "",
+    "diagnostic.infoSign": "",
+    "diagnostic.hintSign": "ﴞ",
+    "diagnostic.virtualTextPrefix": "●",
+
+    //"diagnostic.enable": false,
+    "diagnostic.enableMessage": "never",
+    "diagnostic.refreshOnInsertMode": false,
+    "diagnostic.checkCurrentLine": false,
+    "diagnostic.virtualTextLimitInOneLine": 1,
+
+    "diagnostic.virtualText": false,
+    "diagnostic.virtualTextAlign": "after",
+    "diagnostic.virtualTextCurrentLineOnly": false,
+
+    "diagnostic.messageTarget": "float",//诊断
+    "suggest.enableFloat": false,//文档
+    "hover.target": "float",//悬停
+
+    "outline.autoPreview": true,//禁用通知
+    "outline.previewBorderRounded": true,
+    "outline.keepWindow": true,
+
+    "semanticTokens.enable": true,//语义令牌
+    "suggest.labelMaxLength": 40,
+    "diagnostic.floatConfig": {"border": true,"rounded": true,"highlight": "255"},
+    "suggest.floatConfig": {"border": true,"rounded": true,"highlight": "255"},
+    "signature.floatConfig": {"border": true,"rounded": true,"highlight": "255,"},
+    "hover.floatConfig": {"border": true,"rounded": true,"highlight": "255"},
+    "dialog.floatHighlight": "NONE",
+    "dialog.rounded":true,
+    "dialog.floatBorderHighlight":"NONE",
+
+    "snippets.priority": 100,//优先级
+    "coc.source.buffer.priority": 80,
+    "coc.source.around.priority": 90,
+    "inlayHint.enable": false,//关闭内嵌提示
+
+    //lua
+    "Lua.completion.callSnippet":"Replace",//启用函数提示
+    "Lua.signatureHelp.enable": false,//禁用函数签名
+
+
+    "go.goplsOptions": {
+        "completeUnimported": true,
+        "usePlaceholders": true
+    },
+
+    "clangd.arguments": ["--header-insertion=never"],
+
+    //rust
+    "rust-analyzer.server.path": "rust-analyzer",//
+    "rust-analyzer.disableProgressNotifications":true,
+    "notification.disabledProgressSources": ["*"],//好像也是禁用通知
+
+    "signature.preferShownAbove": true,
+    "suggest.virtualText": false,
+    
+    "snippets.textmateSnippetsRoots": ["~/vimconfig/mysnip/snippets"],
+    //"snippets.textmateSnippetsRoots": ["D:/gitdir/vimconfig/mysnip/snippets"],
+    
+    "suggest.formatItems": [
+        "kind",
+        "abbr",
+        "menu",
+        "shortcut"
+    ],
+    //"coc.source.around.enable": true,
+    "coc.source.buffer.shortcut": "bf",
+    "coc.source.around.shortcut": "ag",
+    "coc.source.file.shortcut": "fi",
+    "snippets.shortcut": "sp"
+
+}
+
