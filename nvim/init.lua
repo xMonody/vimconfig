@@ -329,13 +329,13 @@ cmp.setup({
 
     window = {
         completion = cmp.config.window.bordered(),
-        --documentation=cmp.config.disable,
-        documentation = {
+        documentation=cmp.config.disable,
+        --[[ documentation = {
             border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
             max_width = 40,
             max_height = 10,
-            --winhighlight = "FloatBorder:CmpPmenu,:PmenuSel,Search:None",
-        },
+            winhighlight = "FloatBorder:CmpPmenu,:PmenuSel,Search:None",
+        }, ]]
 
         --[[completion = {
         border = border "CmpDocBorder",
@@ -1478,14 +1478,14 @@ require("nvim-autopairs").setup({
 local po={noremap = true, silent = true }
 
 
---[[vim.g.floaterm_shell='powershell'
+--[[ vim.g.floaterm_shell='powershell'
 vim.g.floaterm_borderchars = '─│─│╭╮╯╰ '
 vim.g.floaterm_title = ''
 vim.g.floaterm_width = 0.8
 vim.g.floaterm_height = 0.9
 vim.api.nvim_set_keymap("t", "<C-\\>", "<C-\\><C-n>:FloatermKill<CR>", po )
 vim.api.nvim_set_keymap("n", "<C-\\>", ":FloatermNew --height=0.9 --width=0.8 --name=xiaobin<CR>", po)
---]]
+]]
 
 
 -------------------------------------------------------------------------------------------------
