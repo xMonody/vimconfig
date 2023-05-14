@@ -56,11 +56,12 @@ hi CocMenuSel ctermbg=237 guibg=#13354A
 "autocmd ColorScheme * hi CocMenuSel ctermbg=237 guibg=#13354A
 hi MatchParen ctermbg=gray guibg=gray
 
+set background=dark
+set termguicolors
 set t_Co=256
 let mapleader=","
 let g:maplocalleader=","
 set hlsearch
-set bg=dark
 set viminfo='1000,<666
 set clipboard=unnamed
 set encoding=utf-8
@@ -100,9 +101,9 @@ set nowritebackup
 set noswapfile
 set noundofile
 set signcolumn=yes
-let &t_SI.="\e[6 q" "SI = INSERT mode
-let &t_SR.="\e[4 q" "SR = REPLACE mode
-let &t_EI.="\e[2 q" "EI = NORMAL mode (ELSE)
+let &t_SI = "\e[6 q" "SI = INSERT mode
+let &t_SR = "\e[4 q" "SR = REPLACE mode
+let &t_EI = "\e[2 q" "EI = NORMAL mode (ELSE)
 "set t_8f=^[[38;2;%lu;%lu;%lum
 "set t_8b=^[[48;2;%lu;%lu;%lum
 "setlocal list
@@ -304,8 +305,6 @@ if has("gui_running")
     endif
 endif
 
-set background=dark
-set termguicolors
 
 "let g:tokyonight_enable_italic=1
 "let g:tokyonight_style='storm'

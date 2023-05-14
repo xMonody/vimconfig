@@ -1165,8 +1165,8 @@ require("catppuccin").setup({
     integrations = {
         cmp = true,
         gitsigns = true,
-        nvimtree = true,
         telescope = true,
+        nvimtree = false,
         notify = false,
         mini = false,
     },
