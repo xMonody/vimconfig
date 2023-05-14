@@ -482,3 +482,10 @@ augroup END
 autocmd BufWinEnter * setlocal formatoptions-=cro
 autocmd FileType json,markdown let g:indentLine_conceallevel = 0
 au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
+
+hi CocSemVariable  guifg=#F7768E
+hi CocSemProperty  guifg=#F7768E
+hi CocSemParameter guifg=#F7768E
+hi Number          guifg=#f78c6c
+hi CocSemClass     guifg=#ffcb6b
+"hi String              guifg=#455574 cterm=italic

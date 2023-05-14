@@ -42,11 +42,11 @@ local plugins = {
     { "stevearc/aerial.nvim" }, --大纲
     --"nvim-treesitter/nvim-treesitter", --高亮
 
-    { "navarasu/onedark.nvim" },--主题
+    --{ "navarasu/onedark.nvim" },--主题
+    { "catppuccin/nvim", name = "catppuccin" },
     { "mhartington/formatter.nvim" },--格式化
 
     { "nvim-lualine/lualine.nvim" }, --状态栏
-    --{'romgrk/barbar.nvim', dependencies = { 'nvim-tree/nvim-web-devicons' }},
     {'akinsho/bufferline.nvim', version = "*", dependencies = 'nvim-tree/nvim-web-devicons'},
 
     { "lukas-reineke/indent-blankline.nvim" }, --对齐线
@@ -329,14 +329,13 @@ cmp.setup({
 
     window = {
         completion = cmp.config.window.bordered(),
-        -- documentation = cmp.config.window.bordered(),
-        documentation=cmp.config.disable,
-        --[[documentation = {
-        border = border("CmpDocBorder"),
-        max_width = 40,
-        max_height = 10,
-        winhighlight = "FloatBorder:CmpPmenu,:PmenuSel,Search:None",
-        },]]--
+        --documentation=cmp.config.disable,
+        documentation = {
+            border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
+            max_width = 40,
+            max_height = 10,
+            --winhighlight = "FloatBorder:CmpPmenu,:PmenuSel,Search:None",
+        },
 
         --[[completion = {
         border = border "CmpDocBorder",
@@ -1101,7 +1100,7 @@ vim.keymap.set("n", "<C-m>o", "<cmd>AerialToggle!<CR>")
 
 ---------------------------------------------------------------------------------------------------
 --schemeconfig
-require("onedark").setup({
+ --[[ require("onedark").setup({
     -- Main options --
     style = "deep", -- Default theme style. Choose between 'dark', 'darker', 'cool', 'deep', 'warm', 'warmer' and 'light'
     transparent = false, -- Show/hide background
@@ -1129,8 +1128,52 @@ require("onedark").setup({
         undercurl = true, -- use undercurl instead of underline for diagnostics
         background = true, -- use background color for virtual text
     },
+}) ]]
+
+require("catppuccin").setup({
+    flavour = "mocha",
+    background = {
+        light = "latte",
+        dark = "mocha",
+    },
+    transparent_background = false,
+    show_end_of_buffer = false,
+    term_colors = false,
+    dim_inactive = {
+        enabled = false,
+        shade = "dark",
+        percentage = 0.15,
+    },
+    no_italic = false,
+    no_bold = false,
+    styles = {
+        comments = { "italic" },
+        conditionals = { "italic" },
+        loops = {},
+        functions = {},
+        keywords = {},
+        strings = {},
+        variables = {},
+        numbers = {},
+        booleans = {},
+        properties = {},
+        types = {},
+        operators = {},
+    },
+    color_overrides = {},
+    custom_highlights = {},
+    integrations = {
+        cmp = true,
+        gitsigns = true,
+        nvimtree = true,
+        telescope = true,
+        notify = false,
+        mini = false,
+    },
 })
-vim.cmd([[colorscheme onedark]])
+
+
+vim.cmd([[colorscheme catppuccin-macchiato]])
 
 ---------------------------------------------------------------------------------------------------
 --lualineconfig 状态栏
@@ -1465,3 +1508,9 @@ vim.api.nvim_set_keymap("n", "<C-j>", "<C-w>w", po)
 
 vim.api.nvim_set_keymap("n", "zl", "5<C-w><", po)
 vim.api.nvim_set_keymap("n", "zh", "5<C-w>>", po)
+
+vim.cmd([[ 
+hi @lsp.type.variable  guifg=#ea99a0 gui=italic
+]])
+
+--hi String guifg=#455574 cterm=italic
