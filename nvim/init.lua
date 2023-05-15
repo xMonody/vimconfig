@@ -34,8 +34,9 @@ local plugins = {
     {"dinhhuy258/sfm.nvim",dependencies={"dinhhuy258/sfm-fs.nvim", --树目录
     "dinhhuy258/sfm-filter.nvim","dinhhuy258/sfm-git.nvim"}},
 
-    { "akinsho/toggleterm.nvim" },--终端
+    { "akinsho/toggleterm.nvim" }, --终端
     --{ "voldikss/vim-floaterm" },
+    {"voldikss/vim-translator"}, --翻译
 
     { "nvim-telescope/telescope.nvim", dependencies = { "nvim-lua/plenary.nvim" } }, --模糊搜索
     { "lewis6991/gitsigns.nvim" }, --git修改
@@ -1475,8 +1476,18 @@ require("nvim-autopairs").setup({
 
 ---------------------------------------------------------------------------------------------------
 
+vim.g.translator_window_borderchars = {'─','│','─','│','╭','╮','╯','╰'}
+vim.g.translator_window_type="popup"
+--vim.g.translator_target_lang="google"
+-----------------------------------------------------------------------------------------------
 local po={noremap = true, silent = true }
 
+
+vim.api.nvim_set_keymap("n", "<leader>t", "<Plug>Translate", po )
+vim.api.nvim_set_keymap("x", "<leader>t", "<Plug>TranslateV", po )
+
+vim.api.nvim_set_keymap("n", "<leader>w", "<Plug>TranslateW", po )
+vim.api.nvim_set_keymap("x", "<leader>w", "<Plug>TranslateWV", po )
 
 --[[ vim.g.floaterm_shell='powershell'
 vim.g.floaterm_borderchars = '─│─│╭╮╯╰ '

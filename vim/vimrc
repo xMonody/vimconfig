@@ -27,6 +27,7 @@ Plug 'itchyny/vim-gitbranch'
 Plug 'mengelbrecht/lightline-bufferline'
 
 Plug 'kaicataldo/material.vim',{'branch':'main'}
+Plug 'voldikss/vim-translator'"翻译
 
 Plug 'voldikss/vim-floaterm' "终端
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } "模糊查找
@@ -438,6 +439,18 @@ let g:formatters_cpp = ['clangformat']
 let g:formatdef_fixjson = '"fixjson"'
 let g:formatters_json = ['fixjson']
 "-------------------------------------------------------------------------------
+let g:translator_window_borderchars = ['─','│','─','│','╭','╮','╯','╰ ']
+let g:translator_window_max_width=0.5
+let g:translator_window_max_height=0.4
+"let g:translator_target_lang='youdao'
+
+nmap <silent> <Leader>t <Plug>Translate
+vmap <silent> <Leader>t <Plug>TranslateV
+nmap <silent> <Leader>w <Plug>TranslateW
+vmap <silent> <Leader>w <Plug>TranslateWV
+nmap <silent> <Leader>r <Plug>TranslateR
+vmap <silent> <Leader>r <Plug>TranslateRV
+"-----------------------------------------------------------------------------------------------
 
 inoremap <silent><C-l> <Right>
 nnoremap <silent><C-l> :bn<CR>
