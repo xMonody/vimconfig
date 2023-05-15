@@ -56,7 +56,7 @@ hi CocMenuSel ctermbg=237 guibg=#13354A
 "autocmd ColorScheme * hi CocMenuSel ctermbg=237 guibg=#13354A
 hi MatchParen ctermbg=gray guibg=gray
 
-set background=dark
+"set background=dark
 set termguicolors
 set t_Co=256
 let mapleader=","

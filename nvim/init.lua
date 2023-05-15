@@ -1510,7 +1510,10 @@ vim.api.nvim_set_keymap("n", "zl", "5<C-w><", po)
 vim.api.nvim_set_keymap("n", "zh", "5<C-w>>", po)
 
 vim.cmd([[ 
-hi @lsp.type.variable  guifg=#ea99a0 gui=italic
+hi @lsp.type.variable       guifg=#ea99a0 gui=italic
+hi @lsp.typemod.function.defaultLibrary guifg=#8aadf4
+hi @lsp.typemod.method.defaultLibrary   guifg=#8aadf4
+hi @lsp.type.property                   guifg=#ea99a0
 ]])
 
 --hi String guifg=#455574 cterm=italic
