@@ -24,6 +24,7 @@ Plug 'kristijanhusak/defx-git'
 
 Plug 'itchyny/lightline.vim'
 Plug 'itchyny/vim-gitbranch'
+Plug 'lambdalisue/nerdfont.vim'
 Plug 'mengelbrecht/lightline-bufferline'
 
 Plug 'kaicataldo/material.vim',{'branch':'main'}
@@ -166,7 +167,7 @@ nnoremap <silent> gc <Plug>(coc-references)
 
 let g:coc_global_extensions = [
         \ 'coc-clangd',
-        \ 'coc-sumneko-lua',
+        "\ 'coc-sumneko-lua',
         \ 'coc-rust-analyzer',
         \ 'coc-json',
         \ 'coc-cmake',
@@ -321,6 +322,10 @@ colorscheme  material
 
 "------------------------------------------------------------------------------------
 "状态栏
+
+let g:lightline#bufferline#enable_nerdfont=1
+let g:lightline#bufferline#modified=' '
+"let g:lightline#bufferline#read_only=' '
 
 let g:lightline = {
         \ 'colorscheme': 'PaperColor',

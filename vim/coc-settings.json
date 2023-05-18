@@ -39,15 +39,19 @@
     "diagnostic.checkCurrentLine": false,
     "diagnostic.virtualTextLimitInOneLine": 1,
 
-    "diagnostic.virtualText": false,
-    "diagnostic.virtualTextAlign": "after",
+    "diagnostic.virtualText": false,//使用虚拟行诊断
+    "diagnostic.virtualTextAlign": "after",//位置
     "diagnostic.virtualTextCurrentLineOnly": false,
+    "signature.preferShownAbove": true,//尽可能在光标上显示函数签名
+    "suggest.virtualText": false,
+
+    "notification.disabledProgressSources": ["*"],//禁用通知
 
     "diagnostic.messageTarget": "float",//诊断
     "suggest.enableFloat": false,//文档
     "hover.target": "float",//悬停
 
-    "outline.autoPreview": true,//禁用通知
+    "outline.autoPreview": true,
     "outline.previewBorderRounded": true,
     "outline.keepWindow": true,
 
@@ -69,6 +73,8 @@
     //lua
     "Lua.completion.callSnippet":"Replace",//启用函数提示
     "Lua.signatureHelp.enable": false,//禁用函数签名
+    "sumneko-lua.enableNvimLuaDev":true,
+    "sumneko-lua.checkUpdate":false,
 
 
     "go.goplsOptions": {
@@ -81,10 +87,7 @@
     //rust
     "rust-analyzer.server.path": "rust-analyzer",//
     "rust-analyzer.disableProgressNotifications":true,
-    "notification.disabledProgressSources": ["*"],//好像也是禁用通知
 
-    "signature.preferShownAbove": true,
-    "suggest.virtualText": false,
     
     "snippets.textmateSnippetsRoots": ["~/vimconfig/mysnip/snippets"],
     //"snippets.textmateSnippetsRoots": ["D:/gitdir/vimconfig/mysnip/snippets"],
@@ -96,10 +99,10 @@
         "shortcut"
     ],
     //"coc.source.around.enable": true,
-    "coc.source.buffer.shortcut": "bf",
-    "coc.source.around.shortcut": "ag",
-    "coc.source.file.shortcut": "fi",
-    "snippets.shortcut": "sp"
+    "coc.source.buffer.shortcut": "Bf",
+    "coc.source.around.shortcut": "Ag",
+    "coc.source.file.shortcut": "Fi",
+    "snippets.shortcut": "Sp"
 
 }
 
