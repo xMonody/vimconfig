@@ -1,0 +1,278 @@
+cursor = '▇'
+blinking-cursor = false
+scroll-multiplier = 3.0
+
+performance = "High"
+
+# Theme
+#
+# It makes Rio look for the specified theme in the themes folder
+# (macos and linux: ~/.config/rio/themes/dracula.toml)
+# (windows: C:\Users\USER\AppData\Local\rio\themes\dracula.toml)
+#
+# Example:
+# theme = "dracula"
+
+# Padding-x
+#
+# define x axis padding (default is 10)
+#
+# Example:
+# padding-x = 10
+
+# Option as Alt
+#
+# This config only works on MacOs.
+# Possible choices: 'both', 'left' and 'right'.
+#
+# Example:
+# option-as-alt = 'left'
+
+# Window configuration
+#
+# • width - define the intial window width.
+#   Default: 600
+#
+# • height - define the inital window height.
+#   Default: 400
+#
+# • mode - define how the window will be created
+#     - "Windowed" (default) is based on width and height
+#     - "Maximized" window is created with maximized
+#     - "Fullscreen" window is created with fullscreen
+#
+# Example:
+ [window]
+ width = 600
+ height = 400
+ mode = "Windowed"
+
+# Background configuration
+#
+# • opacity - changes the background transparency state
+#   Default: 1.0
+#
+# • mode - defines background mode bewteen "Color" and "Image"
+#
+# • image - Set an image as background
+#   Default: None
+#
+# Example:
+# [background]
+# mode = "Image"
+# opacity = 1.0
+#
+# [background.image]
+# path = "/Users/rapha/Desktop/eastward.jpg"
+# width = 200.0
+# height = 200.0
+# x = 0.0
+# y = 0.0
+
+# Window Height
+#
+# window-height changes the inital window height.
+#   Default: 400
+#
+# Example:
+# window-height = 400
+
+# Fonts
+#
+# Configure fonts used by the terminal
+#
+# Note: You can set different font families but Rio terminal
+# will always look for regular font bounds whene
+#
+# You can also set family on root to overwritte all fonts
+ [fonts]
+   family = "SauceCodePro Nerd Font Mono"
+#
+# You can also specify extra fonts to load
+# [fonts]
+# extras = [{ family = "Microsoft JhengHei" }]
+#
+#
+# Example:
+ size = 17
+#
+# [fonts.regular]
+# family = "cascadiamono"
+# style = "normal"
+# weight = 400
+#
+# [fonts.bold]
+# family = "cascadiamono"
+# style = "normal"
+# weight = 800
+#
+# [fonts.italic]
+# family = "cascadiamono"
+# style = "italic"
+# weight = 400
+#
+# [fonts.bold-italic]
+# family = "cascadiamono"
+# style = "italic"
+# weight = 800
+
+# Navigation
+#
+# "mode" - Define navigation mode
+#   • NativeTab (MacOs only)
+#   • CollapsedTab
+#   • BottomTab
+#   • TopTab
+#   • Breadcrumb
+#   • Plain
+#
+# "clickable" - Enable click on tabs to switch.
+# "use-current-path" - Use same path whenever a new tab is created.
+# "color-automation" - Set a specific color for the tab whenever a specific program is running.
+# "macos-hide-window-buttons" - (MacOS only) Hide window buttons
+#
+# Example:
+# [navigation]
+# mode = "CollapsedTab"
+# clickable = false
+# use-current-path = false
+# color-automation = []
+# macos-hide-window-buttons = false
+
+# Shell
+#
+# You can set `shell.program` to the path of your favorite shell, e.g. `/bin/fish`.
+# Entries in `shell.args` are passed unmodified as arguments to the shell.
+#
+# Default:
+#   - (macOS) user login shell
+#   - (Linux/BSD) user login shell
+#   - (Windows) powershell
+#
+# Example 1 using fish shell from bin path:
+#
+# shell = { program = "/bin/fish", args = ["--login"] }
+#
+# Example 2 for Windows using powershell
+#
+# shell = { program = "pwsh", args = [] }
+#
+# Example 3 for Windows using powershell with login
+#
+# shell = { program = "pwsh", args = ["-l"] }
+
+# Startup directory
+#
+# Directory the shell is started in. If this is unset the working
+# directory of the parent process will be used.
+#
+# This configuration only has effect if use-fork is disabled
+#
+# Example:
+# working-dir = "/Users/raphael/Documents/"
+
+# Environment variables
+#
+# The example below sets fish as the default SHELL using env vars
+# please do not copy this if you do not need
+#
+# Example:
+# env-vars = []
+
+# Disable render when unfocused
+#
+# This property disable renderer processes while Rio is unfocused.
+#
+# Example:
+# disable-renderer-when-unfocused = false
+
+# Use fork
+#
+# Defaults for POSIX-based systems (Windows is not configurable):
+# MacOS: spawn processes
+# Linux/BSD: fork processes
+#
+# Example:
+# use-fork = false
+
+# [Colors]
+#	background = '#24283b'
+#	foreground = '#24283b'
+#	cursor = '#c0caf5'
+#	tabs = '#24283b'
+#	tabs-active = '#24283b'
+#	green = '#24283b'
+#	red = '#24283b'
+#	blue = '#24283b'
+#	yellow = '#24283b'
+
+[colors]
+# Regular colors
+background = '#24283b'
+black = '#414868'
+blue = '#7aa2f7'
+cursor = '#c0caf5'
+cyan = '#7dcfff'
+foreground  = '#F9F4DA'
+green = '#9ece6a'
+magenta = '#bb9af7'
+red = '#f7768e'
+white = '#c0caf5'
+yellow = '#e0af68'
+
+# UI colors
+tabs = '#12B5E5'
+tabs-active = '#FCBA28'
+selection-foreground = '#c0caf5'
+selection-background = '#364a82'
+
+# Dim colors
+dim-black = '#1C191A'
+dim-blue = '#0E91B7'
+dim-cyan = '#93D4E7'
+dim-foreground = '#ECDC8A'
+dim-green = '#098749'
+dim-magenta = '#624A87'
+dim-red = '#C7102A'
+dim-white = '#C1C1C1'
+dim-yellow = '#E6A003'
+
+# Light colors
+light-black = '#ADA8A0'
+light-blue = '#44C9F0'
+light-cyan = '#7BE1FF'
+light-foreground = '#F2EFE2'
+light-green = '#0ED372'
+light-magenta = '#9E88BE'
+light-red = '#F25E73'
+light-white = '#FFFFFF'
+light-yellow = '#FDF170'
+
+
+# Bindings
+#
+# Create custom Key bindings for Rio terminal
+# More information in: raphamorim.io/rio/docs/custom-key-bindings
+#
+# Example:
+ [bindings]
+ keys = [
+   { key = "q", with = "Alt", action = "Quit" },
+   
+   { key = "u", with = "Alt", action = "Scroll(1)" },
+   { key = "d", with = "Alt", action = "Scroll(-1)" },
+   { key = "up", with = "Alt", action = "IncreaseFontSize" },
+   { key = "down", with = "Alt", action = "DecreaseFontSize" },
+   
+   { key = "[", with = "Alt | Control", action = "ScrollPageUp" },
+   { key = "]", with = "Alt | Control", action = "ScrollPageDown" },
+ ]
+
+# Log level
+#
+# This property enables log level filter. Default is "OFF".
+#
+# Example:
+# [developer]
+# log-level = "OFF"
+

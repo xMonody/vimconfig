@@ -1,11 +1,19 @@
 local wezterm = require("wezterm")
+
+local act = wezterm.action
+
+wezterm.on('format-window-title', function(tab, pane, tabs, panes, config)
+  return "Wezterm"
+end)
+
+
 return {
     colors = {
-        cursor_bg = "#52ad70",
+        cursor_bg = "364a82",
         cursor_fg = "black",
         cursor_border = "#52ad70",
     },
-
+	--exit_behavior='Hold',
     window_close_confirmation = "AlwaysPrompt", --不用确认关闭
     enable_tab_bar = false, --不显示bar
     enable_scroll_bar = false, --不显示滚动条
@@ -47,7 +55,40 @@ return {
     keys = {
         { key = 'v', mods = 'CTRL', action = wezterm.action.PasteFrom 'Clipboard'},
         { key = 'c',mods = 'CTRL', action =  wezterm.action.CopyTo 'Clipboard'},
+		{ key = 'q', mods = 'ALT', action = wezterm.action.QuitApplication },
+		{ key = 'm', mods = 'ALT', action = wezterm.action.Hide },
+		{ key = 'c', mods = 'ALT', action = wezterm.action.CloseCurrentPane { confirm = true },},
+		{ key = 'v', mods = 'ALT', action = wezterm.action.ActivateCopyMode },
+		
+		{ key = 'UpArrow', mods = 'ALT', action = wezterm.action.DecreaseFontSize },
+		{ key = 'DownArrow', mods = 'ALT', action = wezterm.action.IncreaseFontSize },
+		
+		{ key = 'u', mods = 'ALT', action = wezterm.action.ScrollByLine(-1) },
+		{ key = 'd', mods = 'ALT', action = wezterm.action.ScrollByLine(1) },
+		{ key = 'u', mods = 'ALT|CTRL', action = wezterm.action.ScrollByPage(-0.5) },
+		{ key = 'd', mods = 'ALT|CTRL', action =wezterm.action.ScrollByPage(0.5) },
+		
+		--{ key = 'f', mods = 'ALT',action = act.Search {Regex = '[a-f0-9]{6,}',},},
+		--{ key = 'f', mods = 'ALT',action = act.Search { CaseSensitiveString = 'hash' },},
+		{ key = 'f', mods = 'ALT',action = act.Search { CaseInSensitiveString = '' },},
+		
+		{key = 's',mods = 'CTRL|ALT',action = wezterm.action.SplitHorizontal { domain = 'CurrentPaneDomain' },},
+		{key = 'v', mods = 'CTRL|ALT',action = wezterm.action.SplitVertical},
+		
+
+
+		{ key = 'l', mods = 'CTRL|ALT',action = act.ActivatePaneDirection 'Left',},
+		{ key = 'h', mods = 'CTRL|ALT',action = act.ActivatePaneDirection 'Right',},
+		{ key = 'k', mods = 'CTRL|ALT',action = act.ActivatePaneDirection 'Up',},
+		{ key = 'j', mods = 'CTRL|ALT',action = act.ActivatePaneDirection 'Down',},
+		
+		{ key = 'h', mods = 'ALT', action = act.AdjustPaneSize { 'Left', 5 },},
+		{ key = 'j', mods = 'ALT', action = act.AdjustPaneSize { 'Down', 5 },},
+		{ key = 'k', mods = 'ALT', action = act.AdjustPaneSize { 'Up', 5 } },
+		{ key = 'l', mods = 'ALT', action = act.AdjustPaneSize { 'Right', 5 },},
+  
+  
     },
     --default_prog = { 'powershell' },
-
 }
+

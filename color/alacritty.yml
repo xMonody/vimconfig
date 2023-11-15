@@ -1,3 +1,6 @@
+cursor:
+  style: Block
+
 colors:
   bright:
     black: '#414868'
@@ -57,8 +60,27 @@ font:
 key_bindings:
   - { key: V,        mods: Alt,       action: Paste             }
   - { key: C,        mods: Alt,       action: Copy              }
-
+  
+  - { key: U,        mods: Alt,       action: ScrollLineUp              }
+  - { key: D,        mods: Alt,       action: ScrollLineDown                }
+  
+  - { key: U,        mods: Alt|Control,       action: ScrollPageUp              }
+  - { key: D,        mods: Alt|Control,       action: ScrollPageDown                }
+  
+  - { key: Up,        mods: Alt,       action: IncreaseFontSize              }
+  - { key: Down,        mods: Alt,       action: DecreaseFontSize              }
+  
+  - { key: Q,        mods: Alt,       action: Quit              }
+  - { key: M,        mods: Alt,       action: Minimize              }
+  
+  - { key: N,        mods: Alt,       action: CreateNewWindow              }
+  - { key: V,        mods: Alt,       action: ToggleViMode              }
+  
+  - { key: F,        mods: Alt,       action: SearchForward              }
+  - { key: F,        mods: Alt|Control,       action: SearchBackward              }
+  
 window:
+  title: Alacritty
   dynamic_title: false
   dynamic_padding: false
   opacity: 0.9

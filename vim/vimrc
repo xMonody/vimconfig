@@ -12,7 +12,7 @@ if empty(glob(data_dir . '/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall --sync | source %
 endif
 
-call plug#begin('~/.vim/plugged')
+call plug#begin('~/.vim/plug')
 Plug 'neoclide/coc.nvim',{'branch':'release'} "代码补全
 "Plug 'honza/vim-snippets'"片段
 
@@ -488,7 +488,7 @@ hi SignColumn  ctermbg=NONE ctermfg=NONE guibg=NONE guifg=NONE
 set fillchars+=vert:│
 set cursorline
 hi CursorLine   guifg=NONE       guibg=#363636
-hi LineNr       guifg=Steelblue "设置行号颜色
+""hi LineNr       guifg=Steelblue "设置行号颜色
 hi CursorLineNr guifg=NONE  guibg=NONE
 
 augroup MyHighlightOverrides
