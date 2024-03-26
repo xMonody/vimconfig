@@ -1,0 +1,96 @@
+# (macos and linux: ~/.config/rio/themes/dracula.toml)
+# (windows: C:\Users\USER\AppData\Local\rio\themes\dracula.toml)
+cursor = '▇'
+    blinking-cursor = false
+    hide-cursor-when-typing = true
+    ignore_theme_selection_fg_color = false
+    #working-dir = "d:"
+
+
+[render]
+    performance = "Hide"
+    backend = "GL"
+    padding-x = 0
+
+[window]
+    width = 600
+    height = 400
+    mode = "Windowed"
+    foreground-opacity=1.0
+#background-opacity=0.4
+#blur=true
+    disable-renderer-when-unfocused=false
+
+[fonts]
+    size = 30
+    family = "SauceCodePro Nerd Font Mono"
+    extras = [{family = "新宋体"}]
+
+
+[developer]
+log-level = "OFF"
+
+[colors]
+# Regular colors
+foreground = '#C0CAF5'
+background = '#24283B'
+
+black = '#1D202F'
+blue = '#7AA2F7'
+cursor = '#C0CAF5'
+cyan = '#7DCFFF'
+green = '#9ECE6A'
+magenta = '#BB9AF7'
+red = '#F7768E'
+white = '#A9B1D6'
+yellow = '#E0AF68'
+
+# UI colors
+tabs-active = '#68a0e1'
+tabs        = '#49556a'
+
+selection-foreground = '#000000'
+selection-background = '#364A82'
+
+# Light colors
+light-black = '#414868'
+light-blue = '#7AA2F7'
+light-cyan = '#7DCFFF'
+#light-foreground = ''
+light-green = '#9ECE6A'
+light-magenta = '#BB9AF7'
+light-red = '#F7768E'
+light-white = '#C0CAF5'
+light-yellow = '#E0AF68'
+
+[bindings]
+  keys = [
+    { key = "u", with = "Alt | Shift", action = "Scroll(1)"  },
+    { key = "d", with = "Alt | Shift", action = "Scroll(-1)"  },
+    { key = "u", with = "Control | Shift", action = "ScrollPageUp"  },
+    { key = "d", with = "Control | Shift", action = "ScrollPageDown"  },
+
+    { key = "a", with = "Alt | Shift", action = "IncreaseFontSize"  },
+    { key = "z", with = "Alt | Shift", action = "DecreaseFontSize"  },
+    { key = "r", with = "Alt | Shift", action = "ResetFontSize"  },
+
+    { key = "v", with = "Control | Shift", action = "Paste"  },
+    { key = "c", with = "Control | Shift", action = "Copy"  },
+    { key = "v", with = "Alt", action = "Paste"  },
+    { key = "c", with = "Alt", action = "Copy"  },
+
+    { key = "g", with = "Alt|Shift", action = "ToggleVIMode"  },
+
+    { key = "o", with = "Alt | Shift", action = "CreateTab"  },
+    { key = "c", with = "Alt | Shift", action = "CloseTab"  },
+    { key = "x", with = "Alt | Shift", action = "CloseTab"  },
+
+    { key = "p", with = "Alt | Shift", action = "SelectPrevTab"  },
+    { key = "n", with = "Alt | Shift", action = "SelectNextTab"  },
+]
+
+[shell]
+  program = "nu"
+  args = [""]
+
+

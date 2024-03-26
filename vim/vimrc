@@ -15,6 +15,7 @@ endif
 call plug#begin('~/.vim/plug')
 Plug 'neoclide/coc.nvim',{'branch':'release'} "代码补全
 "Plug 'honza/vim-snippets'"片段
+Plug 'cdelledonne/vim-cmake'
 
 Plug 'Shougo/defx.nvim'"目录树"
 Plug 'roxma/nvim-yarp'
@@ -31,8 +32,8 @@ Plug 'kaicataldo/material.vim',{'branch':'main'}
 Plug 'voldikss/vim-translator'"翻译
 
 Plug 'voldikss/vim-floaterm' "终端
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } "模糊查找
-Plug 'junegunn/fzf.vim'
+"Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } "模糊查找
+"Plug 'junegunn/fzf.vim'
 
 Plug 'jiangmiao/auto-pairs' "补全括号
 Plug '907th/vim-auto-save'
@@ -40,7 +41,7 @@ Plug 'Yggdroot/indentLine' "对其线
 "Plug 'mg979/vim-visual-multi', {'branch': 'master'} "多光标
 Plug 'preservim/nerdcommenter' "注释
 
-Plug 'vim-autoformat/vim-autoformat'
+"Plug 'vim-autoformat/vim-autoformat'
 Plug 'mhinz/vim-startify'
 
 Plug 'airblade/vim-gitgutter' "git修改
@@ -87,7 +88,7 @@ set autoread
 set cindent
 set expandtab "设置tab=space
 "set noexpandtab "设置spce=tab
-set mouse-=a
+set mouse+=a
 
 set laststatus=2
 set hidden
@@ -106,6 +107,7 @@ set signcolumn=yes
 let &t_SI = "\e[6 q" "SI = INSERT mode
 let &t_SR = "\e[4 q" "SR = REPLACE mode
 let &t_EI = "\e[2 q" "EI = NORMAL mode (ELSE)
+autocmd! BufNewFile,BufRead *.vs,*.fs set ft=glsl
 "set t_8f=^[[38;2;%lu;%lu;%lum
 "set t_8b=^[[48;2;%lu;%lu;%lum
 "setlocal list
@@ -298,27 +300,23 @@ endfunction
 
 
 if has("gui_running")
-    "set background=light
     set guioptions=
     if has("win32")||has("win64")
-        set guifont=SauceCodePro_Nerd_Font_Mono:h11
+        set guifont=SauceCodePro_Nerd_Font_Mono:h16
     else
-        set guifont=SauceCodePro\ Nerd\ Font\ Mono\ 17
+        set guifont=SauceCodePro\ Nerd\ Font\ Mono\ 16
     endif
-endif
-
-
-"let g:tokyonight_enable_italic=1
-"let g:tokyonight_style='storm'
-"let g:tokyonight_transparent_background=0
-"let g:tokyonight_disable_italic_comment=0
-
-
-let g:material_terminal_italics = 1
-let g:material_theme_style = 'palenight-community'
+    set background=light
+    let g:material_terminal_italics = 1
+    let g:material_theme_style = 'lighter'
+    colorscheme  material
+    hi Normal guifg=NONE guibg=#fff0f5
+else
+    let g:material_terminal_italics = 1
+    let g:material_theme_style = 'palenight-community'
 "'default' 'palenight' | 'ocean' | 'lighter' | 'darker' | 'default-community' | 'palenight-community' | 'ocean-community' | 'lighter-community' | 'darker-community'
-
-colorscheme  material
+    colorscheme  material
+endif
 
 "------------------------------------------------------------------------------------
 "状态栏
@@ -364,7 +362,10 @@ nnoremap <silent><C-m>l :BLines<CR>
 nnoremap <silent><C-m>a :Ag<CR>
 "------------------------------------------------------------------------------------
 "vim-floaterm终端
-"let g:floaterm_shell='powershell'
+if has("win32")||has("win64")
+    let g:floaterm_shell='nu.exe'
+endif
+
 let g:floaterm_borderchars = '─│─│╭╮╯╰ '
 let g:floaterm_title = ''
 let g:floaterm_width = 0.8
@@ -445,16 +446,13 @@ let g:formatdef_fixjson = '"fixjson"'
 let g:formatters_json = ['fixjson']
 "-------------------------------------------------------------------------------
 let g:translator_window_borderchars = ['─','│','─','│','╭','╮','╯','╰ ']
-let g:translator_window_max_width=0.5
-let g:translator_window_max_height=0.4
+let g:translator_window_type = 'popup'
+let g:translator_window_max_width=0.8
+let g:translator_window_max_height=0.6
 "let g:translator_target_lang='youdao'
 
-nmap <silent> <Leader>t <Plug>Translate
-vmap <silent> <Leader>t <Plug>TranslateV
-nmap <silent> <Leader>w <Plug>TranslateW
-vmap <silent> <Leader>w <Plug>TranslateWV
-nmap <silent> <Leader>r <Plug>TranslateR
-vmap <silent> <Leader>r <Plug>TranslateRV
+nmap <silent> <Leader>t <Plug>TranslateW
+vmap <silent> <Leader>t <Plug>TranslateWV
 "-----------------------------------------------------------------------------------------------
 
 inoremap <silent><C-l> <Right>
@@ -469,13 +467,19 @@ nnoremap e ge
 
 nnoremap <silent>q :nohl<CR>
 
-nnoremap <silent><C-y> "+yy
-nnoremap <silent><C-e> "+p
-vnoremap <silent><C-y> "+y
-nnoremap <C-j> <C-w>w<CR>
+"nnoremap <silent><C-y> "+yy
+"nnoremap <silent><C-e> "+p
+"vnoremap <silent><C-y> "+y
+"nnoremap <C-j> <C-w>w<CR>
 
 nnoremap zl 5<C-w><<CR>
 nnoremap zh 5<C-w>><CR>
+nnoremap <C-w>c :if winnr('$') == 1 \| tabclose \| else \| close \| endif<CR>
+
+nnoremap cq :CMakeClean<CR>
+nnoremap cl :CMakeClose<CR>
+nnoremap cg :CMakeGenerate<CR> 
+nnoremap cb :CMakeBuild<CR>
 
 nnoremap <silent><F11> :call libcallnr("vimtweak64.dll", "SetAlpha", 230)<CR>
 nnoremap <silent><F12> :call libcallnr("vimtweak64.dll", "SetAlpha", 255)<CR>
@@ -485,24 +489,116 @@ set guicursor+=a:blinkon0
 "hi Normal guibg=NONE guifg=NONE ctermfg=NONE ctermbg=NONE "设置透明
 
 hi SignColumn  ctermbg=NONE ctermfg=NONE guibg=NONE guifg=NONE
+hi VertSplit   ctermbg=NONE ctermfg=0 guibg=NONE guifg=#000000
 set fillchars+=vert:│
-set cursorline
-hi CursorLine   guifg=NONE       guibg=#363636
-""hi LineNr       guifg=Steelblue "设置行号颜色
-hi CursorLineNr guifg=NONE  guibg=NONE
-
-augroup MyHighlightOverrides
-    autocmd!
-    autocmd FileType * highlight CocFloatSbar ctermfg=Blue guifg=Blue
-augroup END
 
 autocmd BufWinEnter * setlocal formatoptions-=cro
 autocmd FileType json,markdown let g:indentLine_conceallevel = 0
 au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
 
-hi CocSemVariable  guifg=#F7768E
-hi CocSemProperty  guifg=#F7768E
-hi CocSemParameter guifg=#F7768E
-hi Number          guifg=#f78c6c
-hi CocSemClass     guifg=#ffcb6b
-"hi String              guifg=#455574 cterm=italic
+
+"hi Normal guifg=NONE guibg=#24283b
+"hi SignColumn   guibg=#24283b  guifg=NONE
+"hi NonText guibg=#24283b guifg=NONE
+"highlight EndOfBuffer guibg=#24283b guifg=NONE
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+set cursorline
+
+if has("gui_running")
+    hi CursorLine   guifg=NONE  guibg=#e6e6fa gui=NONE cterm=NONE
+    hi Cursor       gui=NONE    guifg=#292d3e     guibg=#6182bb
+else
+    hi CursorLine   guifg=NONE  guibg=#303347 gui=NONE cterm=NONE
+endif
+hi LineNr       guibg=NONE  guifg=#494d64 "设置行号颜色
+hi CursorLineNr guifg=#b7bdf8  guibg=NONE
+
+hi Type            guifg=#009999 guibg=NONE gui=NONE cterm=NONE  "类型
+hi Structure       guifg=#F7768E guibg=NONE "sturct class等关键字
+
+
+hi CocInlayHint guifg=#111111
+hi CocSemClass     guifg=#ff9999 guibg=NONE "类类型
+hi CocSemNamespace guifg=#ff69b4
+
+if has("gui_running")
+    hi Identifier      guifg=#ffa500 guibg=NONE gui=italic cterm=italic "函数形参
+    hi link CocSemVariable Identifier
+    hi link CocSemProperty Identifier
+else
+    hi Identifier      guifg=#eed49f guibg=NONE gui=italic cterm=italic "函数形参
+    hi CocSemVariable  guifg=#eed49f gui=italic cterm=italic "变量
+    hi CocSemProperty  guifg=#eed49f gui=italic cterm=italic "类成员
+endif
+
+hi CocSemTypeParameter guifg=#006699 "模板参数"
+hi Function        guifg=#68a0e1 guibg=NONE gui=NONE cterm=NONE
+
+hi Statement guifg=#48decc guibg=NONE gui=NONE cterm=NONE "if  while public语句
+hi link Boolean Statement
+
+hi Constant guifg=#ffa0a0 guibg=NONE gui=NONE cterm=NONE "常量
+hi Number   guifg=#ffa0a0 guibg=NONE gui=NONE cterm=NONE "常量
+
+hi Character guifg=#676e95 guibg=NONE gui=italic cterm=italic"字符串"
+hi String    guifg=#676e95 guibg=NONE gui=italic cterm=italic"字符
+hi Comment   guifg=#676e95 guibg=NONE gui=italic cterm=italic"注释
+
+hi Macro guifg=#FF69B4
+hi PreProc guifg=#006699 guibg=NONE gui=NONE cterm=NONE "预处理
+hi Include guifg=#ff9999 guibg=NONE gui=NONE cterm=NONE "
+hi Define  guifg=#F7768E cterm=italic gui=italic "预定义符号
+hi Visual guifg=#f78c6c guibg=#686e95 ctermfg=NONE ctermbg=209
+
+command! -nargs=? -complete=buffer -bang BufOnly {
+    g:BufOnly('<args>', '<bang>') 
+}
+def g:BufOnly(b: string, bang: string): void
+    var buffer: number
+    if b == ''
+        buffer = bufnr('%')
+    elseif str2nr(b) > 0
+        buffer = bufnr(str2nr(b))
+    else
+        buffer = bufnr(b)
+    endif
+    if buffer == -1
+        echohl ErrorMsg
+        echomsg 'No matching buffer for ' .. b
+        echohl None
+        return
+    endif
+
+    var last_buffer: number = bufnr('$')
+    var delete_count = 0
+    for n in range(1, last_buffer)
+        if n != buffer && buflisted(n)
+            if bang == '' && getbufvar(n, '&modified')
+                echohl ErrorMsg
+                echomsg 'No write since last change for buffer ' ..
+                    n .. ' (add ! to override)'
+                echohl None
+            else
+                silent exe 'bdel' .. bang .. ' ' .. n
+                if ! buflisted(n)
+                    ++delete_count
+                endif
+            endif
+        endif
+    endfor
+    if delete_count == 1
+        echomsg delete_count .. " buffer deleted"
+    elseif delete_count > 1
+        echomsg delete_count .. " buffers deleted"
+    endif
+    lightline#bufferline#reload()
+enddef
+nnoremap <silent><C-q> :BufOnly<cr>
+
+function! CloseAllBuffersButCurrent()
+    let curr = bufnr("%")
+    let last = bufnr("$")
+    if curr > 1    | silent! execute"1,".(curr-1)."bd"     | endif
+        if curr < last | silent! execute (curr+1).",".last."bd" | endif
+    endfunction
+nmap <C-1> :call CloseAllBuffersButCurrent()<CR>

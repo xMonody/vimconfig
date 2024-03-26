@@ -58,26 +58,24 @@ font:
 
 
 key_bindings:
-  - { key: V,        mods: Alt,       action: Paste             }
-  - { key: C,        mods: Alt,       action: Copy              }
+  - { key: V,        mods: Alt,               action: Paste             }
+  - { key: C,        mods: Alt,               action: Copy              }
+  - { key: V,        mods: Control|Shift,     action: Paste             }
+  - { key: C,        mods: Control|Shift,     action: Copy              }
+
+  - { key: U,        mods: Alt|Shift,         action: ScrollLineUp      }
+  - { key: D,        mods: Alt|Shift,         action: ScrollLineDown    }
+  - { key: U,        mods: Shift|Control,     action: ScrollPageUp      }
+  - { key: D,        mods: Shift|Control,     action: ScrollPageDown    }
   
-  - { key: U,        mods: Alt,       action: ScrollLineUp              }
-  - { key: D,        mods: Alt,       action: ScrollLineDown                }
+  - { key: A,        mods: Alt|Shift,         action: IncreaseFontSize  }
+  - { key: Z,        mods: Alt|Shift,         action: DecreaseFontSize  }
+  - { key: R,        mods: Alt|Shift,         action: ResetFontSize     }
   
-  - { key: U,        mods: Alt|Control,       action: ScrollPageUp              }
-  - { key: D,        mods: Alt|Control,       action: ScrollPageDown                }
   
-  - { key: Up,        mods: Alt,       action: IncreaseFontSize              }
-  - { key: Down,        mods: Alt,       action: DecreaseFontSize              }
-  
-  - { key: Q,        mods: Alt,       action: Quit              }
-  - { key: M,        mods: Alt,       action: Minimize              }
-  
-  - { key: N,        mods: Alt,       action: CreateNewWindow              }
-  - { key: V,        mods: Alt,       action: ToggleViMode              }
-  
-  - { key: F,        mods: Alt,       action: SearchForward              }
-  - { key: F,        mods: Alt|Control,       action: SearchBackward              }
+  - { key: G,        mods: Alt|Shift,         action: ToggleViMode      }
+  - { key: F,        mods: Alt|Shift,         action: SearchForward     }
+  - { key: B,        mods: Alt|Shift,         action: SearchBackward    }
   
 window:
   title: Alacritty

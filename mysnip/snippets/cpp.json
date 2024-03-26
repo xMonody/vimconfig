@@ -187,5 +187,10 @@
     "prefix": "cin",
     "body": ["cin >> $1;"],
     "description": "Code snippet for std::cin, provided the header is set"
+  },
+  "temp": {
+    "prefix": "temp",
+    "body": ["template<typename $1>"],
+    "description": "Code snippet for std::cin, provided the header is set"
   }
 }
