@@ -1,0 +1,30 @@
+bg1=$(printf "\e[48;2;104;160;225m")
+bg2=$(printf "\e[48;2;60;59;54m")
+bg3=$(printf "\e[48;2;73;85;106m")
+
+cc=$(printf "\e[49m")
+red=$(printf "\e[38;2;255;0;0m")
+fg1=$(printf "\e[38;2;60;59;54m")
+fg2=$(printf "\e[38;2;104;160;225m")
+fg3=$(printf "\e[38;2;73;85;106m")
+
+#PROMPT="%(?:%{$bg1%}%{$fg1%}%1{    %}%{$fg2%}%{$bg2%}%{$bg3%}%{$fg1%} :%{$bg1%}%{$red%}%1{    %}%{$fg2%}%{$bg2%}%{$bg3%}%{$fg1%} )%{$fg[cyan]%}%c %{$cc%}%{$fg3%}%{$reset_color%}"
+
+set_prompt() {
+    if git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
+
+    PROMPT="%(?:%{$bg1%}%{$fg1%}%1{    %}%{$fg2%}%{$bg2%}%{$bg3%}%{$fg1%} :%{$bg1%}%{$red%}%1{    %}%{$fg2%}%{$bg2%}%{$bg3%}%{$fg1%} )%{$fg[cyan]%}%c%{$cc%}%{$bg3%}%{$fg2%}  %{$reset_color%}"
+    PROMPT+='$(git_prompt_info)'
+
+    else
+
+    PROMPT="%(?:%{$bg1%}%{$fg1%}%1{    %}%{$fg2%}%{$bg2%}%{$bg3%}%{$fg1%} :%{$bg1%}%{$red%}%1{    %}%{$fg2%}%{$bg2%}%{$bg3%}%{$fg1%} )%{$fg[cyan]%}%c %{$cc%}%{$fg3%} %{$reset_color%}"
+    fi
+}
+precmd_functions+=(set_prompt)
+
+ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg_bold[blue]%}(%{$fg[red]%}"
+ZSH_THEME_GIT_PROMPT_PREFIX="%{$bg3%}(%{$fg[red]%}"
+ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%} "
+ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[blue]%}) %{$fg[yellow]%}%1{ﴞ%}%{$fg3%}%{$cc%}%}"
+ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[blue]%})"

@@ -461,7 +461,7 @@ vim.api.nvim_set_keymap("n", "<C-[>", "<cmd>lua require('goto-preview').close_al
 require("neo-tree").setup({
     close_if_last_window = false,
     popup_border_style = "rounded",
-    enable_git_status = false,
+    enable_git_status = true,
     enable_diagnostics = false,
     enable_normal_mode_for_inputs = false,
     open_files_do_not_replace_types = { "terminal", "trouble", "qf" },
@@ -506,9 +506,9 @@ require("neo-tree").setup({
             symbols = {
 
                 added     = "",
-                modified  = "",
+                modified  = "ﴞ",
                 conflict  = "",
-                unstaged = "ﴞ",
+                unstaged = "",
                 staged = "",
                 unmerged = "",
                 renamed = "",
