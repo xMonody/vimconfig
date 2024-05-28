@@ -1,0 +1,46 @@
+{
+  "name": "mysnip",
+  "engines": {
+    "vscode": "^1.11.0"
+  },
+  "contributes": {
+    "snippets": [
+      {
+        "language": "c",
+        "path": "./snippets/c.json"
+      },
+      {
+        "language": "cpp",
+        "path": "./snippets/cpp.json"
+      },
+      {
+        "language": "glsl",
+        "path": "./snippets/glsl.json"
+      },
+      {
+        "language": "lua",
+        "path": "./snippets/lua.json"
+      },
+      {
+        "language": "go",
+        "path": "./snippets/go.json"
+      },
+      {
+        "language": "rust",
+        "path": "./snippets/rust.json"
+      },
+      {
+        "language": "sql",
+        "path": "./snippets/sql.json"
+      },
+      {
+        "language": "make",
+        "path": "./snippets/make.json"
+      },
+      {
+        "language": "cmake",
+        "path": "./snippets/cmake.json"
+      }
+    ]
+  }
+}
