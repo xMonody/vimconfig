@@ -3,11 +3,11 @@ local act = wezterm.action
 local action_callback = wezterm.action_callback
 
 local fonts="SauceCodePro Nerd Font Mono"
-local size=15
+local size=20
 
- wezterm.on('format-window-title', function(tab, pane, tabs, panes, config)
-     return "Wezterm"
-  end)
+wezterm.on('format-window-title', function(tab, pane, tabs, panes, config)
+    return "Wezterm"
+end)
 
 local nf = wezterm.nerdfonts
 local GLYPH_SEMI_CIRCLE_LEFT = nf.ple_left_half_circle_thick
@@ -17,8 +17,8 @@ local M = {}
 local __cells__ = {}
 
 local colors = {
-   default   = { bg = '#45475a', fg = '#1c1b19' },
-   is_active = { bg = '#7FB4CA', fg = '#11111b' },
+   default   = { bg = '#49556a', fg = '#1c1b19' },
+   is_active = { bg = '#68a0e1', fg = '#11111b' },
    hover     = { bg = '#587d8c', fg = '#1c1b19' },
 }
 
@@ -29,7 +29,7 @@ end
 
 local _set_title = function(process_name, base_title, max_width, inset)
    local title
-   inset = inset or 6
+   inset = inset or 5
 
    if process_name:len() > 0 then
       title = process_name .. ' ~ ' .. base_title
@@ -58,37 +58,36 @@ local _push = function(bg, fg, attribute, text)
 end
 
 wezterm.on('format-tab-title', function(tab, _tabs, _panes, _config, hover, max_width)
-      __cells__ = {}
-      local bg
-      local fg
-      local process_name = _set_process_name(tab.active_pane.foreground_process_name)
-      local is_admin = _check_if_admin(tab.active_pane.title)
-      local title = _set_title(process_name, tab.active_pane.title, max_width, (is_admin and 8))
+    __cells__ = {}
+    local bg
+    local fg
+    local process_name = _set_process_name(tab.active_pane.foreground_process_name)
+    local is_admin = _check_if_admin(tab.active_pane.title)
+    local title = _set_title(process_name, tab.active_pane.title, max_width, (is_admin and 8))
 
-      if tab.is_active then
-         bg = colors.is_active.bg
-         fg = colors.is_active.fg
-      elseif hover then
-         bg = colors.hover.bg
-         fg = colors.hover.fg
-      else
-         bg = colors.default.bg
-         fg = colors.default.fg
-      end
-      local has_unseen_output = false
-      for _, pane in ipairs(tab.panes) do
-         if pane.has_unseen_output then
+    if tab.is_active then
+        bg = colors.is_active.bg
+        fg = colors.is_active.fg
+    elseif hover then
+        bg = colors.hover.bg
+        fg = colors.hover.fg
+    else
+        bg = colors.default.bg
+        fg = colors.default.fg
+    end
+    local has_unseen_output = false
+    for _, pane in ipairs(tab.panes) do
+        if pane.has_unseen_output then
             has_unseen_output = true
             break
-         end
-      end
-      _push('rgba(0, 0, 0, 0.4)', bg, { Intensity = 'Bold' }, GLYPH_SEMI_CIRCLE_LEFT)
-      _push(bg, fg, { Intensity = 'Bold' }, ' ' .. title)
-      _push(bg, fg, { Intensity = 'Bold' }, ' ')
-      _push('rgba(0, 0, 0, 0.4)', bg, { Intensity = 'Bold' }, GLYPH_SEMI_CIRCLE_RIGHT)
-      return __cells__
-   end)
-
+        end
+    end
+    _push('rgb(36, 40, 59)', bg, { Intensity = 'Bold' }, " " .. GLYPH_SEMI_CIRCLE_LEFT)
+    _push(bg, fg, { Intensity = 'Bold' }, ' ' .. title)
+    _push(bg, fg, { Intensity = 'Bold' }, ' ')
+    _push('rgb(36, 40, 59)', bg, { Intensity = 'Bold' }, GLYPH_SEMI_CIRCLE_RIGHT)
+    return __cells__
+end)
 
 return {
     --exit_behavior='Hold',
@@ -122,6 +121,7 @@ return {
     freetype_load_target = "HorizontalLcd", --抗锯齿
     freetype_render_target = "HorizontalLcd",
     front_end = "OpenGL",
+    hide_mouse_cursor_when_typing=true,
 
 
 

@@ -35,7 +35,7 @@
   offset = {x=0,y=0}
   glyph_offset= {x=0,y=0}
   builtin_box_drawing = false
-  size=16
+  size=20
 
 [window]
   dimensions ={columns=80,lines=24}

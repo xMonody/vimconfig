@@ -31,7 +31,7 @@ colors:
     text: '#c0caf5'
 
 font:
-  size: 17
+  size: 20
   offset:
     x: 0
     y: 0
