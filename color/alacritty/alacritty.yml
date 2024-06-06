@@ -76,6 +76,7 @@ key_bindings:
   - { key: G,        mods: Alt|Shift,         action: ToggleViMode      }
   - { key: F,        mods: Alt|Shift,         action: SearchForward     }
   - { key: B,        mods: Alt|Shift,         action: SearchBackward    }
+  - { key: Q,        mods: Alt,               action: Quit    }
   
 window:
   title: Alacritty

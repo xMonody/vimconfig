@@ -122,6 +122,7 @@ return {
     freetype_render_target = "HorizontalLcd",
     front_end = "OpenGL",
     hide_mouse_cursor_when_typing=true,
+    custom_block_glyphs = false,
 
 
 
@@ -192,7 +193,8 @@ return {
         { key = 'j', mods = 'SHIFT|CTRL', action = act.AdjustPaneSize { 'Down', 5 },},
         { key = 'k', mods = 'SHIFT|CTRL', action = act.AdjustPaneSize { 'Up', 5 } },
         { key = 'l', mods = 'SHIFT|CTRL', action = act.AdjustPaneSize { 'Right', 5 },},
-        { key = '2', mods = 'ALT', action = wezterm.action.ShowLauncher },
+        { key = 'p', mods = 'SHIFT|CTRL', action = wezterm.action.ShowLauncher },
+        { key = 'q', mods = 'ALT', action = wezterm.action.QuitApplication  },
 
         {
             key = 'w',
@@ -228,7 +230,14 @@ return {
         },
 
     },
-        --default_prog = { 'C:/Program Files/nu/bin/nu.exe' },
-        --default_prog = { 'powershell.exe' },
-    --    default_cwd = "D:/"
+    --default_prog = { 'C:/Program Files/nu/bin/nu.exe' },
+    --default_cwd = "D:/"
+        --launch_menu = {
+        --{ label = 'nushell', args = { 'C:/Program Files/nu/bin/nu.exe'  }, },
+        --{ label = 'Powershell', args = { 'powershell.exe'  }, },
+        --{ label='Mingw64',args={'C:/msys64/msys2_shell.cmd','-defterm','-here','-no-start','-mingw64'},},
+        --{ label='ucrt64',args={'C:/msys64/msys2_shell.cmd','-defterm','-here','-no-start','-ucrt64'},},
+        --{ label='Wsl',args={'wsl'},},
+    --},
+
 }
