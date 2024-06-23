@@ -74,6 +74,6 @@ bindings=[
 [mouse]
 hide_when_typing = true
 
-[shell]
+#[shell]
 # program = "C:/Program Files/nu/bin/nu.exe"
 # working_directory = "D://library"

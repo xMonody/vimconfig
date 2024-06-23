@@ -9,24 +9,20 @@ cursor = '▇'
     confirm-before-quit = false
     #working-dir = "d:"
 
-
-[render]
-    disable-renderer-when-unfocused=false
-    performance = "Hide"
-    backend = "GL"
-
 [window]
     width = 1080
     height = 680
     mode = "Windowed"
-    foreground-opacity=1.0
-    background-opacity=0.9
+    opacity=1
     blur=true
 
+[render]
+    performance = "Low"
+    backend = "GL"
+    disable-unfocused-render=false
+
 [fonts]
-size = 25
-
-
+size = 20
 [fonts.regular]
 family = "SauceCodePro Nerd Font Mono"
 style = "normal"
@@ -46,71 +42,70 @@ weight = 400
 family = "SauceCodePro Nerd Font Mono"
 style = "italic"
 weight = 800
-extras = [{ family = "宋体" }]
+extras = [{ family = "新宋体" }]
+
+[navigation]
+mode = "BottomTab"
+clickable = false
+use-current-path = false
+color-automation = []
 
 [developer]
 log-level = "OFF"
 
 [colors]
-# Regular colors
-foreground = '#C0CAF5'
-background = '#24283B'
-
-black = '#1D202F'
-blue = '#7AA2F7'
-cursor = '#C0CAF5'
-cyan = '#7DCFFF'
-green = '#9ECE6A'
-magenta = '#BB9AF7'
-red = '#F7768E'
-white = '#A9B1D6'
-yellow = '#E0AF68'
-
-# UI colors
-tabs-active = '#68a0e1'
-tabs        = '#49556a'
-
-selection-foreground = '#000000'
-selection-background = '#364A82'
-
-# Light colors
-light-black = '#414868'
-light-blue = '#7AA2F7'
-light-cyan = '#7DCFFF'
-#light-foreground = ''
-light-green = '#9ECE6A'
-light-magenta = '#BB9AF7'
-light-red = '#F7768E'
-light-white = '#C0CAF5'
-light-yellow = '#E0AF68'
+tabs             = '#49556A'
+tabs-active      = '#68A0E1'
+background = '#24283b'
+foreground = '#c0caf5'
+selection-background = '#364a82'
+selection-foreground = '#c0caf5'
+cursor = '#c0caf5'
+black = '#1d202f'
+red = '#f7768e'
+green = '#9ece6a'
+yellow = '#e0af68'
+blue = '#7aa2f7'
+magenta = '#bb9af7'
+cyan = '#7dcfff'
+white = '#a9b1d6'
+light_black = '#414868'
+light_red = '#f7768e'
+light_green = '#9ece6a'
+light_yellow = '#e0af68'
+light_blue = '#7aa2f7'
+light_magenta = '#bb9af7'
+light_cyan = '#7dcfff'
+light_white = '#c0caf5'
 
 [bindings]
   keys = [
-    { key = "u", with = "Alt | Shift", action = "Scroll(3)"  },
-    { key = "d", with = "Alt | Shift", action = "Scroll(-3)"  },
+    { key = "u", with = "Alt | Shift", action = "Scroll(3)"},
+    { key = "d", with = "Alt | Shift", action = "Scroll(-3)"},
     
-    { key = "u", with = "Control | Shift", action = "ScrollHalfPageUp"  },
-    { key = "d", with = "Control | Shift", action = "ScrollHalfPageDown"  },
+    { key = "u", with = "Control | Shift", action = "ScrollHalfPageUp"},
+    { key = "d", with = "Control | Shift", action = "ScrollHalfPageDown"},
 
-    { key = "a", with = "Alt | Shift", action = "IncreaseFontSize"  },
-    { key = "z", with = "Alt | Shift", action = "DecreaseFontSize"  },
-    { key = "r", with = "Alt | Shift", action = "ResetFontSize"  },
+    { key = "a", with = "Alt | Shift", action = "IncreaseFontSize"},
+    { key = "z", with = "Alt | Shift", action = "DecreaseFontSize"},
+    { key = "r", with = "Alt | Shift", action = "ResetFontSize"},
 
-    { key = "c", with = "control | shift", action = "none" },
-    { key = "v", with = "control | shift", action = "none" },
-    { key = "v", with = "Control | Shift", action = "Paste"  },
-    { key = "c", with = "Control | Shift", action = "Copy"  },
-    { key = "v", with = "Alt", action = "Paste"  },
-    { key = "c", with = "Alt", action = "Copy"  },
+    { key = "v", with = "Control | Shift", action = "Paste"},
+    { key = "c", with = "Control | Shift", action = "Copy"},
+    { key = "v", with = "Alt", action = "Paste"},
+    { key = "c", with = "Alt", action = "Copy"},
 
-    { key = "g", with = "Alt|Shift", action = "ToggleVIMode"  },
+    { key = "g", with = "Alt|Shift", action = "ToggleVIMode"},
 
-    { key = "o", with = "Alt | Shift", action = "CreateTab"  },
-    { key = "c", with = "Alt | Shift", action = "CloseTab"  },
-    { key = "x", with = "Alt | Shift", action = "CloseTab"  },
+    { key = "o", with = "Alt | Shift", action = "CreateTab"},
+    { key = "c", with = "Alt | Shift", action = "CloseTab"},
+    { key = "x", with = "Alt | Shift", action = "CloseTab"},
 
-    { key = "p", with = "Alt | Shift", action = "SelectPrevTab"  },
-    { key = "n", with = "Alt | Shift", action = "SelectNextTab"  },
+    { key = "p", with = "Alt | Shift", action = "SelectPrevTab"},
+    { key = "n", with = "Alt | Shift", action = "SelectNextTab"},
+    { key = "s", with = "Alt | Shift", action = "SplitHorizontally"},
+    { key = "v", with = "Alt | Shift", action = "SplitVertically"},
+    { key = "b", with = "Alt | Shift", action = "ClosePane"},
 ]
 
 #[shell]
