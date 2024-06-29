@@ -1,0 +1,15 @@
+Invoke-Expression (&starship init powershell)
+Set bell-style none
+
+[Console]::Write([char]27 + "[2 q") # windows powershell
+Write-Host -NoNewLine "`e[2 q" #powershell
+
+Set-PSReadlineOption -EditMode Emacs
+
+Remove-Item alias:ls
+New-Alias -Name ls -Value lsd
+New-Alias -Name ll -Value lsd
+New-Alias -Name ff -Value ffmpeg
+New-Alias -Name fp -Value ffplay
+New-Alias -Name fr -Value ffprobe
+

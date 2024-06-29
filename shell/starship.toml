@@ -1,12 +1,45 @@
 format = """
 [](#DA627D)\
+[󰣚](bg:#DA627D fg:#ffff00)\
 $directory\
 [](fg:#DA627D bg:#FCA17D)\
 $git_branch\
 $git_status\
-[](fg:#FCA17D bg:#4682B4)\
+[](fg:#FCA17D bg:#68A0E1)\
 $time\
-[ ](fg:#4682B4)\
+[ ](fg:#68A0E1)\
+"""
+add_newline=false
+[directory]
+style = "bg:#DA627D"
+format = "[ $path ]($style)"
+truncation_length = 2
+truncation_symbol = "…/"
+
+[time]
+disabled = false
+time_format = "%R"
+style = "bg:#68A0E1"
+format = '[ $time ]($style)'
+
+[git_branch]
+symbol = ""
+style = "bg:#FCA17D"
+format = '[ $branch ]($style)'
+
+[git_status]
+style = "bg:#FCA17D"
+format = '[$all_status$ahead_behind ]($style)'
+
+--------------------------------------------------------------------------
+
+format = """
+[](#DA627D)\
+$directory\
+[](fg:#DA627D bg:#FCA17D)\
+[](fg:#FCA17D bg:#68A0E1)\
+[    ](bg:#68A0E1 fg:#DA627D)\
+[ ](fg:#68A0E1)\
 """
 
 add_newline=false
@@ -16,60 +49,3 @@ style = "bg:#DA627D"
 format = "[ $path ]($style)"
 truncation_length = 3
 truncation_symbol = "…/"
-
-[time]
-disabled = false
-time_format = "%R"
-style = "bg:#4682B4" # #86BBD0
-format = '[  $time ]($style)'
-
-[git_branch]
-symbol = ""
-style = "bg:#FCA17D"
-format = '[ $symbol $branch ]($style)'
-
-[git_status]
-style = "bg:#FCA17D"
-format = '[$all_status$ahead_behind ]($style)'
-
---------------------------------------------------------------------------
-
-format = """
-[](#D65D0E)\
-$directory\
-[](fg:#D65D0E bg:#D79921)\
-$git_branch\
-$git_status\
-[](fg:#D79921 bg:#458588)\
-[  ](bg:#458588 fg:#ff0000)\
-$time\
-[ ](fg:#458588)\
-"""
-
-add_newline=false
-
-[directory]
-style = "bg:#D65D0E"
-format = "[ $path ]($style)"
-truncation_length = 3
-truncation_symbol = "…/"
-
-[leve]
-disabled = false
-format = '($style)'
-
-[time]
-disabled = false
-time_format = "%R"
-style = "bg:#458588" #86BBD0
-format = '[$time ]($style)'
-
-[git_branch]
-symbol = ""
-style = "bg:#D79921"
-format = '[ $symbol $branch ]($style)'
-
-[git_status]
-style = "bg:#D79921"
-format = '[$all_status$ahead_behind ]($style)'
-
