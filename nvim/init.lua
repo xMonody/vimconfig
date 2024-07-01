@@ -1,13 +1,7 @@
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
-    vim.fn.system({
-        "git",
-        "clone",
-        "--filter=blob:none",
-        "https://github.com/folke/lazy.nvim.git",
-        "--branch=stable", -- latest stable release
-        lazypath,
-    })
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
+  local lazyrepo = "https://github.com/folke/lazy.nvim.git"
+  vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
 end
 vim.opt.rtp:prepend(lazypath)
 
@@ -20,10 +14,8 @@ local plugins = {
     { "hrsh7th/nvim-cmp" },
     { "hrsh7th/cmp-nvim-lua" },
     { "saecki/crates.nvim", version = "v0.3.0", dependencies = { "nvim-lua/plenary.nvim" } },
-    --{ "hrsh7th/cmp-nvim-lsp-signature-help" },
     { "ray-x/lsp_signature.nvim" },
     { "rmagatti/goto-preview" },
-    { "cdelledonne/vim-cmake" },
 
     { "L3MON4D3/LuaSnip" },
     { "saadparwaiz1/cmp_luasnip" },
@@ -36,16 +28,13 @@ local plugins = {
     { "nvim-lua/plenary.nvim", "nvim-tree/nvim-web-devicons", "MunifTanjim/nui.nvim", } },
 
     { "akinsho/toggleterm.nvim" }, --终端
-    --{ "voldikss/vim-floaterm" },
     {"voldikss/vim-translator"}, --翻译
 
     { "nvim-telescope/telescope.nvim", dependencies = { "nvim-lua/plenary.nvim" } }, --模糊搜索
     { "lewis6991/gitsigns.nvim" }, --git修改
     { "stevearc/aerial.nvim" }, --大纲
-    --"nvim-treesitter/nvim-treesitter", --高亮
 
     { "brenoprata10/nvim-highlight-colors" },
-    --{ "navarasu/onedark.nvim" },--主题
     { "catppuccin/nvim", name = "catppuccin" },
     { "mhartington/formatter.nvim" },--格式化
 
@@ -152,8 +141,8 @@ require("mason").setup({
 ---------------------------------------------------------------------------------------------------
 
 vim.keymap.set('n', 'gf', vim.diagnostic.open_float)
-vim.keymap.set('n', 'gn', vim.diagnostic.goto_prev)
-vim.keymap.set('n', 'gp', vim.diagnostic.goto_next)
+vim.keymap.set('n', 'gk', vim.diagnostic.goto_prev)
+vim.keymap.set('n', 'gj', vim.diagnostic.goto_next)
 vim.keymap.set('n', 'gs', vim.diagnostic.setloclist)
 
 vim.api.nvim_create_autocmd('LspAttach', {
@@ -186,12 +175,12 @@ local handlers =  {
     ["textDocument/signatureHelp"] =  vim.lsp.with(vim.lsp.handlers.signature_help, {border = border }),
 }
 
-local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
+--[[ local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
 function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
     opts = opts or {}
     opts.border = opts.border or border
     return orig_util_open_floating_preview(contents, syntax, opts, ...)
-end
+end ]]
 
 vim.cmd [[autocmd ColorScheme * highlight NormalFloat guifg=NONE guibg=NONE]]
 vim.cmd [[autocmd ColorScheme * highlight FloatBorder guifg=NONE guibg=NONE]]
@@ -283,51 +272,11 @@ require("lspconfig").gopls.setup({
     },
 })
 
---[[local cfg = {
-    debug = false,
-    log_path = vim.fn.stdpath("cache") .. "/lsp_signature.log",
-    verbose = false,
-
-    bind = true,
-    doc_lines = 10,
-    max_height = 12,
-    max_width = 80,
-    wrap = true,
-    floating_window = true,
-
-    floating_window_above_cur_line = true,
-    floating_window_off_x = 1,
-    floating_window_off_y = 0,
-
-    close_timeout = 4000,
-    fix_pos = false,
-    hint_enable = false,
-    hint_prefix = "",
-    hint_scheme = "",
-    hint_inline = function() return false end,
-    hi_parameter = "LspSignatureActiveParameter",
-    handler_opts = {
-        border = "rounded"
-    },
-
-    always_trigger = false,
-
-    auto_close_after = nil,
-    extra_trigger_chars = {},
-    zindex = 200,
-    padding = '',
-    transparency = nil,
-    shadow_blend = 36,
-    shadow_guibg = 'Black',
-    timer_interval = 200,
-}
-
-require'lsp_signature'.setup(cfg)]]
 
 local cfg = {
   floating_window_off_x = 0,
   floating_window_off_y = function()
-    local linenr = vim.api.nvim_win_get_cursor(0)[1]
+    --[[ local linenr = vim.api.nvim_win_get_cursor(0)[1] ]]
     local pumheight = vim.o.pumheight
     local winline = vim.fn.winline()
     local winheight = vim.fn.winheight(0)
@@ -461,7 +410,6 @@ cmp.setup({
         { name = "nvim_lsp" },
         { name = "path" },
         { name = "buffer" },
-        --{ name = "nvim_lsp_signature_help" },
         { name = "crates" },
     },
 
@@ -512,26 +460,24 @@ cmp.setup.cmdline(":", {
 --------------------------------------------------------------------------------------------------
 --gotoconfig
 require('goto-preview').setup {
-  width = 120; -- Width of the floating window
-  height = 15; -- Height of the floating window
-  border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
-  default_mappings = false; -- Bind default mappings
-  debug = false; -- Print debug information
-  opacity = nil; -- 0-100 opacity level of the floating window where 100 is fully transparent.
-  resizing_mappings = false; -- Binds arrow keys to resizing the floating window.
-  post_open_hook = nil; -- A function taking two arguments, a buffer and a window to be ran as a hook.
-  post_close_hook = nil; -- A function taking two arguments, a buffer and a window to be ran as a hook.
-  references = { -- Configure the telescope UI for slowing the references cycling window.
-    telescope = require("telescope.themes").get_dropdown({ hide_preview = false })
-  };
-  focus_on_open = true; -- Focus the floating window when opening it.
-  dismiss_on_move = false; -- Dismiss the floating window when moving the cursor.
-  force_close = true, -- passed into vim.api.nvim_win_close's second argument. See :h nvim_win_close
-  bufhidden = "wipe", -- the bufhidden option to set on the floating window. See :h bufhidden
-  stack_floating_preview_windows = true, -- Whether to nest floating windows
-  preview_window_title = { enable = true, position = "left" }, -- Whether to set the preview window title as the filename
+    width = 120; -- Width of the floating window
+    height = 15; -- Height of the floating window
+    border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
+    default_mappings = false; -- Bind default mappings
+    debug = false; -- Print debug information
+    opacity = nil; -- 0-100 opacity level of the floating window where 100 is fully transparent.
+    resizing_mappings = false; -- Binds arrow keys to resizing the floating window.
+    post_open_hook = nil; -- A function taking two arguments, a buffer and a window to be ran as a hook.
+    post_close_hook = nil; -- A function taking two arguments, a buffer and a window to be ran as a hook.
+    references = { telescope = require("telescope.themes").get_dropdown({ hide_preview = false }) };
+    focus_on_open = true; -- Focus the floating window when opening it.
+    dismiss_on_move = false; -- Dismiss the floating window when moving the cursor.
+    force_close = true, -- passed into vim.api.nvim_win_close's second argument. See :h nvim_win_close
+    bufhidden = "wipe", -- the bufhidden option to set on the floating window. See :h bufhidden
+    stack_floating_preview_windows = true, -- Whether to nest floating windows
+    preview_window_title = { enable = true, position = "left" },
 }
-vim.api.nvim_set_keymap("n", "<C-g>", "<cmd>lua require('goto-preview').goto_preview_definition()<CR>", { noremap = true })
+vim.api.nvim_set_keymap("n","<C-g>","<cmd>lua require('goto-preview').goto_preview_definition()<CR>", { noremap = true })
 vim.api.nvim_set_keymap("n", "gc", "<cmd>lua require('goto-preview').goto_preview_references()<CR> ", { noremap = true })
 vim.api.nvim_set_keymap("n", "gi", "<cmd>lua require('goto-preview').goto_preview_implementation()<CR>", { noremap = true })
 vim.api.nvim_set_keymap("n", "<C-[>", "<cmd>lua require('goto-preview').close_all_win()<CR>", { noremap = true })
@@ -679,7 +625,6 @@ hijack_netrw_behavior = "open_default",
 use_libuv_file_watcher = false,
 window = {
     mappings = {
-
         --[[ ["<bs>"] = "navigate_up", ]]
         --[[ ["."] = "set_root", ]]
         ["."] = "toggle_hidden",
@@ -689,7 +634,6 @@ window = {
     },
     fuzzy_finder_mappings = {
         ["<down>"] = "move_cursor_down",
-
         ["<C-n>"] = "move_cursor_down",
         ["<up>"] = "move_cursor_up",
         ["<C-p>"] = "move_cursor_up",
@@ -855,89 +799,55 @@ vim.api.nvim_set_keymap("n", "<C-m>p", "<cmd>lua require('telescope.builtin').gr
 
 ------------------------------------------------------------------------------------------------
 --gitconfig
-require("gitsigns").setup({
+require('gitsigns').setup{
     signs = {
-        add = { hl = "GitSignsAdd", text = "|", numhl = "GitSignsAddNr", linehl = "GitSignsAddLn" },
-        change = { hl = "GitSignsChange", text = "|", numhl = "GitSignsChangeNr", linehl = "GitSignsChangeLn" },
-        delete = { hl = "GitSignsDelete", text = "|", numhl = "GitSignsDeleteNr", linehl = "GitSignsDeleteLn" },
-        topdelete = { hl = "GitSignsDelete", text = "|", numhl = "GitSignsDeleteNr", linehl = "GitSignsDeleteLn" },
-        changedelete = { hl = "GitSignsChange", text = "|", numhl = "GitSignsChangeNr", linehl = "GitSignsChangeLn" },
+        add          = { text = '|' },
+        change       = { text = '|' },
+        delete       = { text = '|' },
+        topdelete    = { text = '|' },
+        changedelete = { text = '|' },
+        untracked    = { text = '|' },
     },
-    signcolumn = true, -- Toggle with `:Gitsigns toggle_signs`
-    numhl = false, -- Toggle with `:Gitsigns toggle_numhl`
-    linehl = false, -- Toggle with `:Gitsigns toggle_linehl`
-    word_diff = false, -- Toggle with `:Gitsigns toggle_word_diff`
-    watch_gitdir = {
-        interval = 1000,
-        follow_files = true,
-    },
-    attach_to_untracked = true,
-    current_line_blame = false, -- Toggle with `:Gitsigns toggle_current_line_blame`
-    current_line_blame_opts = {
-        virt_text = true,
-        virt_text_pos = "eol", -- 'eol' | 'overlay' | 'right_align'
-        delay = 1000,
-        ignore_whitespace = false,
-    },
-    current_line_blame_formatter = "<author>, <author_time:%Y-%m-%d> - <summary>",
-    sign_priority = 6,
-    update_debounce = 100,
-    status_formatter = nil, -- Use default
-    max_file_length = 40000,
-    preview_config = {
-        border = "single",
-        style = "minimal",
-        relative = "cursor",
-        row = 0,
-        col = 1,
-    },
-    yadm = {
-        enable = false,
-    },
-
     on_attach = function(bufnr)
-        local gs = package.loaded.gitsigns
+        local gitsigns = require('gitsigns')
         local function map(mode, l, r, opts)
             opts = opts or {}
             opts.buffer = bufnr
             vim.keymap.set(mode, l, r, opts)
         end
 
-        -- Navigati on
-        map("n", "tj", function()
+        map('n', 'tk', function()
             if vim.wo.diff then
-                return "]c"
+                vim.cmd.normal({']c', bang = true})
+            else
+                gitsigns.nav_hunk('next')
             end
-            vim.schedule(function()
-                gs.next_hunk()
-            end)
-            return "<Ignore>"
-        end, { expr = true })
-
-        map("n", "tk", function()
-            if vim.wo.diff then
-                return "[c"
-            end
-            vim.schedule(function()
-                gs.prev_hunk()
-            end)
-            return "<Ignore>"
-        end, { expr = true })
-
-        --map({'n', 'v'}, '<leader>hs', ':Gitsigns stage_hunk<CR>')
-        --map({'n', 'v'}, '<leader>hr', ':Gitsigns reset_hunk<CR>')
-        --map('n', '<leader>hS', gs.stage_buffer)
-        --map('n', '<leader>hu', gs.undo_stage_hunk)
-        --map('n', '<leader>hR', gs.reset_buffer)
-        map("n", "tv", gs.preview_hunk)
-        map("n", "tb", function()
-            gs.blame_line({ full = true })
         end)
-        -- map('n', '<leader>tb', gs.toggle_current_line_blame)
-        map("n", "td", gs.diffthis)
-        --map('n', '<leader>td', gs.toggle_deleted)
-    end,
-})
+
+        map('n', 'tj', function()
+            if vim.wo.diff then
+                vim.cmd.normal({'[c', bang = true})
+            else
+                gitsigns.nav_hunk('prev')
+            end
+        end)
+
+        map('n', '<leader>hs', gitsigns.stage_hunk)
+        map('n', '<leader>hr', gitsigns.reset_hunk)
+        map('v', '<leader>hs', function() gitsigns.stage_hunk {vim.fn.line('.'), vim.fn.line('v')} end)
+        map('v', '<leader>hr', function() gitsigns.reset_hunk {vim.fn.line('.'), vim.fn.line('v')} end)
+        map('n', '<leader>hS', gitsigns.stage_buffer)
+        map('n', '<leader>hu', gitsigns.undo_stage_hunk)
+        map('n', '<leader>hR', gitsigns.reset_buffer)
+        map('n', '<leader>hp', gitsigns.preview_hunk)
+        map('n', '<leader>hb', function() gitsigns.blame_line{full=true} end)
+        map('n', '<leader>tb', gitsigns.toggle_current_line_blame)
+        map('n', '<leader>hd', gitsigns.diffthis)
+        map('n', '<leader>hD', function() gitsigns.diffthis('~') end)
+        map('n', '<leader>td', gitsigns.toggle_deleted)
+    end
+}
+
 --------------------------------------------------------------------------------------------------
 --functionconfig 函数列表
 require("aerial").setup({
@@ -945,7 +855,7 @@ require("aerial").setup({
     layout = {
         max_width = { 30, 0.2 },
         width = nil,
-        min_width = 40,
+        min_width = 30,
         win_opts = {},
         default_direction = "prefer_right",
         placement = "window",
@@ -1048,7 +958,7 @@ require("aerial").setup({
         update_delay = 300,
     },
 })
-vim.keymap.set("n", "<C-m>o", "<cmd>AerialToggle!<CR>")
+vim.keymap.set("n", "<leader>s", "<cmd>AerialToggle!<CR>")
 
 ---------------------------------------------------------------------------------------------------
 --schemeconfig
@@ -1229,9 +1139,7 @@ ins_left {
 }
 
 ins_left { 'location' }
-
 ins_left { 'progress', color = { fg = colors.fg, gui = 'bold' } }
-
 ins_left {
   'diagnostics',
   sources = { 'nvim_diagnostic' },
@@ -1369,7 +1277,6 @@ require("auto-save").setup {
 }
 --------------------------------------------------------------------------------------------------
 
--- default configuration
 require('illuminate').configure({
     -- providers: provider used to get references in the buffer, ordered by priority
     providers = {
@@ -1380,7 +1287,6 @@ require('illuminate').configure({
     -- delay: delay in milliseconds
     delay = 100,
     filetype_overrides = {},
-    -- filetypes_denylist: filetypes to not illuminate, this overrides filetypes_allowlist
     filetypes_denylist = {
         'dirvish',
         'fugitive',
@@ -1449,16 +1355,6 @@ vim.api.nvim_set_keymap("n", "<leader>t", "<Plug>TranslateW", po )
 vim.api.nvim_set_keymap("x", "<leader>t", "<Plug>TranslateWV", po )
 
 
---[[ vim.g.floaterm_shell='powershell'
-vim.g.floaterm_borderchars = '─│─│╭╮╯╰ '
-vim.g.floaterm_title = ''
-vim.g.floaterm_width = 0.8
-vim.g.floaterm_height = 0.9
-vim.api.nvim_set_keymap("t", "<C-\\>", "<C-\\><C-n>:FloatermKill<CR>", po )
-vim.api.nvim_set_keymap("n", "<C-\\>", ":FloatermNew --height=0.9 --width=0.8 --name=xiaobin<CR>", po)
-]]
-
-
 -------------------------------------------------------------------------------------------------
 --自定义快捷键
 --keyconfig
@@ -1480,10 +1376,6 @@ vim.api.nvim_set_keymap("n", "<C-j>", "<C-w>w", po)
 vim.api.nvim_set_keymap("n", "zl", "5<C-w><", po)
 vim.api.nvim_set_keymap("n", "zh", "5<C-w>>", po)
 
-vim.api.nvim_set_keymap("n","cq",":CMakeClean<CR>",po)
-vim.api.nvim_set_keymap("n","cl",":CMakeClose<CR>",po)
-vim.api.nvim_set_keymap("n","cg",":CMakeGenerate<CR>",po)
-vim.api.nvim_set_keymap("n","cb",":CMakeBuild<CR>",po)
 
 vim.cmd([[ 
 hi Type            guifg=#009999 guibg=NONE gui=NONE cterm=NONE

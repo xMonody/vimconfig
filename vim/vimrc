@@ -14,10 +14,6 @@ endif
 
 call plug#begin('~/.vim/plug')
 Plug 'neoclide/coc.nvim',{'branch':'release'} "代码补全
-"Plug 'honza/vim-snippets'"片段
-if has("unix")
-Plug 'cdelledonne/vim-cmake'
-endif
 
 Plug 'Shougo/defx.nvim'"目录树"
 Plug 'roxma/nvim-yarp'
@@ -163,8 +159,8 @@ autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 augroup end
 
 
-nnoremap <silent> gp <Plug>(coc-diagnostic-prev)
-nnoremap <silent> gn <Plug>(coc-diagnostic-next)
+nnoremap <silent> gk <Plug>(coc-diagnostic-prev)
+nnoremap <silent> gj <Plug>(coc-diagnostic-next)
 nnoremap <silent> gd <Plug>(coc-definition)
 nnoremap <silent> gr <Plug>(coc-rename)
 nnoremap <silent> gc <Plug>(coc-references)
@@ -480,12 +476,6 @@ nnoremap <silent>q :nohl<CR>
 nnoremap zl 5<C-w><<CR>
 nnoremap zh 5<C-w>><CR>
 nnoremap <C-w>c :if winnr('$') == 1 \| tabclose \| else \| close \| endif<CR>
-if has("unix")
-nnoremap cq :CMakeClean<CR>
-nnoremap cl :CMakeClose<CR>
-nnoremap cg :CMakeGenerate<CR> 
-nnoremap cb :CMakeBuild<CR>
-endif
 
 nnoremap <silent><F11> :call libcallnr("vimtweak64.dll", "SetAlpha", 230)<CR>
 nnoremap <silent><F12> :call libcallnr("vimtweak64.dll", "SetAlpha", 255)<CR>
