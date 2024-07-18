@@ -104,7 +104,7 @@
     "body": [
       "#include <stdio.h>",
       "#include <stdlib.h>",
-      "int main (int argc, char *argv[])",
+      "int main(int argc, char *argv[])",
       "{",
       "\t$0",
       "\treturn 0;",
@@ -122,14 +122,14 @@
 
   "Print variable of type integer": {
     "prefix": "printf",
-    "body": ["printf(\"$1\\n\", $2)$0"],
+    "body": ["printf(\"$1\\n\"$2)$0"],
     "description": "Calls printf() to log value of variable of type signed integer"
   },
 
 
   "scanf": {
     "prefix": "scanf",
-    "body": ["scanf(\"$1\",$2)$0"],
+    "body": ["scanf(\"$1\"$2)$0"],
     "description": "Generic scanf() snippet"
   },
 

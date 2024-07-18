@@ -12,6 +12,8 @@ end)
 local nf = wezterm.nerdfonts
 local GLYPH_SEMI_CIRCLE_LEFT = nf.ple_left_half_circle_thick
 local GLYPH_SEMI_CIRCLE_RIGHT = nf.ple_right_half_circle_thick
+--local GLYPH_SEMI_CIRCLE_LEFT = ""
+--local GLYPH_SEMI_CIRCLE_RIGHT = ""
 
 local M = {}
 local __cells__ = {}
@@ -93,11 +95,12 @@ return {
     --exit_behavior='Hold',
     audible_bell="Disabled",
     window_close_confirmation = "NeverPrompt", --不用确认关闭
-    enable_tab_bar = enable, --不显示bar
+    enable_tab_bar = true, --是否隐藏bar
+    hide_tab_bar_if_only_one_tab = false,--只有一个tabs是否隐藏
     use_fancy_tab_bar = false,
     window_decorations = "INTEGRATED_BUTTONS|RESIZE",
     enable_scroll_bar = false, --不显示滚动条
-    adjust_window_size_when_changing_font_size = false,
+    adjust_window_size_when_changing_font_size = false, --控制绘制边框粗细
     initial_rows = 24,
     initial_cols = 80,
 
@@ -122,6 +125,7 @@ return {
     freetype_render_target = "HorizontalLcd",
     front_end = "OpenGL",
     hide_mouse_cursor_when_typing=true,
+    custom_block_glyphs = false,
 
 
 
@@ -172,8 +176,8 @@ return {
         { key = 'f', mods = 'SHIFT|ALT',action = act.Search { CaseInSensitiveString = '' },},
         { key = 'g', mods = 'SHIFT|ALT', action = wezterm.action.ActivateCopyMode },
 
-        { key = 'x', mods = 'SHIFT|ALT', action = wezterm.action.CloseCurrentTab { confirm = true }, },
-        { key = 'c', mods = 'SHIFT|ALT', action = wezterm.action.CloseCurrentPane { confirm = true },},
+        { key = 'x', mods = 'SHIFT|ALT', action = wezterm.action.CloseCurrentTab { confirm = false }, },
+        { key = 'c', mods = 'SHIFT|ALT', action = wezterm.action.CloseCurrentPane { confirm = false },},
 
         { key = 'v', mods = 'SHIFT|ALT',action = wezterm.action.SplitHorizontal { domain = 'CurrentPaneDomain' },},
         { key = 's', mods = 'SHIFT|ALT',action = wezterm.action.SplitVertical},
@@ -192,7 +196,8 @@ return {
         { key = 'j', mods = 'SHIFT|CTRL', action = act.AdjustPaneSize { 'Down', 5 },},
         { key = 'k', mods = 'SHIFT|CTRL', action = act.AdjustPaneSize { 'Up', 5 } },
         { key = 'l', mods = 'SHIFT|CTRL', action = act.AdjustPaneSize { 'Right', 5 },},
-        { key = '2', mods = 'ALT', action = wezterm.action.ShowLauncher },
+        { key = 'p', mods = 'SHIFT|CTRL', action = wezterm.action.ShowLauncherArgs{flags='LAUNCH_MENU_ITEMS'}},
+        { key = 'q', mods = 'ALT', action=wezterm.action.QuitApplication  },
 
         {
             key = 'w',
@@ -226,9 +231,16 @@ return {
                 end
             end),
         },
-
     },
-        --default_prog = { 'C:/Program Files/nu/bin/nu.exe' },
-        --default_prog = { 'powershell.exe' },
-    --    default_cwd = "D:/"
+
+    --default_prog = { 'C:/Program Files/nu/bin/nu.exe' },
+    --default_cwd = "D:/",
+        --launch_menu = {
+        --{ label = 'nushell', args = { 'C:/Program Files/nu/bin/nu.exe'  }, },
+        --{ label = 'Powershell', args = { 'powershell.exe'  }, },
+        --{ label='Mingw64',args={'C:/msys64/msys2_shell.cmd','-defterm','-here','-no-start','-mingw64'},},
+        --{ label='ucrt64',args={'C:/msys64/msys2_shell.cmd','-defterm','-here','-no-start','-ucrt64'},},
+        --{ label='Wsl',args={'wsl'},},
+    --},
+
 }

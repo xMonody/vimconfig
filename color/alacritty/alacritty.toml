@@ -68,11 +68,12 @@ bindings=[
 { key="g", mods="Shift|Alt", action="ToggleViMode"},
 { key="f", mods="Shift|Alt", action="SearchForward"},
 { key="b", mods="Shift|Alt", action="SearchBackward"},
+{ key="q", mods="Alt", action="Quit"},
 
 ]
 [mouse]
 hide_when_typing = true
 
-[shell]
+#[shell]
 # program = "C:/Program Files/nu/bin/nu.exe"
 # working_directory = "D://library"
