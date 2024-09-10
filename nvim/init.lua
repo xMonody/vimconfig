@@ -31,7 +31,7 @@ local plugins = {
     {"voldikss/vim-translator"}, --翻译
 
     { "nvim-telescope/telescope.nvim", dependencies = { "nvim-lua/plenary.nvim" } }, --模糊搜索
-    { "lewis6991/gitsigns.nvim" }, --git修改
+    --[[ { "lewis6991/gitsigns.nvim" }, --git修改 ]]
     { "stevearc/aerial.nvim" }, --大纲
 
     { "brenoprata10/nvim-highlight-colors" },
@@ -42,11 +42,14 @@ local plugins = {
     {'akinsho/bufferline.nvim', version = "*", dependencies = 'nvim-tree/nvim-web-devicons'},
 
     { "lukas-reineke/indent-blankline.nvim" }, --对齐线
-    { "RRethy/vim-illuminate" },--突出光标下单词
+    --[[ { "RRethy/vim-illuminate" },--突出光标下单词 ]]
 
     { "numToStr/Comment.nvim" }, --注释
     { "windwp/nvim-autopairs" }, --括号补全
     { "Pocco81/auto-save.nvim" }, --自动保存
+
+    { 'nvimdev/dashboard-nvim', config = function() require('dashboard').setup { } end,
+    dependencies = { {'nvim-tree/nvim-web-devicons'}} },
 }
 
 
@@ -103,29 +106,45 @@ vim.g.loaded_netrwPlugin = 1
 vim.opt.termguicolors = true
 vim.o.backspace = "indent,eol,start" --设置back键
 vim.opt.completeopt = "menu,menuone,noinsert"
-vim.api.nvim_create_autocmd( --回车不注释
+
+--[[ vim.api.nvim_create_autocmd( --回车不注释
 { "FileType" },
 {
     command = "set formatoptions-=ro",
-})
---[[ vim.api.nvim_create_autocmd("FileType", {
-  pattern = "*",
-  callback = function()
-    vim.opt_local.formatoptions:remove({ 'r', 'o' })
-  end,
 }) ]]
 
-vim.cmd[[au BufNewFile,BufRead *.frag,*.vert setf glsl]]
-
-vim.api.nvim_create_autocmd("BufReadPost", {
+vim.api.nvim_create_autocmd("FileType", {
     callback = function()
-        local mark = vim.api.nvim_buf_get_mark(0, '"')
-        local lcount = vim.api.nvim_buf_line_count(0)
-        if mark[1] > 0 and mark[1] <= lcount then
-            pcall(vim.api.nvim_win_set_cursor, 0, mark)
-        end
+        vim.opt_local.formatoptions:remove("r")
+        vim.opt_local.formatoptions:remove("o")
     end,
 })
+
+vim.api.nvim_create_autocmd({"BufNewFile", "BufRead"}, {
+    pattern = {"*.frag", "*.vert"},
+    callback = function()
+        vim.bo.filetype = "glsl"
+    end
+})
+
+vim.opt.viewoptions:append("cursor")
+vim.api.nvim_create_autocmd("BufReadPost", {
+    pattern = "*",
+    command = "silent! normal! g`\""
+})
+
+vim.api.nvim_create_autocmd("ModeChanged", {
+    pattern = "*",
+    callback = function()
+        vim.schedule(function()
+            vim.cmd("redraw")
+        end)
+    end
+})
+
+if vim.g.guicursor ~= "" then
+    vim.o.guifont = "SauceCodePro Nerd Font Mono:h15"
+end
 
 ---------------------------------------------------------------------------------------------------
 require("mason").setup({
@@ -140,10 +159,6 @@ require("mason").setup({
 })
 ---------------------------------------------------------------------------------------------------
 
-vim.keymap.set('n', 'gf', vim.diagnostic.open_float)
-vim.keymap.set('n', 'gk', vim.diagnostic.goto_prev)
-vim.keymap.set('n', 'gj', vim.diagnostic.goto_next)
-vim.keymap.set('n', 'gs', vim.diagnostic.setloclist)
 
 vim.api.nvim_create_autocmd('LspAttach', {
     group = vim.api.nvim_create_augroup('UserLspConfig', {}),
@@ -156,6 +171,10 @@ vim.api.nvim_create_autocmd('LspAttach', {
         vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
         vim.keymap.set('n', 'gh', vim.lsp.buf.signature_help, opts)
         vim.keymap.set('n', 'gr', vim.lsp.buf.rename, opts)
+        vim.keymap.set('n', 'gf', vim.diagnostic.open_float)
+        vim.keymap.set('n', 'gl', vim.diagnostic.setloclist)
+          vim.keymap.set( 'n', 'gm', '<cmd>lua vim.diagnostic.open_float(nil, { scope = "buffer", })<cr>', { desc = 'Show buffer diagnostics' }
+  )
     end,
 })
 
@@ -170,17 +189,23 @@ local border = {
     {"╰", "FloatBorder"},
     {"│", "FloatBorder"},
 }
-local handlers =  {
-    ["textDocument/hover"] =  vim.lsp.with(vim.lsp.handlers.hover, {border = border}),
-    ["textDocument/signatureHelp"] =  vim.lsp.with(vim.lsp.handlers.signature_help, {border = border }),
-}
 
---[[ local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
-function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
-    opts = opts or {}
-    opts.border = opts.border or border
-    return orig_util_open_floating_preview(contents, syntax, opts, ...)
-end ]]
+local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
+function vim.lsp.util.open_floating_preview(contents, syntax, opts)
+  opts = opts or {}  -- 确保 opts 为非 nil，若为 nil 则赋值为空表
+  opts.border = opts.border or border  -- 如果 opts 没有指定 border，则使用 'single' 作为默认边框样式
+  return orig_util_open_floating_preview(contents, syntax, opts)
+end
+
+--[[ local lines = {}
+vim.lsp.util.open_floating_preview(lines, "plaintext", {
+    border = "single",
+    max_width = 60,
+    max_height = 12,
+    focusable = true,
+}) ]]
+
+
 
 vim.cmd [[autocmd ColorScheme * highlight NormalFloat guifg=NONE guibg=NONE]]
 vim.cmd [[autocmd ColorScheme * highlight FloatBorder guifg=NONE guibg=NONE]]
@@ -214,7 +239,7 @@ lsp1.clangd.setup{
         "--header-insertion=never",
         "--header-insertion-decorators=false"
     },
-    handlers=handlers,
+    --[[ handlers=handlers, ]]
     flags = lsp_flags,
     --[[ on_attach = on_attach, ]]
     capabilities = capabilities,
@@ -226,19 +251,19 @@ lsp1.clangd.setup{
 }]]
 
 lsp1.rust_analyzer.setup{
-    handlers=handlers,
+    --[[ handlers=handlers, ]]
     flags = lsp_flags,
     capabilities = capabilities,
 }
 
 lsp1.cmake.setup{
-    handlers=handlers,
+    --[[ handlers=handlers, ]]
     flags = lsp_flags,
     capabilities = capabilities,
 }
 
 lsp1.lua_ls.setup {
-    handlers=handlers,
+    --[[ handlers=handlers, ]]
     capabilities = capabilities,
     settings = {
         Lua = {
@@ -263,7 +288,7 @@ lsp1.lua_ls.setup {
 }
 
 require("lspconfig").gopls.setup({
-    handlers=handlers,
+    --[[ handlers=handlers, ]]
     flags = lsp_flags,
     capabilities = capabilities,
     init_options = {
@@ -338,9 +363,11 @@ local ELLIPSIS_CHAR = "…"
 local MAX_LABEL_WIDTH = 45
 
 local luasnip = require("luasnip")
-
---require("luasnip.loaders.from_vscode").lazy_load({paths={"D:/gitdir/vimconfig/mysnip"}})
-require("luasnip.loaders.from_vscode").lazy_load({paths={"~/vimconfig/mysnip"}})
+if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
+    require("luasnip.loaders.from_vscode").lazy_load({paths={"D:/vimconfig/mysnip"}})
+else
+    require("luasnip.loaders.from_vscode").lazy_load({paths={"~/vimconfig/mysnip"}})
+end
 
 --[[ local has_words_before = function()
     local line, col = unpack(vim.api.nvim_win_get_cursor(0))
@@ -486,7 +513,7 @@ vim.api.nvim_set_keymap("n", "<C-[>", "<cmd>lua require('goto-preview').close_al
 require("neo-tree").setup({
     close_if_last_window = false,
     popup_border_style = "rounded",
-    enable_git_status = true,
+    enable_git_status = false,
     enable_diagnostics = false,
     open_files_do_not_replace_types = { "terminal", "trouble", "qf" },
     sort_case_insensitive = false,
@@ -799,7 +826,7 @@ vim.api.nvim_set_keymap("n", "<C-m>p", "<cmd>lua require('telescope.builtin').gr
 
 ------------------------------------------------------------------------------------------------
 --gitconfig
-require('gitsigns').setup{
+--[[ require('gitsigns').setup{
     signs = {
         add          = { text = '|' },
         change       = { text = '|' },
@@ -846,7 +873,7 @@ require('gitsigns').setup{
         map('n', '<leader>hD', function() gitsigns.diffthis('~') end)
         map('n', '<leader>td', gitsigns.toggle_deleted)
     end
-}
+} ]]
 
 --------------------------------------------------------------------------------------------------
 --functionconfig 函数列表
@@ -1024,7 +1051,8 @@ require('nvim-highlight-colors').setup({
 
 local lualine = require('lualine')
 local colors = {
-  bg       = '#202328',
+  --[[ bg       = '#202328', ]]
+  bg       = '#1a1c26',
   fg       = '#bbc2cf',
   yellow   = '#ECBE7B',
   cyan     = '#008080',
@@ -1277,14 +1305,12 @@ require("auto-save").setup {
 }
 --------------------------------------------------------------------------------------------------
 
-require('illuminate').configure({
-    -- providers: provider used to get references in the buffer, ordered by priority
+--[[ require('illuminate').configure({
     providers = {
         'lsp',
         'treesitter',
         'regex',
     },
-    -- delay: delay in milliseconds
     delay = 100,
     filetype_overrides = {},
     filetypes_denylist = {
@@ -1300,7 +1326,7 @@ require('illuminate').configure({
     large_file_cutoff = nil,
     large_file_overrides = nil,
     min_count_to_highlight = 1,
-})
+}) ]]
 
 ---------------------------------------------------------------------------------------------------
 require("Comment").setup({
@@ -1359,8 +1385,8 @@ vim.api.nvim_set_keymap("x", "<leader>t", "<Plug>TranslateWV", po )
 --自定义快捷键
 --keyconfig
 vim.api.nvim_set_keymap("i", "<C-l>", "<Right>", po)
-vim.api.nvim_set_keymap("n", "<C-h>", ":bp<CR>", po)
-vim.api.nvim_set_keymap("n", "<C-l>", ":bn<CR>", po)
+vim.api.nvim_set_keymap("n", "<C-p>", ":bp<CR>", po)
+vim.api.nvim_set_keymap("n", "<C-n>", ":bn<CR>", po)
 vim.api.nvim_set_keymap("n", "<C-k>", ":bd<CR>", po)
 
 vim.api.nvim_set_keymap("n", "w", "E", po)

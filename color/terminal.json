@@ -1,26 +1,25 @@
 {
-    "name": "tokyonight-storm",
-    "black": "#1d202f",
-    "red": "#f7768e",
-    "green": "#9ece6a",
-    "yellow": "#e0af68",
-    "blue": "#7aa2f7",
-    "purple": "#bb9af7",
-    "cyan": "#7dcfff",
-    "white": "#a9b1d6",
-    "brightBlack": "#414868",
-    "brightRed": "#f7768e",
-    "brightGreen": "#9ece6a",
-    "brightYellow": "#e0af68",
-    "brightBlue": "#7aa2f7",
-    "brightPurple": "#bb9af7",
-    "brightCyan": "#7dcfff",
-    "brightWhite": "#c0caf5",
-    "background": "#24283b",
-    "foreground": "#c0caf5",
-    "cursorColor": "#c0caf5",
-    "selectionBackground": "#364a82"
-    //"selectionBackground": "#626880"
+  "name": "catppuccin-frappe",
+  "black": "#51576d",
+  "red": "#e78284",
+  "green": "#a6d189",
+  "yellow": "#e5c890",
+  "blue": "#8caaee",
+  "purple": "#f4b8e4",
+  "cyan": "#81c8be",
+  "white": "#a5adce",
+  "brightBlack": "#626880",
+  "brightRed": "#e67172",
+  "brightGreen": "#8ec772",
+  "brightYellow": "#d9ba73",
+  "brightBlue": "#7b9ef0",
+  "brightPurple": "#f2a4db",
+  "brightCyan": "#5abfb5",
+  "brightWhite": "#b5bfe2",
+  "background": "#303446",
+  "foreground": "#c6d0f5",
+  "cursorColor": "#626880",
+  "selectionBackground": "#626880"
 },
 
 "actions":
@@ -505,7 +504,7 @@
     },
     {
         "command": "closeOtherPanes",
-        "keys": "alt+shift+w"
+        "keys": "alt+shift+x"
     },
     {
         "command": "toggleFocusMode"

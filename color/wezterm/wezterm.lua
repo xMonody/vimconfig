@@ -4,6 +4,7 @@ local action_callback = wezterm.action_callback
 
 local fonts="SauceCodePro Nerd Font Mono"
 local size=20
+local msys="C:/msys64/msys2_shell.cmd"
 
 wezterm.on('format-window-title', function(tab, pane, tabs, panes, config)
     return "Wezterm"
@@ -30,20 +31,20 @@ local _set_process_name = function(s)
 end
 
 local _set_title = function(process_name, base_title, max_width, inset)
-   local title
-   inset = inset or 5
+    local title = ""  -- 我们不需要使用 max_width 和 inset 参数了，因为固定为5字符
 
-   if process_name:len() > 0 then
-      title = process_name .. ' ~ ' .. base_title
-   else
-      title = base_title
-   end
-   if title:len() > max_width - inset then
-      local diff = title:len() - max_width + inset
-      title = wezterm.truncate_right(title, title:len() - diff)
-   end
-   return title
+    if process_name:len() > 0 then -- 只使用进程名，忽略 base_title(路径)
+        if process_name:len() > 5 then -- 处理进程名：取前5个字符
+            title = process_name:sub(1, 4) .. "~"
+        else
+            title = process_name .. string.rep(" ", 5 - process_name:len())
+        end
+    else
+        title = "     " -- 如果没有进程名，显示5个空格
+    end
+    return title
 end
+
 
 local _check_if_admin = function(p)
    if p:match('^Administrator: ') then
@@ -84,10 +85,11 @@ wezterm.on('format-tab-title', function(tab, _tabs, _panes, _config, hover, max_
             break
         end
     end
-    _push('rgb(36, 40, 59)', bg, { Intensity = 'Bold' }, " " .. GLYPH_SEMI_CIRCLE_LEFT)
-    _push(bg, fg, { Intensity = 'Bold' }, ' ' .. title)
-    _push(bg, fg, { Intensity = 'Bold' }, ' ')
-    _push('rgb(36, 40, 59)', bg, { Intensity = 'Bold' }, GLYPH_SEMI_CIRCLE_RIGHT)
+    -- rgb(36, 40, 59)
+    _push('rgb(51,51,51)', bg, { Intensity = 'Normal' }, " " .. GLYPH_SEMI_CIRCLE_LEFT)
+    _push(bg, fg, { Intensity = 'Normal' }, ' ' .. title)
+    _push(bg, fg, { Intensity = 'Normal' }, ' ')
+    _push('rgb(51,51,51)', bg, { Intensity = 'Normal' }, GLYPH_SEMI_CIRCLE_RIGHT)
     return __cells__
 end)
 
@@ -104,10 +106,25 @@ return {
     initial_rows = 24,
     initial_cols = 80,
 
+    color_scheme = "catppuccin-frappe",
     colors = {
-        cursor_bg = "#c0caf5",
-        cursor_fg = "#ffffff",
-        cursor_border = "#c0caf5",
+        cursor_bg = "#626880",
+        cursor_border = "#626880",
+        cursor_fg = "#c6d0f5"
+
+        --foreground = "#c6d0f5",
+        --background = "#303446",
+        --selection_bg = "#626880",
+        --selection_fg = "#c6d0f5",
+        --ansi = {"#51576d","#e78284","#a6d189","#e5c890","#8caaee","#f4b8e4","#81c8be","#a5adce"},
+        --brights = {"#626880","#e67172","#8ec772","#d9ba73","#7b9ef0","#f2a4db","#5abfb5","#b5bfe2"},
+        --split = '#444444',
+
+        --copy_mode_inactive_highlight_bg = { Color = '#626880' },未选中颜色
+        --copy_mode_inactive_highlight_fg = { Color = '#ffffff' },
+
+        --copy_mode_active_highlight_bg = { Color = '#ff6a19' },
+        --copy_mode_active_highlight_fg = { Color = '#ffffff' }
     },
 
     integrated_title_button_alignment ="Right",
@@ -116,10 +133,10 @@ return {
     integrated_title_buttons = { 'Hide', 'Maximize', 'Close' },
 
 
-    color_scheme = "tokyonight_storm",
     window_padding = { left = 0, right = 0, top = 0, bottom = 0 }, --窗口边距
 
-    window_background_opacity = 1, --背景不透明度
+    window_background_opacity = 0.9, --背景不透明度
+    --win32_system_backdrop = 'Acrylic',
 
     freetype_load_target = "HorizontalLcd", --抗锯齿
     freetype_render_target = "HorizontalLcd",
@@ -176,8 +193,8 @@ return {
         { key = 'f', mods = 'SHIFT|ALT',action = act.Search { CaseInSensitiveString = '' },},
         { key = 'g', mods = 'SHIFT|ALT', action = wezterm.action.ActivateCopyMode },
 
-        { key = 'c', mods = 'SHIFT|ALT', action = wezterm.action.CloseCurrentTab { confirm = false }, },
-        { key = 'w', mods = 'SHIFT|ALT', action = wezterm.action.CloseCurrentPane { confirm = false },},
+        { key = 'w', mods = 'SHIFT|ALT', action = wezterm.action.CloseCurrentTab { confirm = false }, },
+        { key = 'x', mods = 'SHIFT|ALT', action = wezterm.action.CloseCurrentPane { confirm = false },},
 
         { key = 'v', mods = 'SHIFT|ALT',action = wezterm.action.SplitHorizontal { domain = 'CurrentPaneDomain' },},
         { key = 's', mods = 'SHIFT|ALT',action = wezterm.action.SplitVertical},
@@ -197,49 +214,80 @@ return {
         { key = 'k', mods = 'SHIFT|CTRL', action = act.AdjustPaneSize { 'Up', 5 } },
         { key = 'l', mods = 'SHIFT|CTRL', action = act.AdjustPaneSize { 'Right', 5 },},
         { key = 'p', mods = 'SHIFT|CTRL', action = wezterm.action.ShowLauncherArgs{flags='LAUNCH_MENU_ITEMS'}},
+        --{ key = 's', mods = 'ALT', action = act.SendString '\u003A\u0077\u0071\u000D' },
 
         {
-            key = 'q',
+            key = 'x',
             mods = 'SHIFT|ALT',
-            action = action_callback(function(win, pane)
+            action = wezterm.action_callback(function(win, pane)
                 local tab = win:active_tab()
-                for _, p in ipairs(tab:panes()) do
-                    if p:pane_id() ~= pane:pane_id() then
-                        p:activate()
-                        win:perform_action(wezterm.action.CloseCurrentPane{confirm = false},p)
+                local current_pane_id = pane:pane_id()
+                local panes_to_close = {}
+
+                for _, p in ipairs(tab:panes()) do -- 先收集所有需要关闭的 panes
+                    if p:pane_id() ~= current_pane_id then
+                        table.insert(panes_to_close, p)
                     end
                 end
+
+                for _, p in ipairs(panes_to_close) do -- 然后一次性关闭它们
+                    p:activate()  -- 需要先激活要关闭的 pane
+                    win:perform_action(wezterm.action.CloseCurrentPane{confirm = false}, p)
+                end
+
             end),
         },
 
         {
-            key = "x",
+            key = "q",
             mods = "SHIFT|ALT",
-            action = wezterm.action_callback(function(win, _)
-                local tab = win:active_tab()
-                local activeTabId = tab:tab_id()
-                local muxWin = win:mux_window()
-                local tabs = muxWin:tabs()
-                for _, t in ipairs(tabs) do
-                    if t:tab_id() ~= activeTabId then
-                        t:activate()
-                        for _, p in ipairs(t:panes()) do
-                            win:perform_action(wezterm.action.CloseCurrentPane({ confirm = false }), p)
-                        end
+            action = wezterm.action_callback(function(win, pane)
+                local current_tab = win:active_tab()
+                local current_tab_id = current_tab:tab_id()
+                local mux_win = win:mux_window()
+                local tabs_to_close = {} -- 收集所有需要关闭的标签页
+
+                for _, tab in ipairs(mux_win:tabs()) do
+                    if tab:tab_id() ~= current_tab_id then
+                        table.insert(tabs_to_close, tab)
                     end
                 end
+
+                for _, tab in ipairs(tabs_to_close) do -- 先切换到目标标签页 再执行 CloseCurrentTab
+                    tab:activate()  -- 必须切换到目标标签页
+                    win:perform_action(wezterm.action.CloseCurrentTab({ confirm = false }), pane)
+                end
+
             end),
         },
     },
 
-    --default_prog = { 'C:/Program Files/nu/bin/nu.exe' },
+
+    --default_prog = { 'nu.exe' },
     --default_cwd = "D:/",
         --launch_menu = {
-        --{ label = 'nushell', args = { 'C:/Program Files/nu/bin/nu.exe'  }, },
-        --{ label = 'Powershell', args = { 'powershell.exe'  }, },
-        --{ label='Mingw64',args={'C:/msys64/msys2_shell.cmd','-defterm','-here','-no-start','-mingw64'},},
-        --{ label='ucrt64',args={'C:/msys64/msys2_shell.cmd','-defterm','-here','-no-start','-ucrt64'},},
+        --{ label = 'nushell', args = { 'nu.exe' }, },
+        --{ label = 'Powershell', args = { 'powershell.exe' }, },
+        --{ label='Mingw64',args={ msys, '-defterm', '-here', '-no-start', '-mingw64'},},
+        --{ label='ucrt64',args={ msys, '-defterm', '-here', '-no-start', '-ucrt64'},},
         --{ label='Wsl',args={'wsl'},},
+        --{ label='Tmux',args={'wsl.exe','--cd','~','--exec','tmux'},},
     --},
-
 }
+
+--[[ local _set_title = function(process_name, base_title, max_width, inset)
+   local title
+   inset = inset or 5
+
+   if process_name:len() > 0 then
+      title = process_name .. ' ~ ' .. base_title
+   else
+      title = base_title
+   end
+   if title:len() > max_width - inset then
+      local diff = title:len() - max_width + inset
+      title = wezterm.truncate_right(title, title:len() - diff)
+   end
+   return title
+end --]]
+

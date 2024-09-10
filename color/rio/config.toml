@@ -35,19 +35,19 @@ extras = [{ family = "文泉驿正黑" }]
 size = 20
 [fonts.regular]
 family = "SauceCodePro Nerd Font Mono"
-style = "normal"
+style = "Normal"
 weight = 400
 [fonts.bold]
 family = "SauceCodePro Nerd Font Mono"
-style = "normal"
+style = "Normal"
 weight = 800
 [fonts.italic]
 family = "SauceCodePro Nerd Font Mono"
-style = "italic"
+style = "Italic"
 weight = 400
 [fonts.bold-italic]
 family = "SauceCodePro Nerd Font Mono"
-style = "italic"
+style = "Italic"
 weight = 800
 
 [navigation]
@@ -61,59 +61,40 @@ color-automation = []
 log-level = "OFF"
 
 [bindings]
-  keys = [
+keys = [
     { key = "u", with = "Alt | Shift", action = "Scroll(3)"},
     { key = "d", with = "Alt | Shift", action = "Scroll(-3)"},
-    
     { key = "u", with = "Control | Shift", action = "ScrollHalfPageUp"},
     { key = "d", with = "Control | Shift", action = "ScrollHalfPageDown"},
-
+    
     { key = "a", with = "Alt | Shift", action = "IncreaseFontSize"},
     { key = "z", with = "Alt | Shift", action = "DecreaseFontSize"},
     { key = "r", with = "Alt | Shift", action = "ResetFontSize"},
-
-    #{ key = "c", with = "Control | Shift", action = "None"  },
-    #{ key = "v", with = "Control | Shift", action = "None"  },
-
-    #{ key = "v", with = "Control | Shift", action = "Paste"},
-    #{ key = "c", with = "Control | Shift", action = "Copy"},
+    
     { key = "v", with = "Alt", action = "Paste"},
     { key = "c", with = "Alt", action = "Copy"},
-
     { key = "g", with = "Alt|Shift", action = "ToggleVIMode"},
-
+    
     { key = "o", with = "Alt | Shift", action = "CreateTab"},
-    { key = "c", with = "Alt | Shift", action = "CloseTab"},
-    { key = "c", with = "Alt | Shift", action = "CloseTab"},
-    { key = "x", with = "Alt | Shift", action = "CloseUnfocusedTabs"},
-
-    { key = "p", with = "Alt | Shift", action = "SelectPrevTab"},
     { key = "n", with = "Alt | Shift", action = "SelectNextTab"},
-    { key = "s", with = "Alt | Shift", action = "SplitHorizontally"},
-    { key = "v", with = "Alt | Shift", action = "SplitVertically"},
-    { key = "b", with = "Alt | Shift", action = "ClosePane"},
-
+    { key = "p", with = "Alt | Shift", action = "SelectPrevTab"},
+    { key = "w", with = "Alt | Shift", action = "CloseTab"},
+    { key = "q", with = "Alt | Shift", action = "CloseUnfocusedTabs"},
+    
+    
+    
+    { key = "k", with = "Alt | Shift", action = "SelectNextSplit"},
+    { key = "j", with = "Alt | Shift", action = "SelectPrevSplit"},
+    { key = "v", with = "Alt | Shift", action = "SplitRigh"},
+    { key = "s", with = "Alt | Shift", action = "SplitDown"},
+    { key = "c", with = "Alt | Shift", action = "CloseSplitOrTab"},
+    
     { key = "f", with = "Alt | Shift", action = "SearchBackward"},
     { key = "b", with = "Alt | Shift", action = "SearchForward"},
-    { key = "b", with = "Control | Shift", action = "SearchFocusNext"},
-    { key = "b", with = "Control | Shift", action = "SearchFocusPrevious"},
+    #{ key = "s", with = "Alt", text = "\u003A\u0077\u0071\u000D" },
 ]
 
 [colors]
-background = '#24283b'
-foreground = '#c0caf5'
-selection-background = '#364a82'
-#selection-background = '#626880'
-selection-foreground = '#c0caf5'
-cursor    = '#c0caf5'
-vi-cursor = '#364a82'
-
-# Search
-search-match-background = '#364a82'
-search-match-foreground = '#c0caf5'
-search-focused-match-background = '#c0caf5'
-search-focused-match-foreground = '#FFFFFF'
-
 # Navigation
 tabs            = '#494c62'
 tabs-active     = '#6a6e8e'
@@ -122,30 +103,33 @@ tabs-active-highlight  = '#6a6e8e'
 tabs-active-foreground = '#1d202f'
 bar = '#494c62'
 
-# Color
-black   = '#1d202f'
-red     = '#f7768e'
-green   = '#9ece6a'
-yellow  = '#e0af68'
-blue    = '#7aa2f7'
-magenta = '#bb9af7'
-cyan    = '#7dcfff'
-white   = '#a9b1d6'
+background = '#303446'
+foreground = '#c6d0f5'
+selection-background = '#626880'
+selection-foreground = '#c6d0f5'
 
-dim-black   = '#1d202f'
-dim-red     = '#f7768e'
-dim-green   = '#9ece6a'
-dim-yellow  = '#e0af68'
-dim-blue    = '#7aa2f7'
-dim-magenta = '#bb9af7'
-dim-cyan    = '#7dcfff'
-dim-white   = '#a9b1d6'
+vi-cursor = '#626880'
+cursor = '#626880'
+# Search
+search-match-background = '#626880'# 未选中颜色
+search-match-foreground = '#ffffff'# 前景色
+search-focused-match-background = '#ff6a19'# 当前颜色
+search-focused-match-foreground = '#FFFFFF'# 背景色
 
-light_black   = '#414868'
-light_red     = '#f7768e'
-light_green   = '#9ece6a'
-light_yellow  = '#e0af68'
-light_blue    = '#7aa2f7'
-light_magenta = '#bb9af7'
-light_cyan    = '#7dcfff'
-light_white   = '#c0caf5'
+black = '#51576d'
+red = '#e78284'
+green = '#a6d189'
+yellow = '#e5c890'
+blue = '#8caaee'
+magenta = '#f4b8e4'
+cyan = '#81c8be'
+white = '#a5adce'
+
+light_black = '#626880'
+light_red = '#e67172'
+light_green = '#8ec772'
+light_yellow = '#d9ba73'
+light_blue = '#7b9ef0'
+light_magenta = '#f2a4db'
+light_cyan = '#5abfb5'
+light_white = '#b5bfe2'

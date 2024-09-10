@@ -1,34 +1,38 @@
 [colors]
- cursor = {cursor = '#c0caf5',text = '#1d202f'}
- selection= { background = '#364a82',text = '#c0caf5' }
-#selection= { background = '#626880',text = '#c0caf5' }
-[colors.normal]
-    black= '#414868'
-    blue= '#7aa2f7'
-    cyan= '#7dcfff'
-    green= '#9ece6a'
-    magenta= '#bb9af7'
-    red= '#f7768e'
-    white= '#c0caf5'
-    yellow= '#e0af68'
+cursor = { cursor='#626880', text = '#c6d0f5' }
+selection={ background = '#626880', text = '#c6d0f5' }
+vi_mode_cursor={ cursor = '#626880', text = '#c6d0f5' }
 
-[colors.bright]
-    black= '#1d202f'
-    blue= '#7aa2f7'
-    cyan= '#7dcfff'
-    green= '#9ece6a'
-    magenta= '#bb9af7'
-    red= '#f7768e'
-    white= '#a9b1d6'
-    yellow= '#e0af68'
+[colors.search]
+focused_match = {background = "#ff6a19",foreground = "#ffffff"}
+matches = {background = "#626880",foreground = "#ffffff"}
 
 [colors.primary]
-    background= '#24283b'
-    foreground='#c0caf5'
+background = '#303446'
+foreground = '#c6d0f5'
+
+[colors.bright]
+black = '#626880'
+blue = '#7b9ef0'
+cyan = '#5abfb5'
+green = '#8ec772'
+magenta = '#f2a4db'
+red = '#e67172'
+white = '#b5bfe2'
+yellow = '#d9ba73'
+
+[colors.normal]
+black = '#51576d'
+blue = '#8caaee'
+cyan = '#81c8be'
+green = '#a6d189'
+magenta = '#f4b8e4'
+red = '#e78284'
+white = '#a5adce'
+yellow = '#e5c890'
 
 
 [font]
-
   normal={family= "SauceCodePro Nerd Font Mono",style=  "Regular"}
   italic={family= "SauceCodePro Nerd Font Mono",style=  "Italic"}
   bold=  {family="SauceCodePro Nerd Font Mono",style=  "Bold"}
@@ -69,11 +73,12 @@ bindings=[
 { key="g", mods="Shift|Alt", action="ToggleViMode"},
 { key="f", mods="Shift|Alt", action="SearchForward"},
 { key="b", mods="Shift|Alt", action="SearchBackward"},
+# { key="s", mods="Alt", chars = "\u003A\u0077\u0071\u000D"},
 ]
 
 [mouse]
 hide_when_typing = true
 
 #[shell]
-# program = "C:/Program Files/nu/bin/nu.exe"
-# working_directory = "D://library"
+#program = "wsl.exe"
+#args=["--cd","~","--exec","tmux"]

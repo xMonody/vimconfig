@@ -52,7 +52,7 @@ gui:
   enlargedSideViewLocation: left
 
   # One of 'auto' (default) | 'en' | 'zh-CN' | 'zh-TW' | 'pl' | 'nl' | 'ja' | 'ko' | 'ru'
-  language: auto
+  language: zh-CN
 
   # Format used when displaying time e.g. commit time.
   # Uses Go's time format syntax: https://pkg.go.dev/time#Time.Format
@@ -67,12 +67,12 @@ gui:
   theme:
     # Border color of focused window
     activeBorderColor:
-      - red
+      - '#6182bb'
       - bold
 
     # Border color of non-focused windows
     inactiveBorderColor:
-      - default
+      - '#494d64'
 
     # Border color of focused window when searching in that window
     searchingActiveBorderColor:
@@ -84,9 +84,9 @@ gui:
       - blue
 
     # Background color of selected line.
-    # See https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md#highlighting-the-selected-line
+
     selectedLineBgColor:
-      - gray
+      - '#494d64'
 
     # Background color of selected line when view doesn't have focus.
     inactiveViewSelectedLineBgColor:
@@ -146,7 +146,7 @@ gui:
   # Nerd fonts version to use.
   # One of: '2' | '3' | empty string (default)
   # If empty, do not show icons.
-  nerdFontsVersion: ""
+  nerdFontsVersion: 3
 
   # If true (default), file icons are shown in the file views. Only relevant if NerdFontsVersion is not empty.
   showFileIcons: true
@@ -198,11 +198,14 @@ gui:
   spinner:
     # The frames of the spinner animation.
     frames:
-      - '|'
-      - /
-      - '-'
-      - \
-
+      - '󰪞'
+      - '󰪟'
+      - '󰪠'
+      - '󰪡'
+      - '󰪢'
+      - '󰪣'
+      - '󰪤'
+      - '󰪥'
     # The "speed" of the spinner in milliseconds.
     rate: 50
 
@@ -419,5 +422,5 @@ promptToReturnFromSubprocess: true
 keybinding:
   universal:
     quit: <c-w>
-    quit-alt1: <c-c>
-    return: q
+    quit-alt1: q
+    return: <c-u>
