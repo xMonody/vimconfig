@@ -35,19 +35,19 @@ extras = [{ family = "文泉驿正黑" }]
 size = 20
 [fonts.regular]
 family = "SauceCodePro Nerd Font Mono"
-style = "normal"
+style = "Normal"
 weight = 400
 [fonts.bold]
 family = "SauceCodePro Nerd Font Mono"
-style = "normal"
+style = "Normal"
 weight = 800
 [fonts.italic]
 family = "SauceCodePro Nerd Font Mono"
-style = "italic"
+style = "Italic"
 weight = 400
 [fonts.bold-italic]
 family = "SauceCodePro Nerd Font Mono"
-style = "italic"
+style = "Italic"
 weight = 800
 
 [navigation]
@@ -61,42 +61,36 @@ color-automation = []
 log-level = "OFF"
 
 [bindings]
-  keys = [
+keys = [
     { key = "u", with = "Alt | Shift", action = "Scroll(3)"},
     { key = "d", with = "Alt | Shift", action = "Scroll(-3)"},
-    
     { key = "u", with = "Control | Shift", action = "ScrollHalfPageUp"},
     { key = "d", with = "Control | Shift", action = "ScrollHalfPageDown"},
-
+    
     { key = "a", with = "Alt | Shift", action = "IncreaseFontSize"},
     { key = "z", with = "Alt | Shift", action = "DecreaseFontSize"},
     { key = "r", with = "Alt | Shift", action = "ResetFontSize"},
-
-    #{ key = "c", with = "Control | Shift", action = "None"  },
-    #{ key = "v", with = "Control | Shift", action = "None"  },
-
-    #{ key = "v", with = "Control | Shift", action = "Paste"},
-    #{ key = "c", with = "Control | Shift", action = "Copy"},
+    
     { key = "v", with = "Alt", action = "Paste"},
     { key = "c", with = "Alt", action = "Copy"},
-
     { key = "g", with = "Alt|Shift", action = "ToggleVIMode"},
-
+    
     { key = "o", with = "Alt | Shift", action = "CreateTab"},
-    { key = "c", with = "Alt | Shift", action = "CloseTab"},
-    { key = "c", with = "Alt | Shift", action = "CloseTab"},
-    { key = "x", with = "Alt | Shift", action = "CloseUnfocusedTabs"},
-
-    { key = "p", with = "Alt | Shift", action = "SelectPrevTab"},
     { key = "n", with = "Alt | Shift", action = "SelectNextTab"},
-    { key = "s", with = "Alt | Shift", action = "SplitHorizontally"},
-    { key = "v", with = "Alt | Shift", action = "SplitVertically"},
-    { key = "b", with = "Alt | Shift", action = "ClosePane"},
-
+    { key = "p", with = "Alt | Shift", action = "SelectPrevTab"},
+    { key = "w", with = "Alt | Shift", action = "CloseTab"},
+    { key = "q", with = "Alt | Shift", action = "CloseUnfocusedTabs"},
+    
+    
+    
+    { key = "k", with = "Alt | Shift", action = "SelectNextSplit"},
+    { key = "j", with = "Alt | Shift", action = "SelectPrevSplit"},
+    { key = "v", with = "Alt | Shift", action = "SplitRigh"},
+    { key = "s", with = "Alt | Shift", action = "SplitDown"},
+    { key = "c", with = "Alt | Shift", action = "CloseSplitOrTab"},
+    
     { key = "f", with = "Alt | Shift", action = "SearchBackward"},
     { key = "b", with = "Alt | Shift", action = "SearchForward"},
-    { key = "b", with = "Control | Shift", action = "SearchFocusNext"},
-    { key = "b", with = "Control | Shift", action = "SearchFocusPrevious"},
 ]
 
 [colors]

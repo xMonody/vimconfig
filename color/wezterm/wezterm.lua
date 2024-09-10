@@ -176,8 +176,8 @@ return {
         { key = 'f', mods = 'SHIFT|ALT',action = act.Search { CaseInSensitiveString = '' },},
         { key = 'g', mods = 'SHIFT|ALT', action = wezterm.action.ActivateCopyMode },
 
-        { key = 'c', mods = 'SHIFT|ALT', action = wezterm.action.CloseCurrentTab { confirm = false }, },
-        { key = 'w', mods = 'SHIFT|ALT', action = wezterm.action.CloseCurrentPane { confirm = false },},
+        { key = 'w', mods = 'SHIFT|ALT', action = wezterm.action.CloseCurrentTab { confirm = false }, },
+        { key = 'x', mods = 'SHIFT|ALT', action = wezterm.action.CloseCurrentPane { confirm = false },},
 
         { key = 'v', mods = 'SHIFT|ALT',action = wezterm.action.SplitHorizontal { domain = 'CurrentPaneDomain' },},
         { key = 's', mods = 'SHIFT|ALT',action = wezterm.action.SplitVertical},

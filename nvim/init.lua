@@ -31,7 +31,7 @@ local plugins = {
     {"voldikss/vim-translator"}, --翻译
 
     { "nvim-telescope/telescope.nvim", dependencies = { "nvim-lua/plenary.nvim" } }, --模糊搜索
-    { "lewis6991/gitsigns.nvim" }, --git修改
+    --[[ { "lewis6991/gitsigns.nvim" }, --git修改 ]]
     { "stevearc/aerial.nvim" }, --大纲
 
     { "brenoprata10/nvim-highlight-colors" },
@@ -42,11 +42,14 @@ local plugins = {
     {'akinsho/bufferline.nvim', version = "*", dependencies = 'nvim-tree/nvim-web-devicons'},
 
     { "lukas-reineke/indent-blankline.nvim" }, --对齐线
-    { "RRethy/vim-illuminate" },--突出光标下单词
+    --[[ { "RRethy/vim-illuminate" },--突出光标下单词 ]]
 
     { "numToStr/Comment.nvim" }, --注释
     { "windwp/nvim-autopairs" }, --括号补全
     { "Pocco81/auto-save.nvim" }, --自动保存
+
+    { 'nvimdev/dashboard-nvim', config = function() require('dashboard').setup { } end,
+    dependencies = { {'nvim-tree/nvim-web-devicons'}} },
 }
 
 
@@ -338,9 +341,11 @@ local ELLIPSIS_CHAR = "…"
 local MAX_LABEL_WIDTH = 45
 
 local luasnip = require("luasnip")
-
---require("luasnip.loaders.from_vscode").lazy_load({paths={"D:/gitdir/vimconfig/mysnip"}})
-require("luasnip.loaders.from_vscode").lazy_load({paths={"~/vimconfig/mysnip"}})
+if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
+    require("luasnip.loaders.from_vscode").lazy_load({paths={"D:/vimconfig/mysnip"}})
+else
+    require("luasnip.loaders.from_vscode").lazy_load({paths={"~/vimconfig/mysnip"}})
+end
 
 --[[ local has_words_before = function()
     local line, col = unpack(vim.api.nvim_win_get_cursor(0))
@@ -486,7 +491,7 @@ vim.api.nvim_set_keymap("n", "<C-[>", "<cmd>lua require('goto-preview').close_al
 require("neo-tree").setup({
     close_if_last_window = false,
     popup_border_style = "rounded",
-    enable_git_status = true,
+    enable_git_status = false,
     enable_diagnostics = false,
     open_files_do_not_replace_types = { "terminal", "trouble", "qf" },
     sort_case_insensitive = false,
@@ -799,7 +804,7 @@ vim.api.nvim_set_keymap("n", "<C-m>p", "<cmd>lua require('telescope.builtin').gr
 
 ------------------------------------------------------------------------------------------------
 --gitconfig
-require('gitsigns').setup{
+--[[ require('gitsigns').setup{
     signs = {
         add          = { text = '|' },
         change       = { text = '|' },
@@ -846,7 +851,7 @@ require('gitsigns').setup{
         map('n', '<leader>hD', function() gitsigns.diffthis('~') end)
         map('n', '<leader>td', gitsigns.toggle_deleted)
     end
-}
+} ]]
 
 --------------------------------------------------------------------------------------------------
 --functionconfig 函数列表
@@ -1277,14 +1282,12 @@ require("auto-save").setup {
 }
 --------------------------------------------------------------------------------------------------
 
-require('illuminate').configure({
-    -- providers: provider used to get references in the buffer, ordered by priority
+--[[ require('illuminate').configure({
     providers = {
         'lsp',
         'treesitter',
         'regex',
     },
-    -- delay: delay in milliseconds
     delay = 100,
     filetype_overrides = {},
     filetypes_denylist = {
@@ -1300,7 +1303,7 @@ require('illuminate').configure({
     large_file_cutoff = nil,
     large_file_overrides = nil,
     min_count_to_highlight = 1,
-})
+}) ]]
 
 ---------------------------------------------------------------------------------------------------
 require("Comment").setup({
@@ -1359,8 +1362,8 @@ vim.api.nvim_set_keymap("x", "<leader>t", "<Plug>TranslateWV", po )
 --自定义快捷键
 --keyconfig
 vim.api.nvim_set_keymap("i", "<C-l>", "<Right>", po)
-vim.api.nvim_set_keymap("n", "<C-h>", ":bp<CR>", po)
-vim.api.nvim_set_keymap("n", "<C-l>", ":bn<CR>", po)
+vim.api.nvim_set_keymap("n", "<C-p>", ":bp<CR>", po)
+vim.api.nvim_set_keymap("n", "<C-n>", ":bn<CR>", po)
 vim.api.nvim_set_keymap("n", "<C-k>", ":bd<CR>", po)
 
 vim.api.nvim_set_keymap("n", "w", "E", po)

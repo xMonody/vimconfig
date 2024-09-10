@@ -93,7 +93,7 @@ set laststatus=2
 set hidden
 set noshowmode
 
-set nocompatible"不兼容vi模式
+set nocompatible "不兼容vi模式
 set cmdheight=1
 set hlsearch
 set backspace=indent,eol,start "设置back键
@@ -305,6 +305,7 @@ if has("gui_running")
     set guioptions=
     if has("win32")||has("win64")
         set guifont=SauceCodePro_Nerd_Font_Mono:h16
+        set rop=type:directx
     else
         set guifont=SauceCodePro\ Nerd\ Font\ Mono\ 16
     endif
@@ -451,8 +452,8 @@ vmap <silent> <Leader>t <Plug>TranslateWV
 "-----------------------------------------------------------------------------------------------
 
 inoremap <silent><C-l> <Right>
-nnoremap <silent><C-l> :bn<CR>
-nnoremap <silent><C-h> :bp<CR>
+nnoremap <silent><C-n> :bn<CR>
+nnoremap <silent><C-p> :bp<CR>
 nnoremap <silent><C-k> :bd<CR>
 
 nnoremap w e
@@ -469,7 +470,7 @@ nnoremap <silent>q :nohl<CR>
 
 nnoremap zl 5<C-w><<CR>
 nnoremap zh 5<C-w>><CR>
-nnoremap <C-w>c :if winnr('$') == 1 \| tabclose \| else \| close \| endif<CR>
+"nnoremap <C-w>c :if winnr('$') == 1 \| tabclose \| else \| close \| endif<CR>
 
 nnoremap <silent><F11> :call libcallnr("vimtweak64.dll", "SetAlpha", 230)<CR>
 nnoremap <silent><F12> :call libcallnr("vimtweak64.dll", "SetAlpha", 255)<CR>
