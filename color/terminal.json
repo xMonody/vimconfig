@@ -20,7 +20,7 @@
     "foreground": "#c0caf5",
     "cursorColor": "#c0caf5",
     "selectionBackground": "#364a82"
-    //"selectionBackground": "#626880"
+    // "selectionBackground": "#626880"
 },
 
 "actions":
@@ -505,7 +505,7 @@
     },
     {
         "command": "closeOtherPanes",
-        "keys": "alt+shift+w"
+        "keys": "alt+shift+x"
     },
     {
         "command": "toggleFocusMode"

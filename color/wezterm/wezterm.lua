@@ -4,6 +4,7 @@ local action_callback = wezterm.action_callback
 
 local fonts="SauceCodePro Nerd Font Mono"
 local size=20
+local msys="C:/msys64/msys2_shell.cmd"
 
 wezterm.on('format-window-title', function(tab, pane, tabs, panes, config)
     return "Wezterm"
@@ -176,8 +177,8 @@ return {
         { key = 'f', mods = 'SHIFT|ALT',action = act.Search { CaseInSensitiveString = '' },},
         { key = 'g', mods = 'SHIFT|ALT', action = wezterm.action.ActivateCopyMode },
 
-        { key = 'c', mods = 'SHIFT|ALT', action = wezterm.action.CloseCurrentTab { confirm = false }, },
-        { key = 'w', mods = 'SHIFT|ALT', action = wezterm.action.CloseCurrentPane { confirm = false },},
+        { key = 'w', mods = 'SHIFT|ALT', action = wezterm.action.CloseCurrentTab { confirm = false }, },
+        { key = 'x', mods = 'SHIFT|ALT', action = wezterm.action.CloseCurrentPane { confirm = false },},
 
         { key = 'v', mods = 'SHIFT|ALT',action = wezterm.action.SplitHorizontal { domain = 'CurrentPaneDomain' },},
         { key = 's', mods = 'SHIFT|ALT',action = wezterm.action.SplitVertical},
@@ -199,7 +200,7 @@ return {
         { key = 'p', mods = 'SHIFT|CTRL', action = wezterm.action.ShowLauncherArgs{flags='LAUNCH_MENU_ITEMS'}},
 
         {
-            key = 'q',
+            key = 'x',
             mods = 'SHIFT|ALT',
             action = action_callback(function(win, pane)
                 local tab = win:active_tab()
@@ -213,7 +214,7 @@ return {
         },
 
         {
-            key = "x",
+            key = "q",
             mods = "SHIFT|ALT",
             action = wezterm.action_callback(function(win, _)
                 local tab = win:active_tab()
@@ -232,13 +233,13 @@ return {
         },
     },
 
-    --default_prog = { 'C:/Program Files/nu/bin/nu.exe' },
+    --default_prog = { 'nu.exe' },
     --default_cwd = "D:/",
         --launch_menu = {
-        --{ label = 'nushell', args = { 'C:/Program Files/nu/bin/nu.exe'  }, },
-        --{ label = 'Powershell', args = { 'powershell.exe'  }, },
-        --{ label='Mingw64',args={'C:/msys64/msys2_shell.cmd','-defterm','-here','-no-start','-mingw64'},},
-        --{ label='ucrt64',args={'C:/msys64/msys2_shell.cmd','-defterm','-here','-no-start','-ucrt64'},},
+        --{ label = 'nushell', args = { 'nu.exe' }, },
+        --{ label = 'Powershell', args = { 'powershell.exe' }, },
+        --{ label='Mingw64',args={ msys, '-defterm', '-here', '-no-start', '-mingw64'},},
+        --{ label='ucrt64',args={ msys, '-defterm', '-here', '-no-start', '-ucrt64'},},
         --{ label='Wsl',args={'wsl'},},
     --},
 
