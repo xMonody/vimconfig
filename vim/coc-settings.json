@@ -1,0 +1,110 @@
+{
+    "suggest.completionItemKindLabels":
+    {
+        "class": "",
+        "color": "",
+        "constant": "",
+        "default": "",
+        "enum": "",
+        "enumMember": "",
+        "event": "󱐋",
+        "field": "󰇽",
+        "file": "",
+        "folder": "",
+        "function": "󰊕",
+        "interface": "",
+        "keyword": "",
+        "method": "",
+        "module": "",
+        "operator": "󰆕",
+        "property": "󰜢",
+        "reference": "",
+        "snippet": "󰉿",
+        "struct": "",
+        "text": "󱀍",
+        "typeParameter": "󰅲",
+        "unit": "",
+        "value": "",
+        "variable": ""
+    },
+    "diagnostic.errorSign": "",
+    "diagnostic.warningSign": "",
+    "diagnostic.infoSign": "",
+    "diagnostic.hintSign": "󰠠",
+    "diagnostic.virtualTextPrefix": "●",
+
+    //"diagnostic.enable": false,
+    "diagnostic.enableMessage": "never",
+    "diagnostic.refreshOnInsertMode": false,
+    "diagnostic.checkCurrentLine": false,
+    "diagnostic.virtualTextLimitInOneLine": 1,
+
+    "diagnostic.virtualText": false,//使用虚拟行诊断
+    "diagnostic.virtualTextAlign": "after",//位置
+    "diagnostic.virtualTextCurrentLineOnly": false,
+    "signature.preferShownAbove": true,//尽可能在光标上显示函数签名
+    "suggest.virtualText": false,
+
+    "notification.disabledProgressSources": ["*"],//禁用通知
+
+    "diagnostic.messageTarget": "float",//诊断
+    "suggest.enableFloat": false,//文档
+    "hover.target": "float",//悬停
+    "colors.enable": true,
+
+    "outline.autoPreview": true,
+    "outline.previewBorderRounded": true,
+    "outline.keepWindow": true,
+
+    "semanticTokens.enable": true,//语义令牌
+    "suggest.labelMaxLength": 40,
+    "diagnostic.floatConfig": {"border": true,"rounded": true,"highlight": "255"},
+    "suggest.floatConfig": {"border": true,"rounded": true,"highlight": "255"},
+    "signature.floatConfig": {"border": true,"rounded": true,"highlight": "255,"},
+    "hover.floatConfig": {"border": true,"rounded": true,"highlight": "255"},
+    "dialog.floatHighlight": "NONE",
+    "dialog.rounded":true,
+    "dialog.floatBorderHighlight":"NONE",
+
+    "snippets.priority": 100,//优先级
+    "coc.source.buffer.priority": 80,
+    "coc.source.around.priority": 90,
+    "inlayHint.enable": false,//关闭内嵌提示
+
+    //lua
+    "Lua.completion.callSnippet":"Replace",//启用函数提示
+    "Lua.signatureHelp.enable": false,//禁用函数签名
+    "sumneko-lua.enableNvimLuaDev":true,
+    "sumneko-lua.checkUpdate":false,
+
+
+    "go.goplsOptions": {
+        "completeUnimported": true,
+        "usePlaceholders": true
+    },
+
+    "clangd.arguments": ["--header-insertion=never"],
+
+    //rust
+    "rust-analyzer.server.path": "rust-analyzer",//
+    "rust-analyzer.disableProgressNotifications":true,
+
+    
+    "snippets.textmateSnippetsRoots": ["~/vimconfig/mysnip/snippets"],
+    //"snippets.textmateSnippetsRoots": ["D:/gitdir/vimconfig/mysnip/snippets"],
+    
+    "suggest.formatItems": [
+        "kind",
+        "abbr",
+        "menu",
+        "shortcut"
+    ],
+    //"coc.source.around.enable": true,
+    "coc.source.buffer.shortcut": "Bf",
+    "coc.source.around.shortcut": "Ag",
+    "coc.source.file.shortcut": "Fi",
+    "snippets.shortcut": "Sp",
+    "snippets.ultisnips.pythonPrompt": false
+
+}
+

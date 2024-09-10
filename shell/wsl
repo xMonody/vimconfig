@@ -1,0 +1,18 @@
+.wslconfig
+[wsl2]
+vmIdleTimeout = -1
+memory = 5G
+swap = 10G
+networkingMode = mirrored
+autoProxy = true
+
+[experimental]
+hostAddressLoopback = true
+autoMemoryReclaim = gradual  # dropcache
+
+/etc/wsl.conf
+[interop]
+enabled = false
+appendWindowsPath = false
+[boot]
+systemd = true

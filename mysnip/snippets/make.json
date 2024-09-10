@@ -1,0 +1,86 @@
+{
+  "cc": {
+    "prefix": "cc",
+    "body": [
+        ".HELLO:.c.o\n",
+
+        "CC=gcc",
+        "PKG=-g -Wall",
+        "Cflags=${1}",
+        "EXE=${2:app}",
+        "Source=${3:source}\n",
+        "GREP=$(Source:.c=.o)",
+        "$(EXE):$(GREP)",
+            "\t$(CC) -o $(EXE) $(GREP) ${0:$($Cflags)}",
+            "\t@echo '--------------------------Compiler OK------------------------------'",
+        ".c.o:",
+            "\t$(CC) -c -o $@ $<",
+
+        "rm:",
+            "\trm *.o "
+    ],
+    "description": "gcc"
+  },
+
+  "cxx": {
+    "prefix": "cxx",
+    "body": [
+        ".HELLO:.c.o\n",
+        "PKG= -g -Wall",
+        "CC=g++",
+        "Cflags=${1}",
+        "EXE=${2:app}",
+        "Source=${3:source}\n",
+
+        "GREP=$(Source:.c=.o)",
+        "$(EXE):$(GREP)",
+            "\t$(CC) -o $(EXE) $(GREP) ${0:$($Cflags)}",
+            "\t@echo '--------------------------Compiler OK------------------------------'",
+        ".c.o:",
+            "\t$(CC) -c -o $@ $<",
+
+        "rm:",
+            "\trm *.o "
+    ],
+    "description": "g++"
+  },
+
+  "ff": {
+    "prefix": "ff",
+    "body": [
+        "-lavcodec -lavformat -lavutil -lavfilter"
+    ],
+    "description": "ffmpeg"
+  },
+
+  "sws": {
+    "prefix": "sws",
+    "body": [
+        "lswscale -lswresample -lpostroc -lavdevice"
+    ],
+    "description": "ffmpeg"
+  },
+
+  "gl": {
+    "prefix": "gl",
+    "body": [
+        "-lglfw3 -lglad -lgdi32 -lopengl32"
+    ],
+    "description": "opengl"
+  },
+
+  "sdl": {
+    "prefix": "sdl",
+    "body": [
+        "-lmingw32 -mwindows -lSDL2main -lSDL2  -lm -luser32 -lgdi32 -lwinmm -limm32 -lole32 -loleaut32 -lversion -luuid -ladvapi32 -lsetupapi -lshell32 -ldinput8"
+    ],
+    "description": "sdl2 library"
+  },
+  "vk": {
+    "prefix": "vk",
+    "body": [
+        "-lvulkan-1 -lgdi32"
+    ],
+    "description": "vulkan library"
+  }
+}

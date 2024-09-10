@@ -1,0 +1,9 @@
+#!/bin/sh
+
+compton &
+#picom --experimental-backends --config ~/.config/picom/picom.conf
+#picom -CGb &  
+#sudo apt-get install libx11-dev xorg xorg-dev
+#sudo apt-get install compton feh sysstat xsetroot alsa-utils dmenu
+feh --bg-scale ~/vimconfig/image/2.jpg
+exec ewm

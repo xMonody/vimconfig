@@ -1,0 +1,53 @@
+Linux
+
+format = """
+[](#DA627D)\
+$directory\
+[](fg:#DA627D bg:#FCA17D)\
+$git_branch\
+$git_status\
+[](fg:#FCA17D bg:#68A0E1)\
+$time\
+[ ](fg:#68A0E1)\
+"""
+add_newline=false
+[directory]
+style = "bg:#DA627D"
+format = "[ $path ]($style)"
+truncation_length = 2
+truncation_symbol = "…/"
+
+[time]
+disabled = false
+time_format = "%R"
+style = "bg:#68A0E1"
+format = '[ $time ]($style)'
+
+[git_branch]
+symbol = ""
+style = "bg:#FCA17D"
+format = '[ $branch ]($style)'
+
+[git_status]
+style = "bg:#FCA17D"
+format = '[$all_status$ahead_behind ]($style)'
+
+-----------------------------------------------------------
+Windows
+
+format = """
+[](#DA627D)\
+$directory\
+[](fg:#DA627D bg:#FCA17D)\
+[](fg:#FCA17D bg:#68A0E1)\
+[    ](bg:#68A0E1 fg:#DA627D)\
+[ ](fg:#68A0E1)\
+"""
+
+add_newline=false
+
+[directory]
+style = "bg:#DA627D"
+format = "[ $path ]($style)"
+truncation_length = 2
+truncation_symbol = "…/"

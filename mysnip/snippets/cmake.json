@@ -1,0 +1,89 @@
+{
+  "Creates a do...qt5": {
+    "prefix": "qt5",
+    "body": [
+      "cmake_minimum_required(VERSION 3.16)",
+      "project(${1:main} LANGUAGES CXX)\n",
+      "set(CMAKE_AUTOMOC ON)",
+      "set(CMAKE_AUTOUIC ON)",
+      "set(CMAKE_AUTOMOC ON)",
+      "set(CMAKE_AUTORCC ON)",
+      "set(CMAKE_PREFIX_PATH D:/Library/qt5/lib/cmake)",
+      "set(CMAKE_PREFIX_PATH D:/Library/qt5/lib/cmake/Qt5)",
+      "set(CMAKE_CXX_FLAGS -mwindows)\n",
+      "set(CMAKE_EXE_LINKER_FLAGS \"-static\")",
+      "set(CMAKE_CXX_COMPILE g++)",
+      "set(CMAKE_EXPORT_COMPILE_COMMANDS 1)\n",
+      "find_package(Qt5 REQUIRED COMPONENTS Core Gui Widgets)\n",
+      "add_executable(${${PROJECT_NAME}}",
+      "\tWidget.cpp ",
+      "\tmain.cpp",
+      "\tWidget.h",
+      "   ${2}",
+      ")\n",
+      "target_link_libraries(${${PROJECT_NAME}} PUBLIC",
+      "\tQt::Core",
+      "\tQt::Gui",
+      "\tQt::Widgets",
+      ")"
+    ],
+    "description": "Creates a do...qt5"
+  },
+  "pkg-config": {
+    "prefix": "pkg",
+    "body": [
+        "find_package(PkgConfig REQUIRED)",
+        "pkg_check_modules(${1} REQUIRED IMPORTED_TARGET)"
+    ],
+    "description": "Code snippet find_package  loop"
+  },
+
+  "if compiler": {
+    "prefix": "if",
+    "body": [
+        "if(CMAKE_C_COMPILER_ID MATCHES \"GNU\" OR CMAKE_C_COMPILER_ID MATCHES \"Clang\")",
+            "\t${1}",
+        "else(CMAKE_C_COMPILER_ID MATCHES \"MSVC\")",
+            "\t${2}",
+        "endif()"
+    ],
+    "description": "compile"
+  },
+  "main": {
+    "prefix": "main",
+    "body": [
+        "cmake_minimum_required(VERSION 3.20)",
+        "project(${1})\n",
+
+        "set(CMAKE_EXPORT_COMPILE_COMMANDS on)",
+        "set(CMAKE_CXX_STANDARD 17)\n",
+
+        "add_executable(${${PROJECT_NAME}} ${2})",
+        "target_link_libraries(${${PROJECT_NAME}} PUBLIC ${3})"
+    ],
+    "description": "compile"
+  },
+
+  "sub": {
+    "prefix": "sub",
+    "body": [
+        "cmake_minimum_required(VERSION 3.20)",
+        "project(${0})",
+        "add_library(${${PROJECT_NAME}} ${1})\n",
+
+        "#target_compile_options(sub PUBLIC -stdlib=libc++)",
+        "#target_link_options(sub PUBLIC -stdlib=libc++)"
+
+    ],
+    "description": "compile"
+  },
+
+  "include": {
+    "prefix": "inc",
+    "body": [
+        "include_directories(${0})",
+        "link_directories(${2})"
+    ],
+    "description": "compile"
+  }
+}

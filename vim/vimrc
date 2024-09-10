@@ -1,0 +1,595 @@
+if has("win32")||has("win64")
+    let g:python3_host_prog=('python')
+    let data_dir=$HOME.'/vimfiles'
+else
+    let g:python3_host_prog=('python3')
+    "let data_dir='~/.vim'
+    let data_dir='~/.config/vim'
+endif
+
+if empty(glob(data_dir.'/autoload/plug.vim'))
+  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  autocmd VimEnter * PlugInstall --sync | source %
+endif
+
+"call plug#begin('~/.vim')
+call plug#begin(data_dir.'/plug')
+Plug 'neoclide/coc.nvim',{'branch':'release'} "代码补全
+
+Plug 'Shougo/defx.nvim'"目录树"
+Plug 'roxma/nvim-yarp'
+Plug 'roxma/vim-hug-neovim-rpc'
+Plug 'kristijanhusak/defx-icons'
+Plug 'kristijanhusak/defx-git'
+
+Plug 'itchyny/lightline.vim'
+Plug 'itchyny/vim-gitbranch'
+Plug 'lambdalisue/nerdfont.vim'
+Plug 'mengelbrecht/lightline-bufferline'
+
+Plug 'kaicataldo/material.vim',{'branch':'main'}
+Plug 'voldikss/vim-translator'"翻译
+
+Plug 'voldikss/vim-floaterm' "终端
+"Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } "模糊查找
+"Plug 'junegunn/fzf.vim'
+
+Plug 'jiangmiao/auto-pairs' "补全括号
+Plug '907th/vim-auto-save'
+Plug 'Yggdroot/indentLine' "对其线
+"Plug 'mg979/vim-visual-multi', {'branch': 'master'} "多光标
+Plug 'preservim/nerdcommenter' "注释
+
+"Plug 'vim-autoformat/vim-autoformat'
+Plug 'mhinz/vim-startify'
+
+"Plug 'airblade/vim-gitgutter' "git修改
+"Plug 'tpope/vim-fugitive'
+
+"Plug 'itchyny/vim-cursorword'
+call plug#end()
+
+"------------------------------------------------------------------------------
+
+
+"hi PMenu              ctermfg=240 ctermbg=123
+"hi PMenuSel           ctermfg=255    ctermbg=123
+hi CocMenuSel ctermbg=237 guibg=#13354A
+"autocmd ColorScheme * hi CocMenuSel ctermbg=237 guibg=#13354A
+hi MatchParen ctermbg=gray guibg=gray
+
+"set background=dark
+set termguicolors
+set t_Co=256
+let mapleader=","
+let g:maplocalleader=","
+set hlsearch
+set viminfo='1000,<666
+set clipboard=unnamed
+set encoding=utf-8
+set fileencodings=ucs-bom,utf-8,gb18030,default
+set ignorecase "搜索忽略大小写
+" autocmd VimEnter * NoMatchParen "取消括号高亮匹配
+set noerrorbells visualbell t_vb=
+autocmd GUIEnter * set visualbell t_vb=
+set belloff=all
+set tm=500
+set number
+"set relativenumber
+set autoindent
+set ts=4
+set shiftwidth=4
+set softtabstop=4
+set tabstop=4
+set scrolloff=5
+set pumheight=10 "菜单选项行数
+set autoread
+set cindent
+set expandtab "设置tab=space
+"set noexpandtab "设置spce=tab
+set mouse+=a
+
+set laststatus=2
+set hidden
+set noshowmode
+
+set nocompatible"不兼容vi模式
+set cmdheight=1
+set hlsearch
+set backspace=indent,eol,start "设置back键
+set incsearch
+set nobackup
+set nowritebackup
+set noswapfile
+set noundofile
+set signcolumn=yes
+let &t_SI = "\e[6 q" "SI = INSERT mode
+let &t_SR = "\e[4 q" "SR = REPLACE mode
+let &t_EI = "\e[2 q" "EI = NORMAL mode (ELSE)
+autocmd! BufNewFile,BufRead *.vs,*.fs set ft=glsl
+"set t_8f=^[[38;2;%lu;%lu;%lum
+"set t_8b=^[[48;2;%lu;%lu;%lum
+"setlocal list
+"set listchars=tab:>-,space:.
+"-------------------------------------------------------------------------------------
+"coc-nvim 补全
+
+
+let g:coc_snippet_next="<C-j>"
+
+inoremap <silent><expr> <TAB>
+        \ coc#pum#visible() ? coc#pum#next(1) :
+        \ CheckBackspace() ? "\<Tab>" :
+        \ coc#refresh()
+
+inoremap <expr><C-p> coc#pum#visible() ? coc#pum#prev(1) : "\<C-p>"
+
+inoremap <silent><expr> <C-n>
+        \ coc#pum#visible() ? coc#pum#next(1) :
+        \ CheckBackspace() ? "\<Tab>" :
+        \ coc#refresh()
+
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+        \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+inoremap <expr><C-k> coc#pum#visible() ? coc#pum#cancel() : CheckBackspace()
+
+function! CheckBackspace() abort
+let col = col('.') - 1
+return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+nnoremap <silent> K :call ShowDocumentation()<CR>
+
+function! ShowDocumentation()
+if CocAction('hasProvider', 'hover')
+call CocActionAsync('doHover')
+else
+call feedkeys('K', 'in')
+endif
+endfunction
+
+"autocmd CursorHold * silent call CocActionAsync('highlight')
+
+augroup mygroup
+autocmd!
+" Setup formatexpr specified filetype(s)
+autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+" Update signature help on jump placeholder
+autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+augroup end
+
+
+nnoremap <silent> gk <Plug>(coc-diagnostic-prev)
+nnoremap <silent> gj <Plug>(coc-diagnostic-next)
+nnoremap <silent> gd <Plug>(coc-definition)
+nnoremap <silent> gr <Plug>(coc-rename)
+nnoremap <silent> gc <Plug>(coc-references)
+
+let g:coc_global_extensions = [
+        "\ 'coc-sumneko-lua',
+        "\ 'coc-sh',
+        \ 'coc-clangd',
+        \ 'coc-rust-analyzer',
+        \ 'coc-go',
+        \ 'coc-highlight',
+        \ 'coc-vimlsp',
+        \ 'coc-json',
+        \ 'coc-cmake',
+        \ 'coc-snippets']
+
+nnoremap <silent><nowait><expr> <C-d> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+nnoremap <silent><nowait><expr> <C-u> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+inoremap <silent><nowait><expr> <C-d> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+inoremap <silent><nowait><expr> <C-u> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+vnoremap <silent><nowait><expr> <C-d> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+vnoremap <silent><nowait><expr> <C-u> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+
+noremap <silent><C-m>o :CocOutline<CR>
+
+"------------------------------------------------------------------------------------
+"let g:fern#renderer="nerdfont"
+"let g:fern#mark_symbol                       = '●'
+"let g:fern#renderer#default#collapsed_symbol = '▷ '
+"let g:fern#renderer#default#expanded_symbol  = '▼ '
+"let g:fern#renderer#default#leading          = ' '
+"let g:fern#renderer#default#leaf_symbol      = ' '
+"let g:fern#renderer#default#root_symbol      = '~ '
+"nnoremap  <silent><C-s> :Fern . -drawer -width=30 -toggle<CR>
+"----------------------------------------------------------------------------------
+call defx#custom#column('git', 'indicators', {
+  \ 'Modified'  : '󰠠',
+  \ 'Staged'    : '',
+  \ 'Untracked' : '',
+  \ 'Renamed'   : '',
+  \ 'Unmerged'  : '',
+  \ 'Ignored'   : '',
+  \ 'Deleted'   : '',
+  \ 'Unknown'   : '󰋗'
+  \ })
+
+call defx#custom#column('git', 'column_length', 2)
+"Defx 目录树
+let g:defx_icons_enable_syntax_highlight = 1
+let g:defx_icons_column_length = 2
+let g:defx_icons_directory_icon = ''
+let g:defx_icons_mark_icon = '*'
+let g:defx_icons_copy_icon = '󰆏'
+let g:defx_icons_link_icon = ''
+let g:defx_icons_move_icon = ''
+let g:defx_icons_parent_icon = ''
+let g:defx_icons_default_icon = ''
+let g:defx_icons_directory_symlink_icon = ''
+
+let g:defx_icons_root_opened_tree_icon = ''
+let g:defx_icons_nested_opened_tree_icon = ''
+let g:defx_icons_nested_closed_tree_icon = ''
+
+call defx#custom#column('icon', {
+            \ 'directory_icon': '▸ ',
+            \ 'file_icon': '  ',
+            \ 'opened_icon': '▾ ',
+            \ 'root_icon': '  ',
+            \ })
+
+call defx#custom#column('mark', {
+            \ 'readonly_icon': '✗',
+            \ 'selected_icon': '✓',
+            \ })
+
+call defx#custom#option('_', {
+            \ 'columns': 'indent:git:icons:filename',
+            \ 'winwidth': 30,
+            \ 'split': 'vertical',
+            \ 'direction': 'topleft',
+            \ 'show_ignored_files': 0,
+            \ 'root_marker': '≡ ',
+            \ 'ignored_files':
+            \     '.mypy_cache,.pytest_cache,.git,.hg,.svn,.*,.stversions'
+            \   . ',__pycache__,.sass-cache,*.egg-info,.DS_Store,*.pyc,*.swp'
+            \ })
+
+nnoremap <silent> <C-s>
+            \ :<C-u>Defx -resume -toggle -buffer-name=tab`tabpagenr()` <CR>
+
+"nnoremap <silent> <LocalLeader>a
+            "\ :<C-u>Defx -resume -buffer-name=tab`tabpagenr()` -search=`expand('%:p')`<CR>
+
+autocmd FileType defx call s:defx_my_settings()
+function! s:defx_my_settings() abort
+    "nnoremap <silent><buffer><expr> l
+                "\ defx#is_directory() ?
+                "\ defx#do_action('open_tree') :
+                "\ defx#do_action('multi', ['drop'])
+
+    "nnoremap <silent><buffer><expr> <CR>
+                "\ defx#is_directory() ?
+                "\ defx#do_action('open_or_close_tree') :
+                "\ defx#do_action('multi', ['drop'])
+
+    nnoremap <silent><buffer><expr> <CR>
+                \ defx#is_directory() ?
+                \ defx#do_action('open_tree', 'toggle') :
+                \ defx#do_action('multi', ['drop'])
+
+    nnoremap <silent><buffer><expr> l
+                \ defx#is_directory() ?
+                \ defx#do_action('open_tree', 'toggle') :
+                \ defx#do_action('multi', ['drop'])
+
+    nnoremap <silent><buffer><expr> a
+                \ defx#do_action('new_file')
+
+    nnoremap <silent><buffer><expr> d
+                \ defx#do_action('remove')
+
+    nnoremap <silent><buffer><expr> r
+                \ defx#do_action('rename')
+
+    nnoremap <silent><buffer><expr> .
+                \ defx#do_action('toggle_ignored_files')
+
+    nnoremap <silent><buffer><expr> A
+                \ defx#do_action('new_directory')
+
+    nnoremap <silent><buffer><expr> q
+                \ defx#do_action('quit')
+endfunction
+
+
+"-----------------------------------------------------------------------------------
+"主题 material
+
+
+if has("gui_running")
+    set guioptions=
+    if has("win32")||has("win64")
+        set guifont=SauceCodePro_Nerd_Font_Mono:h16
+    else
+        set guifont=SauceCodePro\ Nerd\ Font\ Mono\ 16
+    endif
+    set background=light
+    let g:material_terminal_italics = 1
+    let g:material_theme_style = 'lighter'
+    colorscheme  material
+    hi Normal guifg=NONE guibg=#fff0f5
+else
+    let g:material_terminal_italics = 1
+    let g:material_theme_style = 'palenight-community'
+"'default' 'palenight' | 'ocean' | 'lighter' | 'darker' | 'default-community' | 'palenight-community' | 'ocean-community' | 'lighter-community' | 'darker-community'
+    colorscheme  material
+endif
+
+"------------------------------------------------------------------------------------
+"状态栏
+
+let g:lightline#bufferline#enable_nerdfont=1
+let g:lightline#bufferline#modified=' '
+"let g:lightline#bufferline#read_only=' '
+
+let g:lightline = {
+        \ 'colorscheme': 'PaperColor',
+        \ 'active': {
+        \ 'left': [ [ 'mode', 'paste' ],
+        \ [ 'gitbranch', 'readonly', 'filename', 'modified','method' ] ]
+        \ },
+        \ 'component_function': {
+        \ 'gitbranch': 'gitbranch#name',
+        \ 'method': 'NearestMethodOrFunction'
+        \ },
+        \ 'tabline': {
+        \   'left': [ ['buffers'] ],
+        \   'right': [ ['close'] ]
+        \ },
+        \ 'component_expand': {
+        \   'buffers': 'lightline#bufferline#buffers'
+        \ },
+        \ 'component_type': {
+        \   'buffers': 'tabsel'
+        \ },
+        \ }
+
+let g:lightline.separator = { 'left': '', 'right': '' }
+let g:lightline.subseparator = { 'left': '', 'right': '' }
+set showtabline=2
+autocmd BufWritePost,TextChanged,TextChangedI * call lightline#update()
+
+"------------------------------------------------------------------------------------
+"fzf
+let g:fzf_layout = { 'window': { 'width': 0.98, 'height': 0.9, 'relative': v:true, 'border':'sharp'} }
+nnoremap <silent><C-m>f :Files<CR>
+nnoremap <silent><C-m>g :Rg<CR>
+nnoremap <silent><C-m>b :Buffers<CR>
+nnoremap <silent><C-m>l :BLines<CR>
+nnoremap <silent><C-m>a :Ag<CR>
+"------------------------------------------------------------------------------------
+"vim-floaterm终端
+if has("win32")||has("win64")
+    let g:floaterm_shell='nu.exe'
+endif
+
+let g:floaterm_borderchars = '─│─│╭╮╯╰ '
+let g:floaterm_title = ''
+let g:floaterm_width = 0.8
+let g:floaterm_height = 0.9
+
+tnoremap <silent><C-\> <C-\><C-n>:FloatermKill<CR>
+nnoremap <silent><C-\> :FloatermNew --height=0.9 --width=0.8 --name=xiaobin<CR>
+"-----------------------------------------------------------------------------------
+"indentLine
+"let g:indentLine_color_term = 111
+let g:indentLine_char = '│'
+let g:indentLine_enabled=1
+let g:indentLine_concealcursor = 'inc'
+let g:indentLine_conceallevel = 2
+" Vim
+let g:indentLine_color_term = 237
+
+set listchars=tab:~~,"space:.
+set list
+"------------------------------------------------------------------------------------
+
+"vim-visual-multi
+"------------------------------------------------------------------------------------
+"nerdcommenter
+nnoremap <silent> <leader>c V}:call nerdcommenter#Comment('x', 'toggle')<CR>
+nnoremap <silent> <leader>c V{:call nerdcommenter#Comment('x', 'toggle')<CR>
+
+let g:auto_save = 1
+"------------------------------------------------------------------------------------
+
+"auto-pairs 括号补全
+let g:AutoPairs = {'(':')', '[':']', '{':'}',"'":"'",'"':'"'}
+"let g:AutoPairsShortcutFastWrap = '<C-e>'
+"------------------------------------------------------------------------------------
+
+"git setting
+set updatetime=250
+set signcolumn=yes
+let g:gitgutter_max_signs = 500
+let g:gitgutter_max_signs = -1
+highlight GitgutterAdd guifg=#009900 ctermfg=10
+highlight GitgutterChange guifg=#bbbb00 ctermfg=9
+highlight GitgutterDelete guifg=#ff2222 ctermfg=9
+let g:gitgutter_sign_added='|'
+let g:gitgutter_sign_modified='|'
+let g:gitgutter_sign_removed='|'
+let g:gitgutter_sign_removed_first_line='|'
+let g:gitgutter_sign_removed_above_and_below='|'
+let g:gitgutter_sign_modified_removed='|'
+nnoremap <silent>tj <Plug>(GitGutterNextHunk)
+nnoremap <silent>tk <Plug>(GitGutterPrevHunk)
+nnoremap <silent>td :Gvdiffsplit<CR>
+nnoremap <silent>tb :Git blame<CR>
+
+"--------------------------------------------------------------------------------
+"formatconfig
+let g:formatdef_stylua = '"stylua --indent-type=Spaces --indent-width=4 --column-width=150 --search-parent-directories"'
+let g:formatters_lua = ['stylua']
+
+let g:formatdef_rustfmt = '"rustfmt"'
+let g:formatters_rust = ['rustfmt']
+
+let g:formatdef_clangformat = '"clang-format \"-style={BasedOnStyle: LLVM, IndentWidth:    4, SortIncludes:  false, SpacesInParentheses : false, ReflowComments: false, ReflowComments: false, SpacesInConditionalStatement:   false, SpaceBeforeRangeBasedForLoopColon: false, SpaceBeforeParens:  Never, AllowShortLambdasOnASingleLine: All, ColumnLimit: 130,}\""'
+let g:formatters_c = ['clangformat']
+
+let g:formatdef_clangformat = '"clang-format \"-style={BasedOnStyle: LLVM, IndentWidth:    4, SortIncludes:  false, SpacesInParentheses : false, ReflowComments: false, ReflowComments: false, SpacesInConditionalStatement:   false, SpaceBeforeRangeBasedForLoopColon: false, SpaceBeforeParens:  Never, AllowShortLambdasOnASingleLine: All, ColumnLimit: 130,}\""'
+let g:formatters_cpp = ['clangformat']
+
+
+let g:formatdef_fixjson = '"fixjson"'
+let g:formatters_json = ['fixjson']
+"-------------------------------------------------------------------------------
+let g:translator_window_borderchars = ['─','│','─','│','╭','╮','╯','╰ ']
+let g:translator_window_type = 'popup'
+let g:translator_window_max_width=0.8
+let g:translator_window_max_height=0.6
+"let g:translator_target_lang='youdao'
+
+nmap <silent> <Leader>t <Plug>TranslateW
+vmap <silent> <Leader>t <Plug>TranslateWV
+"-----------------------------------------------------------------------------------------------
+
+inoremap <silent><C-l> <Right>
+nnoremap <silent><C-l> :bn<CR>
+nnoremap <silent><C-h> :bp<CR>
+nnoremap <silent><C-k> :bd<CR>
+
+nnoremap w e
+nnoremap e ge
+
+"nnoremap <leader>a :%s/<C-r><C-w>//g<left><left>
+
+nnoremap <silent>q :nohl<CR>
+
+"nnoremap <silent><C-y> "+yy
+"nnoremap <silent><C-e> "+p
+"vnoremap <silent><C-y> "+y
+"nnoremap <C-j> <C-w>w<CR>
+
+nnoremap zl 5<C-w><<CR>
+nnoremap zh 5<C-w>><CR>
+nnoremap <C-w>c :if winnr('$') == 1 \| tabclose \| else \| close \| endif<CR>
+
+nnoremap <silent><F11> :call libcallnr("vimtweak64.dll", "SetAlpha", 230)<CR>
+nnoremap <silent><F12> :call libcallnr("vimtweak64.dll", "SetAlpha", 255)<CR>
+
+set numberwidth=1
+set guicursor+=a:blinkon0
+"hi Normal guibg=NONE guifg=NONE ctermfg=NONE ctermbg=NONE "设置透明
+
+hi SignColumn  ctermbg=NONE ctermfg=NONE guibg=NONE guifg=NONE
+hi VertSplit   ctermbg=NONE ctermfg=0 guibg=NONE guifg=#000000
+set fillchars+=vert:│
+
+autocmd BufWinEnter * setlocal formatoptions-=cro
+autocmd FileType json,markdown let g:indentLine_conceallevel = 0
+au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
+
+
+"hi Normal guifg=NONE guibg=#24283b
+"hi SignColumn   guibg=#24283b  guifg=NONE
+"hi NonText guibg=#24283b guifg=NONE
+"highlight EndOfBuffer guibg=#24283b guifg=NONE
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+set cursorline
+
+if has("gui_running")
+    hi CursorLine   guifg=NONE  guibg=#e6e6fa gui=NONE cterm=NONE
+    hi Cursor       gui=NONE    guifg=#292d3e     guibg=#6182bb
+else
+    hi CursorLine   guifg=NONE  guibg=#303347 gui=NONE cterm=NONE
+endif
+hi LineNr       guibg=NONE  guifg=#494d64 "设置行号颜色
+hi CursorLineNr guifg=#b7bdf8  guibg=NONE
+
+hi Type            guifg=#009999 guibg=NONE gui=NONE cterm=NONE  "类型
+hi Structure       guifg=#F7768E guibg=NONE "sturct class等关键字
+
+
+hi CocInlayHint guifg=#111111
+hi CocSemClass     guifg=#ff9999 guibg=NONE "类类型
+hi CocSemTypeClass     guifg=#ff9999 guibg=NONE "类类型
+hi CocSemNamespace guifg=#ff69b4
+
+if has("gui_running")
+    hi Identifier      guifg=#ffa500 guibg=NONE gui=italic cterm=italic "函数形参
+    hi link CocSemVariable Identifier
+    hi link CocSemProperty Identifier
+else
+    hi Identifier      guifg=#eed49f guibg=NONE gui=italic cterm=italic "函数形参
+    hi CocSemVariable  guifg=#eed49f gui=italic cterm=italic "变量
+    hi CocSemProperty  guifg=#eed49f gui=italic cterm=italic "类成员
+endif
+
+hi CocSemTypeParameter guifg=#006699 "模板参数"
+hi Function        guifg=#68a0e1 guibg=NONE gui=NONE cterm=NONE
+
+hi Statement guifg=#48decc guibg=NONE gui=NONE cterm=NONE "if  while public语句
+hi link Boolean Statement
+
+hi Constant guifg=#ffa0a0 guibg=NONE gui=NONE cterm=NONE "常量
+hi Number   guifg=#ffa0a0 guibg=NONE gui=NONE cterm=NONE "常量
+
+hi Character guifg=#676e95 guibg=NONE gui=italic cterm=italic"字符串"
+hi String    guifg=#676e95 guibg=NONE gui=italic cterm=italic"字符
+hi Comment   guifg=#676e95 guibg=NONE gui=italic cterm=italic"注释
+
+hi Macro guifg=#FF69B4
+hi PreProc guifg=#006699 guibg=NONE gui=NONE cterm=NONE "预处理
+hi Include guifg=#ff9999 guibg=NONE gui=NONE cterm=NONE "
+hi Define  guifg=#F7768E cterm=italic gui=italic "预定义符号
+hi Visual guifg=#f78c6c guibg=#686e95 ctermfg=NONE ctermbg=209
+
+command! -nargs=? -complete=buffer -bang BufOnly {
+    g:BufOnly('<args>', '<bang>') 
+}
+def g:BufOnly(b: string, bang: string): void
+    var buffer: number
+    if b == ''
+        buffer = bufnr('%')
+    elseif str2nr(b) > 0
+        buffer = bufnr(str2nr(b))
+    else
+        buffer = bufnr(b)
+    endif
+    if buffer == -1
+        echohl ErrorMsg
+        echomsg 'No matching buffer for ' .. b
+        echohl None
+        return
+    endif
+
+    var last_buffer: number = bufnr('$')
+    var delete_count = 0
+    for n in range(1, last_buffer)
+        if n != buffer && buflisted(n)
+            if bang == '' && getbufvar(n, '&modified')
+                echohl ErrorMsg
+                echomsg 'No write since last change for buffer ' ..
+                    n .. ' (add ! to override)'
+                echohl None
+            else
+                silent exe 'bdel' .. bang .. ' ' .. n
+                if ! buflisted(n)
+                    ++delete_count
+                endif
+            endif
+        endif
+    endfor
+    if delete_count == 1
+        echomsg delete_count .. " buffer deleted"
+    elseif delete_count > 1
+        echomsg delete_count .. " buffers deleted"
+    endif
+    lightline#bufferline#reload()
+enddef
+nnoremap <silent><C-q> :BufOnly<cr>
+
+function! CloseAllBuffersButCurrent()
+    let curr = bufnr("%")
+    let last = bufnr("$")
+    if curr > 1    | silent! execute"1,".(curr-1)."bd"     | endif
+        if curr < last | silent! execute (curr+1).",".last."bd" | endif
+    endfunction
+nmap <C-1> :call CloseAllBuffersButCurrent()<CR>
