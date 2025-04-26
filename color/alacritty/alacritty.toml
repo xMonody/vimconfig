@@ -81,4 +81,7 @@ hide_when_typing = true
 
 #[shell]
 #program = "wsl.exe"
-#args=["--cd","~","--exec","tmux"]
+#args=["--cd","~","--exec","tmux", "attach-session", "-t", "home"]
+
+[env]
+TERM="xterm-256color"

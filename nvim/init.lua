@@ -75,6 +75,69 @@ require("lazy").setup(plugins,{
     },
 })
 
+local win32yank_available = vim.fn.executable('win32yank') == 1
+if win32yank_available then -- 统一 win32yank 配置
+  vim.g.clipboard = {
+    name = 'win32yank',
+    copy = {
+      ['+'] = 'win32yank -i --crlf',
+      ['*'] = 'win32yank -i --crlf',
+    },
+    paste = {
+      ['+'] = 'win32yank -o --lf',
+      ['*'] = 'win32yank -o --lf',
+    },
+    cache_enabled = true,
+  }
+else -- Linux 环境检测
+  local is_wayland = vim.env.WAYLAND_DISPLAY ~= nil
+    or vim.env.XDG_SESSION_TYPE == 'wayland'
+  local is_x11 = vim.env.DISPLAY ~= nil
+    and (vim.env.XDG_SESSION_TYPE == nil or vim.env.XDG_SESSION_TYPE ~= 'wayland')
+
+  if is_wayland and vim.fn.executable('wl-copy') == 1 then -- Wayland优先 即使同时安装了xclip
+    vim.g.clipboard = {
+      name = 'wl-clipboard',
+      copy = {
+        ['+'] = 'wl-copy',
+        ['*'] = 'wl-copy',
+      },
+      paste = {
+        ['+'] = 'wl-paste',
+        ['*'] = 'wl-paste',
+      },
+      cache_enabled = true,
+    }
+  elseif is_x11 and vim.fn.executable('xclip') == 1 then -- X11环境
+    vim.g.clipboard = {
+      name = 'xclip',
+      copy = {
+        ['+'] = 'xclip -selection clipboard',
+        ['*'] = 'xclip -selection primary',
+      },
+      paste = {
+        ['+'] = 'xclip -selection clipboard -o',
+        ['*'] = 'xclip -selection primary -o',
+      },
+      cache_enabled = true,
+    }
+  end
+end
+
+---- 配置检查（调试用）
+--vim.api.nvim_create_user_command('CheckClipboard', function()
+  --print('当前剪贴板配置:')
+  --print(vim.inspect(vim.g.clipboard))
+  --print('\n环境检测:')
+  --print('Wayland:', vim.env.WAYLAND_DISPLAY or 'nil')
+  --print('XDG_SESSION_TYPE:', vim.env.XDG_SESSION_TYPE or 'nil')
+  --print('DISPLAY:', vim.env.DISPLAY or 'nil')
+  --print('可用工具:')
+  --print('wl-copy:', vim.fn.executable('wl-copy'))
+  --print('xclip:', vim.fn.executable('xclip'))
+  --print('win32yank:', vim.fn.executable('win32yank'))
+--end, {})
+
 vim.o.tabstop = 4
 vim.bo.tabstop = 4
 vim.o.softtabstop = 4

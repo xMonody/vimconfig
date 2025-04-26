@@ -221,47 +221,43 @@ return {
             mods = 'SHIFT|ALT',
             action = wezterm.action_callback(function(win, pane)
                 local tab = win:active_tab()
-                local current_pane_id = pane:pane_id()
-                local panes_to_close = {}
-
-                for _, p in ipairs(tab:panes()) do -- 先收集所有需要关闭的 panes
-                    if p:pane_id() ~= current_pane_id then
-                        table.insert(panes_to_close, p)
+                for i = #tab:panes(), 1, -1 do -- 反向遍历避免动态修改问题
+                    local p = tab:panes()[i]
+                    if p:pane_id() ~= pane:pane_id() then
+                        p:activate()
+                        win:perform_action(wezterm.action.CloseCurrentPane{confirm = false}, p)
                     end
                 end
-
-                for _, p in ipairs(panes_to_close) do -- 然后一次性关闭它们
-                    p:activate()  -- 需要先激活要关闭的 pane
-                    win:perform_action(wezterm.action.CloseCurrentPane{confirm = false}, p)
-                end
-
             end),
         },
 
         {
             key = "q",
             mods = "SHIFT|ALT",
-            action = wezterm.action_callback(function(win, pane)
+            action = wezterm.action_callback(function(win, _)
                 local current_tab = win:active_tab()
-                local current_tab_id = current_tab:tab_id()
-                local mux_win = win:mux_window()
-                local tabs_to_close = {} -- 收集所有需要关闭的标签页
-
-                for _, tab in ipairs(mux_win:tabs()) do
-                    if tab:tab_id() ~= current_tab_id then
-                        table.insert(tabs_to_close, tab)
+                for _, tab in ipairs(win:mux_window():tabs()) do
+                    if tab:tab_id() ~= current_tab:tab_id() then
+                        tab:activate()
+                        local panes = tab:panes()
+                        if #panes > 0 then
+                            for i = #panes, 1, -1 do
+                                win:perform_action(
+                                    wezterm.action.CloseCurrentPane({ confirm = false }),
+                                    panes[i]
+                                )
+                            end
+                        else
+                            win:perform_action(
+                                wezterm.action.CloseCurrentTab({ confirm = false }),
+                                tab:active_pane() or win:active_pane()
+                            )
+                        end
                     end
                 end
-
-                for _, tab in ipairs(tabs_to_close) do -- 先切换到目标标签页 再执行 CloseCurrentTab
-                    tab:activate()  -- 必须切换到目标标签页
-                    win:perform_action(wezterm.action.CloseCurrentTab({ confirm = false }), pane)
-                end
-
             end),
         },
-    },
-
+    }
 
     --default_prog = { 'nu.exe' },
     --default_cwd = "D:/",
@@ -275,19 +271,18 @@ return {
     --},
 }
 
---[[ local _set_title = function(process_name, base_title, max_width, inset)
-   local title
-   inset = inset or 5
+--[[ {
+    key = 'q',
+    mods = 'SHIFT|ALT',
+    action = wezterm.action_callback(function(win, pane)
+        local current_tab = win:active_tab()
 
-   if process_name:len() > 0 then
-      title = process_name .. ' ~ ' .. base_title
-   else
-      title = base_title
-   end
-   if title:len() > max_width - inset then
-      local diff = title:len() - max_width + inset
-      title = wezterm.truncate_right(title, title:len() - diff)
-   end
-   return title
-end --]]
+        for _, tab in ipairs(win:mux_window():tabs()) do
+            if tab:tab_id() ~= current_tab:tab_id() then
+                tab:activate()
+                win:perform_action(wezterm.action.CloseCurrentTab({ confirm = false }), pane)
+            end
+        end
 
+    end),
+}, ]]

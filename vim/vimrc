@@ -12,6 +12,52 @@ if empty(glob(data_dir.'/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall --sync | source %
 endif
 
+if executable('win32yank') "优先使用 win32yank
+  let g:clipboard = {
+        \   'name': 'win32yank',
+        \   'copy': {
+        \      '+': 'win32yank -i --crlf',
+        \      '*': 'win32yank -i --crlf',
+        \    },
+        \   'paste': {
+        \      '+': 'win32yank -o --lf',
+        \      '*': 'win32yank -o --lf',
+        \    },
+        \   'cache_enabled': 1,
+        \ }
+else " Linux环境
+
+  let s:wayland_active = !empty($WAYLAND_DISPLAY) || $XDG_SESSION_TYPE ==# 'wayland'
+  let s:x11_active = !empty($DISPLAY) && $XDG_SESSION_TYPE !=# 'wayland'
+
+  if s:wayland_active && executable('wl-copy') " Wayland 环境（即使同时安装了 X11 工具）
+    let g:clipboard = {
+          \   'name': 'wl-clipboard',
+          \   'copy': {
+          \      '+': 'wl-copy',
+          \      '*': 'wl-copy',
+          \    },
+          \   'paste': {
+          \      '+': 'wl-paste',
+          \      '*': 'wl-paste',
+          \    },
+          \ }
+  elseif s:x11_active && executable('xclip') "明确处于 X11 会话时使用 xclip
+    let g:clipboard = {
+          \   'name': 'xclip',
+          \   'copy': {
+          \      '+': 'xclip -selection clipboard',
+          \      '*': 'xclip -selection primary',
+          \    },
+          \   'paste': {
+          \      '+': 'xclip -selection clipboard -o',
+          \      '*': 'xclip -selection primary -o',
+          \    },
+          \ }
+  endif
+endif
+
+
 "call plug#begin('~/.vim')
 call plug#begin(data_dir.'/plug')
 Plug 'neoclide/coc.nvim',{'branch':'release'} "代码补全
