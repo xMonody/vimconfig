@@ -1,0 +1,60 @@
+# prezto
+git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
+
+setopt EXTENDED_GLOB
+for rcfile in "${ZDOTDIR:-$HOME}"/.zprezto/runcoms/^README.md(.N); do
+  ln -s "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
+done
+
+zstyle ':prezto:load' pmodule \
+  'environment' \
+  'spectrum' \
+  'terminal' \
+  'history' \
+  'completion' \
+  'history-substring-search' \
+  'prompt' \
+  'autosuggestions' \
+  'syntax-highlighting'
+
+
+function format_path {
+  local current_path=${PWD/#$HOME/\~}
+  local segments=(${(s:/:)current_path})
+  local count=${#segments[@]}
+
+  if (( count <= 2 )); then
+    echo "$current_path"
+  else
+    echo "…/${segments[-2]}/${segments[-1]}"
+  fi
+}
+
+function proxystatus {
+  if [[ -z $http_proxy && -z $https_proxy ]]; then
+      echo ""
+  else
+      echo ""
+  fi
+}
+
+local FG1="%{%F{#414559}%}"
+local BG1="%{%K{#A0819D}%}"
+local FG2="%{%F{#A0819D}%}"
+local BG2="%{%K{#749395}%}"
+local FG3="%{%F{#749395}%}"
+local BG3="%{%K{#7F81AF}%}"
+local FG4="%{%F{#414559}%}"
+local BG4="%{%K{NONE}%}"
+local FG5="%{%F{#7F81AF}%}"
+local RESET="%{%f%k%}"
+
+function prompt_mytheme_setup {
+  setopt prompt_subst
+  prompt_opts=(cr percent subst)
+  PROMPT=$'\n'"${FG1}${BG1} \$(format_path) ${RESET}${BG2}${FG2}${FG3}${BG3}${BG3}${FG4} \$(proxystatus) ${FG5}${BG4} ${RESET}"
+  #PROMPT="${FG1}${BG1} \$(format_path) ${RESET}${BG2}${FG2}${FG3}${BG3}${BG3}${FG1} \$(proxystatus) ${FG5}${BG4} ${RESET}"
+  #PROMPT=$'%F{#414559}%K{#A0819D}\n $(format_path) %K{#749395}%F{#A0819D}%F{#749395}%K{#7F81AF}%K{#7F81AF}%F{#414559}\
+  #$(proxystatus) %K{NONE}%F{#7F81AF}%k%f '
+}
+prompt_mytheme_setup

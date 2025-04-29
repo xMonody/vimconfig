@@ -1,7 +1,7 @@
 Linux
 
 format = """
-[](#DA627D)\
+[](#DA627D)\
 $directory\
 [](fg:#DA627D bg:#FCA17D)\
 $git_branch\
@@ -32,22 +32,47 @@ format = '[ $branch ]($style)'
 style = "bg:#FCA17D"
 format = '[$all_status$ahead_behind ]($style)'
 
+fizh  starship init fish | source
+zsh   eval "$(starship init zsh)"
+powershell vim $PROFILE Invoke-Expression (&starship init powershell)
+
+nushell mkdir ($nu.data-dir | path join "vendor/autoload")
+starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.nu")
+
+$env.config.shell_integration.osc133 = false
+$env.config.cursor_shape.emacs = "block"
 -----------------------------------------------------------
 Windows
 
 format = """
-[](#DA627D)\
+[](#80667f)\
 $directory\
-[](fg:#DA627D bg:#FCA17D)\
-[](fg:#FCA17D bg:#68A0E1)\
-[    ](bg:#68A0E1 fg:#DA627D)\
-[ ](fg:#68A0E1)\
+[](fg:#80667f bg:#88767f)\
+[](fg:#88767f bg:#637698)\
+[  ](bg:#637698 fg:#80667f)\
+[ ](fg:#637698)\
 """
-
-add_newline=false
-
+add_newline = true
 [directory]
-style = "bg:#DA627D"
+style = "bg:#80667f"
+format = "[ $path  ]($style)"
+truncation_length = 2
+truncation_symbol = "…/"
+
+
+
+# #A0819D #7F81AF #749395
+format = """
+[](#A0819D)\
+$directory\
+[](fg:#A0819D bg:#749395)\
+[](fg:#749395 bg:#7F81AF)\
+[  ](bg:#7F81AF fg:#A0819D)\
+[ ](fg:#7F81AF)\
+"""
+add_newline=true
+[directory]
+style = "bg:#A0819D"
 format = "[ $path ]($style)"
 truncation_length = 2
 truncation_symbol = "…/"
