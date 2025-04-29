@@ -1,0 +1,100 @@
+# echo -ne "\x1b[2 q\033]12;#ffff00\0x7"
+# .host:/ /mnt/hgfs fuse.vmhgfs-fuse allow_other,defaults,uid=1000,gid=1000,umask=022 0 0
+echo -ne "\x1b[2 q" #bash zsh
+unsetopt beep        # 禁用 zsh 内置的 beep
+unsetopt hist_beep   # 禁用历史搜索时的 beep
+unsetopt list_beep   # 禁用自动补全时的 beep
+setopt no_beep       # 另一种禁用方式
+unsetopt LIST_BEEP   # 禁用补全时的声音
+
+
+
+alias bat='bat --style="header" --paging=never --theme=TwoDark'
+alias sysnogui="sudo systemctl set-default multi-user.target"
+alias sysgui="sudo systemctl set-default graphical.target"
+
+export EDITOR=vim
+export VISUAL=vim
+export FZF_DEFAULT_OPTS='--border=rounded'
+export VISUAL=vim
+export FZF_DEFAULT_OPTS='--border=rounded'
+export LC_ALL=C.UTF-8
+export LANG=C.UTF-8
+
+function toggle_proxy {
+    local default_ip="127.0.0.1"
+    local port="10809"
+    local custom_ip="${1:-}"  #第二个参数
+
+    if [[ -z $custom_ip ]]; then
+        local target_ip="http://$default_ip:$port"
+        if [[ -z $http_proxy && -z $https_proxy ]]; then
+            export HTTP_PROXY="$target_ip"
+            export HTTPS_PROXY="$target_ip"
+            export http_proxy="$target_ip"
+            export https_proxy="$target_ip"
+        else
+            unset HTTP_PROXY HTTPS_PROXY http_proxy https_proxy
+        fi
+    else
+        local target_ip="http://192.168.$custom_ip:$port"
+        export HTTP_PROXY="$target_ip"
+        export HTTPS_PROXY="$target_ip"
+        export http_proxy="$target_ip"
+        export https_proxy="$target_ip"
+    fi
+}
+alias proxy="toggle_proxy"
+
+function format_path {
+    local current_path=${PWD/#$HOME/\~}
+    local segments=(${(s:/:)current_path})
+    local count=${#segments[@]}
+    if (( count <= 2 )); then
+     echo "$current_path"
+    else
+      echo "~/${segments[-2]}/${segments[-1]}"
+    fi
+}
+
+local FG1="%{%F{#414559}%}"
+local BG1="%{%K{#A0819D}%}"
+local FG2="%{%F{#A0819D}%}"
+local BG2="%{%K{#749395}%}"
+local FG3="%{%F{#749395}%}"
+local BG3="%{%K{#7F81AF}%}"
+local ff3="%{%F{#7F81AF}%}"
+local FG4="%{%F{#A0819D}%}"
+local BG4="%{%K{NONE}%}"
+local RESET="%{%f%k%}"
+
+function proxystatus {
+  if [[ -z $http_proxy && -z $https_proxy ]]; then
+      echo ""
+  else
+      echo ""
+  fi
+}
+
+setopt PROMPT_SUBST
+PROMPT='
+${FG1}${BG1} $(format_path) ${RESET}${BG2}${FG2}${FG3}${BG3}${BG3}${FG1} $(proxystatus) ${ff3}%k${RESET} '
+zstyle ':completion:*:default' list-colors 'di=34:ma=38;2;40;40;40;48;2;106;110;142'
+
+
+g++ -std=c++23 -fmodules -c -fmodule-only -fsearch-include-path bits/std.cc
+g++ -std=c++23 -fmodules main.cpp
+
+-Wno-reserved-identifier -Wno-reserved-module-identifier \
+clang++ -std=c++23 -stdlib=libc++ --precompile -o std.pcm /usr/share/libc++/v1/std.cppm
+clang++ -std=c++23 -stdlib=libc++ -fmodule-file=std=std.pcm std.pcm main.cpp -o main
+
+clang -x c++-header -emit-pch -o xxx.h.pch 
+clang main.c++ -include-pch xxx.h.pch -o 
+
+gcc -x c-header -c -o xxx.h.gch
+g++ -x c++-header -o xxx.hpp.gch
+
+alias tarp="peek"
+alias tarx="extract"
+

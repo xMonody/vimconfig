@@ -1,0 +1,13 @@
+{
+  "clangd": {
+    "prefix": "clangd",
+    "body": [
+      "CompileFlags:",
+      "Add: [-std=c++23, -Wall, -xc++, -I/usr/include/freetype2, -stdlib=libc++, -fmodule-file=std=std.pcm]",
+      "Compiler: clang++"
+    ],
+    "description": "clangd compile snippet"
+  }
+
+}
+

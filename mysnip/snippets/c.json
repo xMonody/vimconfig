@@ -65,7 +65,7 @@
 
   "switch": {
     "prefix": "switch",
-    "body": ["switch(${1:switch_on}) {", "\tdefault:", "\t\t$0", "\t\tbreak;", "}"],
+    "body": [ "switch(${1:switch_on}) {", "\tcase: ${2:1}", "\t\t${3}", "\t\tbreak;", "\tcase: ${4:2}", "\t\t${5}", "\t\tbreak;", "\tdefault:", "\t\t${6:default}", "}" ],
     "description": "Code snippet for switch statement"
   },
 
@@ -140,3 +140,4 @@
   }
 
 }
+
