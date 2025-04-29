@@ -33,18 +33,23 @@
 [fonts]
 extras = [{ family = "文泉驿正黑" }]
 size = 20
+use-drawable-chars = false
+
 [fonts.regular]
 family = "SauceCodePro Nerd Font Mono"
 style = "Normal"
 weight = 400
+
 [fonts.bold]
 family = "SauceCodePro Nerd Font Mono"
 style = "Normal"
 weight = 800
+
 [fonts.italic]
 family = "SauceCodePro Nerd Font Mono"
 style = "Italic"
 weight = 400
+
 [fonts.bold-italic]
 family = "SauceCodePro Nerd Font Mono"
 style = "Italic"
@@ -56,9 +61,6 @@ mode = "CollapsedTab"
 clickable = false
 use-current-path = false
 color-automation = []
-
-[developer]
-log-level = "OFF"
 
 [bindings]
 keys = [
@@ -80,8 +82,6 @@ keys = [
     { key = "p", with = "Alt | Shift", action = "SelectPrevTab"},
     { key = "w", with = "Alt | Shift", action = "CloseTab"},
     { key = "q", with = "Alt | Shift", action = "CloseUnfocusedTabs"},
-    
-    
     
     { key = "k", with = "Alt | Shift", action = "SelectNextSplit"},
     { key = "j", with = "Alt | Shift", action = "SelectPrevSplit"},
@@ -133,3 +133,7 @@ light_blue = '#7b9ef0'
 light_magenta = '#f2a4db'
 light_cyan = '#5abfb5'
 light_white = '#b5bfe2'
+
+[developer]
+log-level = "OFF"
+
