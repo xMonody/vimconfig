@@ -32,6 +32,15 @@ format = '[ $branch ]($style)'
 style = "bg:#FCA17D"
 format = '[$all_status$ahead_behind ]($style)'
 
+fizh  starship init fish | source
+zsh   eval "$(starship init zsh)"
+powershell vim $PROFILE Invoke-Expression (&starship init powershell)
+
+nushell mkdir ($nu.data-dir | path join "vendor/autoload")
+starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.nu")
+
+$env.config.shell_integration.osc133 = false
+$env.config.cursor_shape.emacs = "block"
 -----------------------------------------------------------
 Windows
 
