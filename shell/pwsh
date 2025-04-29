@@ -1,0 +1,227 @@
+# New-Item -ItemType File -Path $PROFILE -Force
+# Set bell-style none
+# [Console]::Write([char]27 + "[2 q") #powershell 5.1
+# MSYS2_PATH_TYPE strict
+
+Invoke-Expression (&starship init powershell)
+
+Set-PSReadlineOption -EditMode Emacs
+Write-Host -NoNewLine "`e[2 q"
+Set-PSReadLineKeyHandler -Key Ctrl+e -ScriptBlock {
+    param($key, $arg)
+    $line = $null
+    $cursor = $null
+    [Microsoft.PowerShell.PSConsoleReadLine]::GetBufferState( [ref]$line, [ref]$cursor)
+
+    if ($cursor -eq $line.Length) {
+        [Microsoft.PowerShell.PSConsoleReadLine]::AcceptSuggestion()
+    }
+    else {
+        [Microsoft.PowerShell.PSConsoleReadLine]::EndOfLine()
+    }
+}
+
+Set-PSReadLineKeyHandler -Key Ctrl+f -ScriptBlock {
+    param($key, $arg)
+    $line = $null
+    $cursor = $null
+    [Microsoft.PowerShell.PSConsoleReadLine]::GetBufferState( [ref]$line, [ref]$cursor)
+
+    if ($cursor -eq $line.Length) {
+        [Microsoft.PowerShell.PSConsoleReadLine]::AcceptNextSuggestionWord()
+    }
+    else {
+        [Microsoft.PowerShell.PSConsoleReadLine]::ForwardChar()
+    }
+}
+Set-PSReadLineOption -PredictionSource History
+
+Remove-Item alias:\ls
+New-Alias -Name ls -Value lsd
+New-Alias -Name ll -Value lsd
+Set-Alias -Name reset -Value cls
+
+Set-Alias -Name which -Value Get-Command
+Set-Alias -Name cat -Value Get-Content
+Set-Alias -Name grep -Value Select-String
+Set-Alias -Name pwd -Value Get-Location
+Set-Alias -Name mv -Value Move-Item
+Set-Alias -Name rm -Value Remove-Item
+
+
+$env:http_proxy = "http://127.0.0.1:10809"
+$env:HTTP_PROXY = "http://127.0.0.1:10809"
+$env:https_proxy = "http://127.0.0.1:10809"
+$env:HTTPS_PROXY = "http://127.0.0.1:10809"
+
+function toggle_proxy {
+    param( [string]$custom_ip = $null)
+    $default_ip = "127.0.0.1"
+    $port = "10809"
+
+    if ([string]::IsNullOrEmpty($custom_ip)) {
+        $target_ip = "http://$default_ip" + ":$port"
+        if ([string]::IsNullOrEmpty($env:http_proxy) -and [string]::IsNullOrEmpty($env:https_proxy)) {
+            $env:HTTP_PROXY = $target_ip
+            $env:HTTPS_PROXY = $target_ip
+            $env:http_proxy = $target_ip
+            $env:https_proxy = $target_ip
+        } else {
+            Remove-Item Env:\HTTP_PROXY -ErrorAction SilentlyContinue
+            Remove-Item Env:\HTTPS_PROXY -ErrorAction SilentlyContinue
+            Remove-Item Env:\http_proxy -ErrorAction SilentlyContinue
+            Remove-Item Env:\https_proxy -ErrorAction SilentlyContinue
+        }
+    } else {
+        $target_ip = "http://192.168.$custom_ip" + ":$port"
+        $env:HTTP_PROXY = $target_ip
+        $env:HTTPS_PROXY = $target_ip
+        $env:http_proxy = $target_ip
+        $env:https_proxy = $target_ip
+    }
+}
+Set-Alias -Name proxy -Value toggle_proxy
+
+function prompt {
+    function Format-Path {
+        $currentPath = $PWD.Path
+        $homePath = $HOME
+
+        if ($currentPath.StartsWith($homePath)) {
+            $currentPath = "~" + $currentPath.Substring($homePath.Length)
+        }
+
+        $segments = $currentPath -split '[\\/]'
+        $count = $segments.Count
+
+        if ($count -le 2) {
+            return $currentPath
+        } else {
+            return "~/$($segments[-2])/$($segments[-1])"
+        }
+    }
+
+    $ESC = [char]27
+    $Reset = "$ESC[0m"
+
+    $FG1 = "$ESC[38;2;65;69;89m"      # #414559
+    $FG2 = "$ESC[38;2;160;129;157m"   # #A0819D
+    $FG3 = "$ESC[38;2;116;147;149m"   # #749395
+    $FG4 = "$ESC[38;2;127;129;175m"   # #7F81AF
+    $ff3 = "$ESC[38;2;127;129;175m"   # #7F81AF
+    $BG1 = "$ESC[48;2;160;129;157m"   # #A0819D
+    $BG2 = "$ESC[48;2;116;147;149m"   # #749395
+    $BG3 = "$ESC[48;2;127;129;175m"   # #7F81AF
+    $BG4 = "$ESC[49m"                  # NONE
+    $formattedPath = Format-Path
+
+    if ([string]::IsNullOrEmpty($env:http_proxy) -and [string]::IsNullOrEmpty($env:https_proxy)) {
+        $off = ""
+    } else {
+        $off = "" #开启proxy 
+    }
+
+    $PS1 = "`n" + #表示换行
+           "${FG1}${BG1} $formattedPath ${Reset}" +
+           "${BG2}${FG2}" +
+           "${FG3}${BG3}${FG1} ${off} " +
+           "${ff3}${BG4}${Reset} "
+    return $PS1
+}
+
+function mywget {
+    param(
+        [Parameter(Mandatory = $true, Position = 0)]
+        [string]$Uri,
+
+        [Parameter(Position = 1)]
+        [string]$o
+    )
+
+    try {
+        # 处理文件名
+        if (-not $o) {
+            $fileName = [System.IO.Path]::GetFileName([System.Uri]$Uri)
+            if (-not $fileName) {
+                throw "无法从 URI 提取文件名，请使用 -o 指定输出文件名"
+            }
+        }
+        else {
+            $fileName = $o
+        }
+
+        # ====== 同名处理 ======
+        $baseName = [System.IO.Path]::GetFileNameWithoutExtension($fileName)
+        $extension = [System.IO.Path]::GetExtension($fileName)
+        $counter = 1
+
+        while (Test-Path $fileName) {
+            $fileName = "$baseName-$counter$extension"
+            $counter++
+        }
+
+        Write-Host "Requesting $Uri ..."
+        Write-Host "Saving to: $fileName"
+
+        $client = [System.Net.Http.HttpClient]::new()
+        $response = $client.GetAsync(
+            $Uri,
+            [System.Net.Http.HttpCompletionOption]::ResponseHeadersRead
+        ).Result
+
+        if (-not $response.IsSuccessStatusCode) {
+            throw "HTTP Error: $($response.StatusCode)"
+        }
+
+        $totalBytes = $response.Content.Headers.ContentLength
+        $stream = $response.Content.ReadAsStreamAsync().Result
+        $fileStream = [System.IO.File]::Create($fileName)
+
+        $buffer = New-Object byte[] 8192
+        $totalRead = 0
+        $stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
+
+        while (($read = $stream.Read($buffer, 0, $buffer.Length)) -gt 0) {
+            $fileStream.Write($buffer, 0, $read)
+            $totalRead += $read
+
+            $elapsed = $stopwatch.Elapsed.TotalSeconds
+            if ($elapsed -lt 0.1) { continue }
+
+            $speed = $totalRead / $elapsed
+
+            if ($totalBytes) {
+                $percent = ($totalRead / $totalBytes) * 100
+
+                Write-Progress `
+                    -Activity "Downloading $fileName" `
+                    -Status ("{0:N2}% - {1:N2} MB / {2:N2} MB - {3:N2} MB/s" -f `
+                        $percent,
+                        ($totalRead / 1MB),
+                        ($totalBytes / 1MB),
+                        ($speed / 1MB)
+                    ) `
+                    -PercentComplete $percent
+            }
+            else {
+                Write-Progress `
+                    -Activity "Downloading $fileName" `
+                    -Status ("{0:N2} MB - {1:N2} MB/s" -f `
+                        ($totalRead / 1MB),
+                        ($speed / 1MB)
+                    )
+            }
+        }
+
+        $fileStream.Close()
+        $stream.Close()
+        $stopwatch.Stop()
+
+        Write-Host "`nDownload completed."
+    }
+    catch {
+        Write-Error $_
+    }
+}
+Set-Alias -Name wget -Value mywget
+

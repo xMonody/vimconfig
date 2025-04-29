@@ -1,0 +1,300 @@
+# echo -ne "\x1b[2 q\033]12;#ffff00\0x7"
+echo -ne "\x1b[2 q" #bash zsh
+unsetopt beep        # 禁用 zsh 内置的 beep
+unsetopt hist_beep   # 禁用历史搜索时的 beep
+unsetopt list_beep   # 禁用自动补全时的 beep
+setopt no_beep       # 另一种禁用方式
+unsetopt LIST_BEEP   # 禁用补全时的声音
+
+
+alias bat='bat --style="header" --paging=never --theme=TwoDark'
+alias sysnogui="sudo systemctl set-default multi-user.target"
+alias sysgui="sudo systemctl set-default graphical.target"
+
+export EDITOR=vim
+export VISUAL=vim
+export FZF_DEFAULT_OPTS='--border=rounded'
+export VISUAL=vim
+export FZF_DEFAULT_OPTS='--border=rounded'
+export LC_ALL=C.UTF-8
+export LANG=C.UTF-8
+
+function toggle_proxy {
+    local default_ip="127.0.0.1"
+    local port="10809"
+    local custom_ip="${1:-}"  #第二个参数
+
+    if [[ -z $custom_ip ]]; then
+        local target_ip="http://$default_ip:$port"
+        if [[ -z $http_proxy && -z $https_proxy ]]; then
+            export HTTP_PROXY="$target_ip"
+            export HTTPS_PROXY="$target_ip"
+            export http_proxy="$target_ip"
+            export https_proxy="$target_ip"
+        else
+            unset HTTP_PROXY HTTPS_PROXY http_proxy https_proxy
+        fi
+    else
+        local target_ip="http://192.168.$custom_ip:$port"
+        export HTTP_PROXY="$target_ip"
+        export HTTPS_PROXY="$target_ip"
+        export http_proxy="$target_ip"
+        export https_proxy="$target_ip"
+    fi
+}
+alias proxy="toggle_proxy"
+
+function format_path {
+    local current_path=${PWD/#$HOME/\~}
+    local segments=(${(s:/:)current_path})
+    local count=${#segments[@]}
+    if (( count <= 2 )); then
+     echo "$current_path"
+    else
+      echo "~/${segments[-2]}/${segments[-1]}"
+    fi
+}
+
+local FG1="%{%F{#414559}%}"
+local BG1="%{%K{#A0819D}%}"
+local FG2="%{%F{#A0819D}%}"
+local BG2="%{%K{#749395}%}"
+local FG3="%{%F{#749395}%}"
+local BG3="%{%K{#7F81AF}%}"
+local ff3="%{%F{#7F81AF}%}"
+local FG4="%{%F{#A0819D}%}"
+local BG4="%{%K{NONE}%}"
+local RESET="%{%f%k%}"
+
+function proxystatus {
+  if [[ -z $http_proxy && -z $https_proxy ]]; then
+      echo ""
+  else
+      echo ""
+  fi
+}
+
+setopt PROMPT_SUBST
+PROMPT='
+${FG1}${BG1} $(format_path) ${RESET}${BG2}${FG2}${FG3}${BG3}${BG3}${FG1} $(proxystatus) ${ff3}%k${RESET} '
+zstyle ':completion:*:default' list-colors 'di=34:ma=38;2;40;40;40;48;2;106;110;142'
+
+
+# 解压函数 - 支持多种压缩格式
+# 添加到 ~/.zshrc 文件中
+
+extract() {
+    if [[ -z "$1" ]]; then
+        echo "使用方法: extract <压缩文件> [目标目录]"
+        echo "如果提供目标目录，则解压到该目录；否则解压到当前目录"
+        echo "支持的格式: .tar .gz .tar.gz .tgz .bz2 .tar.bz2 .xz .tar.xz .zip .7z .tar.zst .zst"
+        return 1
+    fi
+    local file_name="$1"
+    local target_dir="$2"
+    if [[ ! -f "$file_name" ]]; then
+        echo "错误: 文件 '$file_name' 不存在"
+        return 1
+    fi
+    echo "正在解压: $file_name"
+    if [[ -n "$target_dir" ]]; then
+        mkdir -p "$target_dir"
+        echo "目标目录: $target_dir"
+    fi
+    case "$file_name" in
+        # .tar 格式
+        *.tar)
+            if [[ -n "$target_dir" ]]; then
+                tar -xf "$file_name" -C "$target_dir"
+            else
+                tar -xf "$file_name"
+            fi
+            ;;
+        *.gz)
+            if [[ "$file_name" != *.tar.gz && "$file_name" != *.tgz ]]; then
+                gunzip -k "$file_name"
+            else
+                if [[ -n "$target_dir" ]]; then
+                    tar -xzf "$file_name" -C "$target_dir"
+                else
+                    tar -xzf "$file_name"
+                fi
+            fi
+            ;;
+        *.tgz)
+            if [[ -n "$target_dir" ]]; then
+                tar -xzf "$file_name" -C "$target_dir"
+            else
+                tar -xzf "$file_name"
+            fi
+            ;;
+        *.bz2)
+            if [[ "$file_name" != *.tar.bz2 ]]; then
+                bunzip2 -k "$file_name"
+            else
+                # .tar.bz2
+                if [[ -n "$target_dir" ]]; then
+                    tar -xjf "$file_name" -C "$target_dir"
+                else
+                    tar -xjf "$file_name"
+                fi
+            fi
+            ;;
+        *.xz)
+            if [[ "$file_name" != *.tar.xz ]]; then
+                unxz -k "$file_name"
+            else
+                # .tar.xz
+                if [[ -n "$target_dir" ]]; then
+                    tar -xJf "$file_name" -C "$target_dir"
+                else
+                    tar -xJf "$file_name"
+                fi
+            fi
+            ;;
+        *.zst)
+            if [[ "$file_name" != *.tar.zst ]]; then
+                if command -v zstd &> /dev/null; then
+                    zstd -d -k "$file_name"
+                else
+                    echo "错误: 需要安装 zstd。尝试: sudo apt install zstd 或 sudo pacman -S zstd"
+                    return 1
+                fi
+            else
+                # .tar.zst
+                if command -v zstd &> /dev/null; then
+                    if [[ -n "$target_dir" ]]; then
+                        tar --use-compress-program=zstd -xf "$file_name" -C "$target_dir"
+                    else
+                        tar --use-compress-program=zstd -xf "$file_name"
+                    fi
+                else
+                    echo "错误: 需要安装 zstd。尝试: sudo apt install zstd 或 sudo pacman -S zstd"
+                    return 1
+                fi
+            fi
+            ;;
+        *.zip)
+            if command -v unzip &> /dev/null; then
+                if [[ -n "$target_dir" ]]; then
+                    unzip -q "$file_name" -d "$target_dir"
+                else
+                    unzip -q "$file_name"
+                fi
+            else
+                echo "错误: 需要安装 unzip。尝试: sudo apt install unzip 或 sudo pacman -S unzip"
+                return 1
+            fi
+            ;;
+        *.7z)
+            if command -v 7z &> /dev/null; then
+                if [[ -n "$target_dir" ]]; then
+                    7z x "$file_name" -o"$target_dir" > /dev/null
+                else
+                    7z x "$file_name" > /dev/null
+                fi
+            else
+                echo "错误: 需要安装 p7zip。尝试: sudo apt install p7zip-full 或 sudo pacman -S p7zip"
+                return 1
+            fi
+            ;;
+        *)
+            echo "错误: 不支持的压缩格式 '$file_name'"
+            echo "支持的格式: .tar .gz .tar.gz .tgz .bz2 .tar.bz2 .xz .tar.xz .zip .7z .tar.zst .zst"
+            return 1
+            ;;
+    esac
+    echo "✓ 解压完成: $file_name"
+}
+
+peek() {
+    if [[ -z "$1" ]]; then
+        echo "使用方法: peek <压缩文件>"
+        echo "支持的格式: .tar .gz .tar.gz .tgz .bz2 .tar.bz2 .xz .tar.xz .zip .7z .tar.zst .zst"
+        return 1
+    fi
+
+    local file_name="$1"
+
+    if [[ ! -f "$file_name" ]]; then
+        echo "错误: 文件 '$file_name' 不存在"
+        return 1
+    fi
+    case "$file_name" in
+        *.tar)
+            tar -tvf "$file_name"
+            ;;
+        *.tar.gz|*.tgz)
+            tar -tzvf "$file_name"
+            ;;
+        *.tar.bz2)
+            tar -tjvf "$file_name"
+            ;;
+        *.tar.xz)
+            tar -tJvf "$file_name"
+            ;;
+        *.tar.zst)
+            if command -v zstd &> /dev/null; then
+                tar --use-compress-program=zstd -tf "$file_name"
+            else
+                echo "需要安装 zstd"
+            fi
+            ;;
+        *.gz)
+            if [[ "$file_name" != *.tar.gz && "$file_name" != *.tgz ]]; then
+                echo "gzip 文件: $file_name"
+                echo "原始大小: $(gunzip -l "$file_name" | tail -1 | awk '{print $2}') 字节"
+                echo "压缩大小: $(gunzip -l "$file_name" | tail -1 | awk '{print $1}') 字节"
+                echo "压缩率: $(gunzip -l "$file_name" | tail -1 | awk '{print $3}')"
+            else
+                tar -tzvf "$file_name"
+            fi
+            ;;
+        *.bz2)
+            if [[ "$file_name" != *.tar.bz2 ]]; then
+                echo "bzip2 文件: $file_name"
+                echo "无法直接查看内容，使用: bzcat $file_name 查看内容"
+            else
+                tar -tjvf "$file_name"
+            fi
+            ;;
+        *.xz)
+            if [[ "$file_name" != *.tar.xz ]]; then
+                echo "xz 文件: $file_name"
+                echo "无法直接查看内容，使用: xzcat $file_name 查看内容"
+            else
+                tar -tJvf "$file_name"
+            fi
+            ;;
+        *.zst)
+            if [[ "$file_name" != *.tar.zst ]]; then
+                echo "zstd 文件: $file_name"
+                echo "无法直接查看内容，使用: zstdcat $file_name 查看内容"
+            else
+                tar --use-compress-program=zstd -tf "$file_name"
+            fi
+            ;;
+        *.zip)
+            if command -v unzip &> /dev/null; then
+                unzip -l "$file_name"
+            else
+                echo "需要安装 unzip"
+            fi
+            ;;
+        *.7z)
+            if command -v 7z &> /dev/null; then
+                7z l "$file_name"
+            else
+                echo "需要安装 p7zip"
+            fi
+            ;;
+        *)
+            echo "不支持的格式"
+            return 1
+            ;;
+    esac
+}
+
+alias tarp="peek"
+alias tarx="extract"
+

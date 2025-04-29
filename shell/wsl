@@ -1,5 +1,8 @@
 .wslconfig
+
 [wsl2]
+# kernel=D:\\Wsl\\bzImage
+guiApplications = false
 vmIdleTimeout = -1
 memory = 5G
 swap = 10G
@@ -8,11 +11,17 @@ autoProxy = true
 
 [experimental]
 hostAddressLoopback = true
-autoMemoryReclaim = gradual  # dropcache
+autoMemoryReclaim = dropcache
+
 
 /etc/wsl.conf
+
 [interop]
-enabled = false
+enabled = true
 appendWindowsPath = false
+
 [boot]
 systemd = true
+
+[user] #可以忽略这个配置
+default = user_name

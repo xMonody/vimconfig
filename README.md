@@ -21,8 +21,8 @@ windows
 iwr -useb https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim |`
     ni $HOME/vimfiles/autoload/plug.vim -Force
 ```
-2. windows file pos ~/_vimrc 
-linux file pos ~/.vimrc
+2. windows file pos ~/vimfiles/vimrc 
+linux file pos ~/.vimrc and .config/vim/vimrc
 3. PlugInstall
 
 ## nvim config
