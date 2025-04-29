@@ -68,7 +68,7 @@ gui:
     # Border color of focused window
     activeBorderColor:
       - '#6182bb'
-      - bold
+      - none
 
     # Border color of non-focused windows
     inactiveBorderColor:
@@ -132,7 +132,7 @@ gui:
   showRandomTip: false
 
   # If true, show the command log
-  showCommandLog: true
+  showCommandLog: false
 
   # If true, show the bottom line that contains keybinding info and useful buttons. If false, this line will be hidden except to display a loader for an in-progress action.
   showBottomLine: false

@@ -1,0 +1,29 @@
+
+# ~/.zshrc config
+#export LC_ALL=C.UTF-8
+#export LANG=C.UTF-8
+echo -ne "\x1b[2 q" #  "\x1b[2 q\033]12;#7C73B0\0x7"
+unsetopt beep        # 禁用 zsh 内置的 beep
+unsetopt hist_beep   # 禁用历史搜索时的 beep
+unsetopt list_beep   # 禁用自动补全时的 beep
+alias bat='bat --style="header" --paging=never --theme=TwoDark'
+alias lg=lazygit
+#alias ls="lsd --icon never"
+#alias ll="ls --icon never -all"
+alias ls=lsd
+alias ll="ls -all"
+alias cls='reset'
+
+# -- export 
+export FZF_COMPLETION_TRIGGER=".."
+export FZF_DEFAULT_OPTS=" --border=rounded --preview 'bat --style=numbers --color=always {}' \
+--preview-window=right:60%:border-left --color=border:#565f89,pointer:#7C73B0,\
+current-bg:#585d73,current-fg:-1:regular"
+export FZF_CTRL_R_OPTS="--preview-window=hidden --color=border:#565f89,\
+pointer:#7C73B0,current-bg:#585d73,current-fg:-1:regular"
+export EDITOR='vim -u NONE'
+export VISUAL='vim -u NONE'
+
+# archlinux  sudo pkgfile --update | Debian sudo update-command-not-found
+# source ~/.zprezto/modules/command-not-found/init.zsh # zimfw enable
+source ~/vimconfig/shell/setting.zsh
