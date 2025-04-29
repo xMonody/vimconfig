@@ -1,0 +1,67 @@
+"alias vim="/D/Editor/nvim/bin/nvim -u ~/.vim.vim --noplugin"
+
+set signcolumn=yes
+
+set background=dark
+set termguicolors
+set t_Co=256
+let mapleader=","
+let g:maplocalleader=","
+set hlsearch
+set viminfo='2000,<666
+set clipboard=unnamed
+set encoding=utf-8
+set fileencodings=ucs-bom,utf-8,gb18030,default
+set ignorecase "搜索忽略大小写
+" autocmd VimEnter * NoMatchParen "取消括号高亮匹配
+set noerrorbells visualbell t_vb=
+autocmd GUIEnter * set visualbell t_vb=
+set belloff=all
+set tm=500
+set number
+"set relativenumber
+set autoindent
+set ts=4
+set shiftwidth=4
+set softtabstop=4
+set tabstop=4
+set scrolloff=5
+set pumheight=7 "菜单选项行数
+set autoread
+set cindent
+set expandtab "设置tab=space
+"set noexpandtab "设置spce=tab
+set mouse+=a
+
+set laststatus=2
+set hidden
+set noshowmode
+set numberwidth=1
+
+set nocompatible "不兼容vi模式
+set cmdheight=0
+set hlsearch
+set backspace=indent,eol,start "设置back键
+set incsearch
+set nobackup
+set nowritebackup
+set noswapfile
+set noundofile
+set signcolumn=yes
+let &t_SI = "\e[6 q" "SI = INSERT mode
+let &t_SR = "\e[4 q" "SR = REPLACE mode
+let &t_EI = "\e[2 q" "EI = NORMAL mode (ELSE)
+
+"colorscheme darkblue
+colorscheme habamax
+hi Normal guifg=NONE guibg=#303446
+hi endOfBuffer guifg=NONE guibg=#303446
+hi NoText      guifg=NONE guibg=#303446
+
+set cursorline
+hi CursorLine   guifg=NONE  guibg=#3B3F52 gui=NONE cterm=NONE
+hi LineNr       guibg=#303446  guifg=#494d64 "设置行号颜色
+hi CursorLineNr guifg=#494d64  guibg=NONE
+
+hi Comment guifg=#676e95 guibg=NONE gui=NONE
+hi Constant gui=NONE

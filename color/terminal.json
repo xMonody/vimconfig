@@ -19,7 +19,7 @@
   "background": "#303446",
   "foreground": "#c6d0f5",
   "cursorColor": "#626880",
-  "selectionBackground": "#626880"
+  "selection-background": "#585d73"
 },
 
 "actions":

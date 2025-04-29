@@ -43,7 +43,9 @@
     "diagnostic.virtualTextAlign": "after",//位置
     "diagnostic.virtualTextCurrentLineOnly": false,
     "signature.preferShownAbove": true,//尽可能在光标上显示函数签名
-    "suggest.virtualText": false,
+    "suggest.virtualText": false,//期望补全
+    //"suggest.noselect": true,
+    "suggest.selection": "first",
 
     "notification.disabledProgressSources": ["*"],//禁用通知
 
@@ -58,10 +60,12 @@
 
     "semanticTokens.enable": true,//语义令牌
     "suggest.labelMaxLength": 40,
-    "diagnostic.floatConfig": {"border": true,"rounded": true,"highlight": "255"},
-    "suggest.floatConfig": {"border": true,"rounded": true,"highlight": "255"},
-    "signature.floatConfig": {"border": true,"rounded": true,"highlight": "255,"},
-    "hover.floatConfig": {"border": true,"rounded": true,"highlight": "255"},
+
+    "diagnostic.floatConfig":{"border":true,"rounded":true,"highlight":"suFloat","borderhighlight":"mmFloat"},
+    "suggest.floatConfig":{"border":true,"rounded":true,"highlight":"nnFloat","borderhighlight":"mmFloat"},
+    "signature.floatConfig":{"border": true,"rounded": true,"highlight":"nnFloat","borderhighlight":"mmFloat"},
+    "hover.floatConfig": {"border": true,"rounded": true,"highlight":"snFloat","borderhighlight":"mmFloat"},
+
     "dialog.floatHighlight": "NONE",
     "dialog.rounded":true,
     "dialog.floatBorderHighlight":"NONE",
@@ -80,18 +84,52 @@
 
     "go.goplsOptions": {
         "completeUnimported": true,
-        "usePlaceholders": true
+        "usePlaceholders": true,
+        "semanticTokens": true
     },
 
-    "clangd.arguments": ["--header-insertion=never"],
+    "languageserver": {
+        "glsl": {
+            "command": "glsl_analyzer",
+            "filetypes": ["glsl", "vert", "tecs", "tese", "frag", "geom", "comp", "vs", "fs"]
+        }
+    },
+
+    "clangd.arguments":["--background-index","--header-insertion=never", "--header-insertion-decorators=false"],
 
     //rust
     "rust-analyzer.server.path": "rust-analyzer",//
     "rust-analyzer.disableProgressNotifications":true,
+    "rust-analyzer.notifications.cargoTomlNotFound":false,
 
+    "rust-analyzer.diagnostics.enable": true,
+    "rust-analyzer.check.workspace":false,
+
+    "rust-analyzer.inlayHints.expressionAdjustmentHints.enable": "never",
+    "rust-analyzer.inlayHints.expressionAdjustmentHints.mode": "prefix",
+    //"rust-analyzer.inlayHints.expressionAdjustmentHints.enable": "always",
+    //"rust-analyzer.inlayHints.expressionAdjustmentHints.mode": "prefix",
+
+    "rust-analyzer.inlayHints.typeHints.hideNamedConstructor": false,
+    "rust-analyzer.inlayHints.typeHints.hideClosureParameter": false,
+    "rust-analyzer.inlayHints.typeHints.hideClosureInitialization": false,
+    "rust-analyzer.inlayHints.parameterHints.enable": true,      // 显示函数参数名
+    "rust-analyzer.inlayHints.typeHints.enable": false,           // 显示变量类型
+    "rust-analyzer.inlayHints.chainingHints.enable": true,       // 方法链返回类型提示
+    "rust-analyzer.inlayHints.closingBraceHints.enable": true,   // 闭括号所属项提示
+    "rust-analyzer.inlayHints.lifetimeElisionHints.enable": "never", // 生命周期提示（非简单情况）
+
+    "javascript.inlayHints.parameterNames.enabled": "all",
+    "javascript.inlayHints.parameterNames.suppressWhenArgumentMatchesName":true,
+    "javascript.inlayHints.functionLikeReturnTypes.enabled": false,
+    "javascript.inlayHints.parameterTypes.enabled": true,
+    "javascript.inlayHints.variableTypes.enabled": false,
+    "javascript.inlayHints.propertyDeclarationTypes.enabled": true,
+    "javascript.inlayHints.enumMemberValues.enabled": true,
+    "javascript.inlayHints.variableTypes.suppressWhenTypeMatchesName": false,
     
     "snippets.textmateSnippetsRoots": ["~/vimconfig/mysnip/snippets"],
-    //"snippets.textmateSnippetsRoots": ["D:/gitdir/vimconfig/mysnip/snippets"],
+    //"snippets.textmateSnippetsRoots": ["D:/vimconfig/mysnip/snippets"],
     
     "suggest.formatItems": [
         "kind",
