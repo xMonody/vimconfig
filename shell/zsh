@@ -1,0 +1,28 @@
+export LC_ALL=C.UTF-8
+export LANG=C.UTF-8
+
+function format_path() {
+    local current_path=${PWD/#$HOME/\~}
+    local segments=(${(s:/:)current_path})
+    local count=${#segments[@]}
+    if (( count <= 2 )); then
+     echo "$current_path"
+    else
+      echo "~/${segments[-2]}/${segments[-1]}"
+    fi
+}
+
+local FG1="%{%F{#414559}%}"
+local BG1="%{%K{#A0819D}%}"
+local FG2="%{%F{#A0819D}%}"
+local BG2="%{%K{#749395}%}"
+local FG3="%{%F{#749395}%}"
+local BG3="%{%K{#7F81AF}%}"
+local ff3="%{%F{#7F81AF}%}"
+local FG4="%{%F{#A0819D}%}"
+local BG4="%{%K{NONE}%}"
+local RESET="%{%f%k%}"
+
+PS1=$'\n'"${FG1}${BG1} \$($(typeset -f format_path); format_path) ${RESET}${BG2}${FG2}${FG3}${BG3}${BG3}${FG4}  ${ff3}%k${RESET} "
+
+zstyle ':completion:*:default' list-colors 'di=34:ma=38;2;40;40;40;48;2;106;110;142'

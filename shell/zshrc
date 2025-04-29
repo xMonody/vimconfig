@@ -1,0 +1,223 @@
+
+export VISUAL=vim
+export FZF_DEFAULT_OPTS='--border=rounded'
+
+#eval "$(starship init zsh)"
+# bindkey '^O' edit-command-line
+
+bindkey '^[k' forward-char   #移动字符
+bindkey '^[j' backward-char
+bindkey '^k' forward-word  #移动单词
+bindkey '^j' backward-word
+
+# 删除单词（左右）
+bindkey '^[u' delete-char           #删除一个字符
+bindkey '^[d' backward-delete-char
+bindkey '^d' kill-word            #删除一个单词
+#bindkey '^d' backward-kill-word
+
+# 删除整行的左右段
+bindkey '^b' backward-kill-line # Ctrl-b 删除到行首
+bindkey '^f' kill-line          # Ctrl-f 删除到行尾
+
+# 清空整行（使用自定义函数）
+zle-kill-whole-line() {
+  zle beginning-of-line
+  zle kill-line
+}
+zle -N zle-kill-whole-line
+bindkey '^u' zle-kill-whole-line    # Ctrl-h 清空整行
+
+bg-func() { fg }
+zle -N bg-func
+bindkey '^[f' bg-func
+
+by() {
+    nohup "$@" > /dev/null 2>&1 &
+}
+
+preview_archive() {
+    local file="$1"
+    if [[ ! -f "$file" ]]; then
+        echo "\e[31m 文件不存在: $file\e[0m" >&2
+        return 1
+    fi
+
+    local list
+    case "$file" in
+        *.tar.gz|*.tgz)
+            list=$(tar -tzf "$file" 2>/dev/null)
+            ;;
+        *.tar.xz|*.txz)
+            list=$(tar -tJf "$file" 2>/dev/null)
+            ;;
+        *.tar.zst)
+            list=$(tar --zstd -tf "$file" 2>/dev/null)
+            ;;
+        *.tar)
+            list=$(tar -tf "$file" 2>/dev/null)
+            ;;
+        *.bz2)
+            list=$(bzip2 -cd "$file" 2>/dev/null | tar -tf -)
+            ;;
+        *.gz)
+            list=$(gzip -cd "$file" 2>/dev/null | tar -tf -)
+            ;;
+        *.xz)
+            list=$(xz -cd "$file" 2>/dev/null | tar -tf -)
+            ;;
+        *.zip)
+            list=$(unzip -l "$file" 2>/dev/null | awk 'NR>3 && $0!~/^---/ {print $4}')
+            ;;
+        *.7z)
+            list=$(7z l "$file" 2>/dev/null | sed -n '/^----/,/^----/p' | sed '1d;$d' | awk '{print $NF}')
+            ;;
+        *.deb)
+            list=$(dpkg-deb -c "$file" 2>/dev/null | awk '{print $6}')
+            ;;
+        *)
+            echo "\e[31m 不支持的文件类型: $file \e[0m" >&2
+            return 2
+            ;;
+    esac
+
+    declare -A dir_count
+    declare -a output
+    local max_total=10  # 最大总输出行数
+    local total=0
+
+    while IFS= read -r line && (( total < max_total )); do
+        if [[ "$line" == */* ]]; then
+            # 提取顶级目录（第一个/之前的部分）
+            top_dir="${line%%/*}"
+            if [[ -z "${dir_count[$top_dir]}" ]]; then
+                dir_count[$top_dir]=0
+            fi
+            if (( dir_count[$top_dir] < 2 )); then
+                output+=("$line")
+                ((dir_count[$top_dir]++))
+                ((total++))
+            fi
+        else
+            # 没有路径的单独文件
+            if [[ -z "${dir_count["_no_path_"]}" ]]; then
+                dir_count["_no_path_"]=0
+            fi
+            if (( dir_count["_no_path_"] < 2 )); then
+                output+=("$line")
+                ((dir_count["_no_path_"]++))
+                ((total++))
+            fi
+        fi
+    done <<< "$list"
+
+    # 打印结果
+    printf '\e[32m %s\n' "${output[@]} \e[0m"
+    return 0
+}
+
+
+extract_archive() {
+    local create_dir=false
+    local archive_file
+    local original_dir=$(pwd)
+
+    # 参数处理
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            -x)
+                create_dir=true
+                shift
+                ;;
+            *)
+                archive_file="$1"
+                shift
+                ;;
+        esac
+    done
+
+    if [[ ! -f "$archive_file" ]]; then
+        echo "\e[31m 文件不存在: $archive_file \e[0m" >&2
+        return 1
+    fi
+
+    # 获取不带后缀的文件名（处理复合后缀如 .pkg.tar.zst）
+    local base_name
+    base_name=$(basename "$archive_file")
+    base_name=${base_name%.tar.zst}
+    base_name=${base_name%.pkg.tar.zst}  # 专门处理.pkg.tar.zst
+    base_name=${base_name%.tar.gz}
+    base_name=${base_name%.tgz}
+    base_name=${base_name%.tar.xz}
+    base_name=${base_name%.txz}
+    base_name=${base_name%.tar}
+    base_name=${base_name%.zip}
+    base_name=${base_name%.7z}
+    base_name=${base_name%.deb}
+    base_name=${base_name%.gz}
+    base_name=${base_name%.bz2}
+    base_name=${base_name%.xz}
+    base_name=${base_name%.pkg}  # 单独处理.pkg后缀
+
+    if [[ "$create_dir" == true ]]; then
+        echo "\e[33m 创建目录: $base_name \e[0m"
+        mkdir -p "$base_name"
+        cd "$base_name" || return 1
+        local archive_path="../$archive_file"
+    else
+        local archive_path="$archive_file"
+    fi
+
+    case "$archive_file" in
+        *.tar.zst|*.pkg.tar.zst)
+            echo " 解压 tar.zst 文件..."
+            tar --zstd -xf "$archive_path"
+            ;;
+        *.tar.gz|*.tgz)
+            echo " 解压 tar.gz 文件..."
+            tar -xzf "$archive_path"
+            ;;
+        *.tar.xz|*.txz)
+            echo " 解压 tar.xz 文件..."
+            tar -xJf "$archive_path"
+            ;;
+        *.tar)
+            echo " 解压 tar 文件..."
+            tar -xf "$archive_path"
+            ;;
+        *.zip)
+            echo " 解压 zip 文件..."
+            unzip -q "$archive_path"
+            ;;
+        *.7z)
+            echo " 解压 7z 文件..."
+            7z x "$archive_path" >/dev/null
+            ;;
+        *.deb)
+            echo " 解压 deb 文件..."
+            dpkg-deb -x "$archive_path" .
+            ;;
+        *.gz)
+            echo " 解压 gz 文件..."
+            gunzip -k "$archive_path"
+            ;;
+        *.bz2)
+            echo " 解压 bz2 文件..."
+            bunzip2 -k "$archive_path"
+            ;;
+        *.xz)
+            echo " 解压 xz 文件..."
+            unxz -k "$archive_path"
+            ;;
+        *)
+            echo "\e[31m 不支持的文件类型: $archive_file \e[0m" >&2
+            return 2
+            ;;
+    esac
+
+    [[ "$create_dir" == true ]] && cd "$original_dir"
+
+    echo "\e[32m 解压完成!\e[0m"
+    return 0
+}
+

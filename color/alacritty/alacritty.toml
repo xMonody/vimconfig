@@ -1,7 +1,8 @@
 [colors]
-cursor = { cursor='#626880', text = '#c6d0f5' }
-selection={ background = '#626880', text = '#c6d0f5' }
+selection={ background = '#414559', text = '#c6d0f5' }
+#selection={ background  = '#585d73', text = '#c6d0f5' }
 vi_mode_cursor={ cursor = '#626880', text = '#c6d0f5' }
+cursor = { cursor='#626880', text = '#c6d0f5' }
 
 [colors.search]
 focused_match = {background = "#ff6a19",foreground = "#ffffff"}
@@ -32,11 +33,12 @@ white = '#a5adce'
 yellow = '#e5c890'
 
 
+# SauceCodePro NFM CN
 [font]
-  normal={family= "SauceCodePro Nerd Font Mono",style=  "Regular"}
-  italic={family= "SauceCodePro Nerd Font Mono",style=  "Italic"}
-  bold=  {family="SauceCodePro Nerd Font Mono",style=  "Bold"}
-  bold_italic={family= "SauceCodePro Nerd Font Mono",style=  "Bold Italic"}
+  normal={family= "SauceCodePro NFM",style=  "Regular"}
+  italic={family= "SauceCodePro NFM",style=  "Italic"}
+  bold=  {family="SauceCodePro NFM",style=  "Bold"}
+  bold_italic={family= "SauceCodePro NFM",style=  "Bold Italic"}
   offset = {x=0,y=0}
   glyph_offset= {x=0,y=0}
   builtin_box_drawing = false
@@ -73,15 +75,17 @@ bindings=[
 { key="g", mods="Shift|Alt", action="ToggleViMode"},
 { key="f", mods="Shift|Alt", action="SearchForward"},
 { key="b", mods="Shift|Alt", action="SearchBackward"},
-# { key="s", mods="Alt", chars = "\u003A\u0077\u0071\u000D"},
+#{ key="a", mods="Control", chars = "\u003A\u0078\u000A"},
 ]
 
 [mouse]
 hide_when_typing = true
 
-#[shell]
-#program = "wsl.exe"
-#args=["--cd","~","--exec","tmux", "attach-session", "-t", "home"]
-
 [env]
 TERM="xterm-256color"
+
+#[terminal]
+#shell = { program = "wsl.exe", args = ["--cd", "~", "--exec", "tmux"] }
+#shell = { program = "wsl.exe", args = ["--cd", "~"] }
+
+
