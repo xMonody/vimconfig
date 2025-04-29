@@ -40,6 +40,10 @@
       {
         "language": "cmake",
         "path": "./snippets/cmake.json"
+      },
+      {
+        "language": "yaml",
+        "path": "./snippets/yaml.json"
       }
     ]
   }
