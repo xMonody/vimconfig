@@ -12,6 +12,9 @@ set-option -g status-interval 1
 set-option -g status-position top
 set-option -g status-justify left
 
+#set-option -g visual-activity off
+#set-option -g monitor-activity on
+
 set-option -g destroy-unattached on # 自动销毁无附加的会话，并在无会话时退出服务器
 set-option -g exit-empty on
 
@@ -41,6 +44,10 @@ unbind w
 bind s splitw -v -c '#{pane_current_path}'
 unbind %
 bind v  splitw -h -c '#{pane_current_path}'
+
+
+unbind -T copy-mode MouseDown3Pane  # 取消复制模式下的右键绑定
+unbind -T root MouseDown3Pane       # 取消普通模式下的右键绑定
 
 # 切换焦点
 bind k   select-pane -U
@@ -109,18 +116,26 @@ set-window-option -g mode-style none,bg=#626880
 set-option -g status-left-length 20
 set-option -g status-left-style none
 #(tmux list-sessions | wc -l)❐  󰄷
-set-option -g  @npre "#[bg=#babbf1,fg=#282828] #[fg=#babbf1,bg=#292c3c] "
+set-option -g  @npre "#[bg=#6a6e8e,fg=#282828] #[fg=#6a6e8e,bg=#292c3c] "
 set-option -g @pre "#[bg=#ea999c,fg=#282828] #[fg=#ea999c,bg=#292c3c] "
 
 # set-option -g status-left "#[bg=#8caaee,fg=#282828] ❐  #[fg=#282828,bg=#babbf1] #(tmux list-sessions | wc -l) #[fg=#282828,bg=#8caaee]  #[bg=#babbf1,fg=#282828] #S #{?client_prefix,#{@pre},#{@npre}}"
 # set-option -g status-left "#[bg=#8caaee,fg=#282828]  #[fg=#282828,bg=#babbf1] #(whoami) #[fg=#282828,bg=#8caaee]  #[bg=#babbf1,fg=#282828] #S #{?client_prefix,#{@pre},#{@npre}}"
-set-option -g status-left "#[bg=#8caaee,fg=#282828] 󰄷 #[fg=#282828,bg=#babbf1] #S #[fg=#282828,bg=#8caaee] 󰾆 #{?client_prefix,#{@pre},#{@npre}}"
+
+#tabs            = '#494c62'
+#tabs-active     = '#6a6e8e'
+
+set-option -g status-left "#[bg=#494c62,fg=#282828] 󰄷 #[fg=#282828,bg=#6a6e8e] #S #[fg=#282828,bg=#494c62] 󰾆 #{?client_prefix,#{@pre},#{@npre}}"
 
 #非活动tab
-set-option -g window-status-format '#[fg=#949cbb,bg=#292c3c]#[fg=#282828,bg=#949cbb]#I #[fg=#282828,bg=#414559]  #(ps -o comm= -t #{pane_tty}) #[fg=#414559,bg=#292c3c,nobold]'
+set-option -g @yact "#[fg=#282828,bg=#414559]"
+set-option -g @nact "#[fg=#eed49f,bg=#414559]"
+#set-option -g window-status-format '#[fg=#6a6e8e,bg=#292c3c]#[fg=#282828,bg=#6a6e8e]#I #{?window_activity_flag,#{@nact}  #(ps -o comm= -t #{pane_tty}),#{@yact}  #(ps -o comm= -t #{pane_tty})} #[fg=#414559,bg=#292c3c,nobold]'
+
+set-option -g window-status-format '#[fg=#6a6e8e,bg=#292c3c]#[fg=#282828,bg=#6a6e8e]#I #[fg=#282828,bg=#414559]  #(ps -o comm= -t #{pane_tty}) #[fg=#414559,bg=#292c3c,nobold]'
 
 #活动tab
-set-option -g @on "#[fg=#babbf1,bg=#292c3c]#[fg=#282828,bg=#babbf1]"
+set-option -g @on "#[fg=#949cbb,bg=#292c3c]#[fg=#282828,bg=#949cbb]"
 set-option -g @off "#[fg=#ea999c,bg=#292c3c]#[fg=#282828,bg=#ea999c]"
 set-option -g window-status-current-format '#{?window_zoomed_flag,#{@off}#I,#{@on}#I} #[bg=#51576d,fg=#282828]  #(ps -o comm= -t #{pane_tty}) #[fg=#51576d,bg=#292c3c]'
 
@@ -128,7 +143,9 @@ set-option -g window-status-current-format '#{?window_zoomed_flag,#{@off}#I,#{@o
 set-option -g status-right-length 40
 set-option -g status-right-style none
 
-set-option -g status-right "#[fg=#8caaee,bg=#292c3c]#[fg=#282828,bg=#8caaee] #[fg=#282828,bg=#babbf1] %H:%M #[fg=#282828,bg=#8caaee]  #[fg=#282828,bg=#babbf1] %m-%d "
+#tabs            = '#494c62'
+#tabs-active     = '#6a6e8e'
+set-option -g status-right "#[fg=#494c62,bg=#292c3c]#[fg=#282828,bg=#494c62] #[fg=#282828,bg=#6a6e8e] %m-%d #[fg=#282828,bg=#494c62]  #[fg=#282828,bg=#6a6e8e] %H:%M "
 
 # [bg=#8caaee,fg=#282828] #{?SSH_CLIENT,󰢹,} #[fg=#282828,bg=#babbf1] #(whoami) "
 
@@ -139,8 +156,8 @@ set-option -g window-status-current-style "fg=#e1a4db,bg=#2e3c64"
 set-option -g window-status-activity-style "fg=#24283b,bg=#49556a"
 
 # pane border style
-set-option -g pane-active-border-style fg='#292c3c'
-set-option -g pane-border-style fg='#292c3c'
+set-option -g pane-active-border-style fg='#686eaa'
+set-option -g pane-border-style fg='#686eaa'
 
 set -g popup-border-style 'fg=#babbf1'  # 边框颜色
 set -g popup-border-lines rounded  # 圆角边框

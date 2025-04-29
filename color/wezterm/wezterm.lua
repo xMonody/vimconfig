@@ -20,9 +20,9 @@ local M = {}
 local __cells__ = {}
 
 local colors = {
-   default   = { bg = '#49556a', fg = '#1c1b19' },
-   is_active = { bg = '#68a0e1', fg = '#11111b' },
-   hover     = { bg = '#587d8c', fg = '#1c1b19' },
+   default   = { bg = '#494c62', fg = '#1c1b19' },
+   is_active = { bg = '#6a6e8e', fg = '#11111b' },
+   hover     = { bg = '#6a6e8e', fg = '#1c1b19' },
 }
 
 local _set_process_name = function(s)
@@ -108,13 +108,14 @@ return {
 
     color_scheme = "catppuccin-frappe",
     colors = {
-        cursor_bg = "#626880",
+        --selection_bg  = "#585d73",
+        selection_bg  = "##414559",
+        cursor_bg     = "#626880",
         cursor_border = "#626880",
-        cursor_fg = "#c6d0f5"
+        cursor_fg     = "#c6d0f5"
 
         --foreground = "#c6d0f5",
         --background = "#303446",
-        --selection_bg = "#626880",
         --selection_fg = "#c6d0f5",
         --ansi = {"#51576d","#e78284","#a6d189","#e5c890","#8caaee","#f4b8e4","#81c8be","#a5adce"},
         --brights = {"#626880","#e67172","#8ec772","#d9ba73","#7b9ef0","#f2a4db","#5abfb5","#b5bfe2"},
@@ -122,7 +123,6 @@ return {
 
         --copy_mode_inactive_highlight_bg = { Color = '#626880' },未选中颜色
         --copy_mode_inactive_highlight_fg = { Color = '#ffffff' },
-
         --copy_mode_active_highlight_bg = { Color = '#ff6a19' },
         --copy_mode_active_highlight_fg = { Color = '#ffffff' }
     },

@@ -11,9 +11,6 @@ colors:
     red: '#f7768e'
     white: '#c0caf5'
     yellow: '#e0af68'
-  cursor:
-    cursor: '#c0caf5'
-    text: '#1d202f'
   normal:
     black: '#1d202f'
     blue: '#7aa2f7'
@@ -24,12 +21,15 @@ colors:
     white: '#a9b1d6'
     yellow: '#e0af68'
   primary:
-    background: '#24283b'
-    foreground: '#c0caf5'
+    background: '#303446'
+    foreground: '#c6d0f5'
   selection:
-    background: '#364a82'
-    #background: '#626880'
-    text: '#c0caf5'
+    background: '#414559'
+    #background: '#585d73'
+    text: '#c6d0f5'
+  cursor:
+    cursor: '#626880'
+    text: '#c6d0f5'
 
 font:
   size: 20

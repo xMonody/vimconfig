@@ -43,7 +43,9 @@
     "diagnostic.virtualTextAlign": "after",//位置
     "diagnostic.virtualTextCurrentLineOnly": false,
     "signature.preferShownAbove": true,//尽可能在光标上显示函数签名
-    "suggest.virtualText": false,
+    "suggest.virtualText": false,//期望补全
+    //"suggest.noselect": true,
+    "suggest.selection": "first",
 
     "notification.disabledProgressSources": ["*"],//禁用通知
 
@@ -58,10 +60,12 @@
 
     "semanticTokens.enable": true,//语义令牌
     "suggest.labelMaxLength": 40,
-    "diagnostic.floatConfig": {"border": true,"rounded": true,"highlight": "255"},
-    "suggest.floatConfig": {"border": true,"rounded": true,"highlight": "255"},
-    "signature.floatConfig": {"border": true,"rounded": true,"highlight": "255,"},
-    "hover.floatConfig": {"border": true,"rounded": true,"highlight": "255"},
+
+    "diagnostic.floatConfig":{"border":true,"rounded":true,"highlight":"suFloat","borderhighlight":"mmFloat"},
+    "suggest.floatConfig":{"border":true,"rounded":true,"highlight":"nnFloat","borderhighlight":"mmFloat"},
+    "signature.floatConfig":{"border": true,"rounded": true,"highlight":"snFloat","borderhighlight":"mmFloat"},
+    "hover.floatConfig": {"border": true,"rounded": true,"highlight":"suFloat","borderhighlight":"mmFloat"},
+
     "dialog.floatHighlight": "NONE",
     "dialog.rounded":true,
     "dialog.floatBorderHighlight":"NONE",
@@ -80,18 +84,30 @@
 
     "go.goplsOptions": {
         "completeUnimported": true,
-        "usePlaceholders": true
+        "usePlaceholders": true,
+        "semanticTokens": true
     },
 
-    "clangd.arguments": ["--header-insertion=never"],
+    "languageserver": {
+        "glsl": {
+            "command": "glsl_analyzer",
+            "filetypes": ["glsl", "vert", "tecs", "tese", "frag", "geom", "comp", "vs", "fs"]
+        }
+    },
+
+    "clangd.arguments": [ "--header-insertion=never", "--header-insertion-decorators=false" ],
 
     //rust
     "rust-analyzer.server.path": "rust-analyzer",//
     "rust-analyzer.disableProgressNotifications":true,
+    //"rust-analyzer.inlayHints.typeHints.hideNamedConstructor": true,
+    //"rust-analyzer.inlayHints.typeHints.enable": true,
+    //"rust-analyzer.inlayHints.typeHints.hideClosureParameter": true,
+    //"rust-analyzer.inlayHints.typeHints.hideClosureInitialization": true,
 
     
     "snippets.textmateSnippetsRoots": ["~/vimconfig/mysnip/snippets"],
-    //"snippets.textmateSnippetsRoots": ["D:/gitdir/vimconfig/mysnip/snippets"],
+    //"snippets.textmateSnippetsRoots": ["D:/vimconfig/mysnip/snippets"],
     
     "suggest.formatItems": [
         "kind",
