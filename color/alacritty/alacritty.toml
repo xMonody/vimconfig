@@ -1,7 +1,8 @@
 [colors]
-cursor = { cursor='#626880', text = '#c6d0f5' }
-selection={ background = '#626880', text = '#c6d0f5' }
+selection={ background = '#414559', text = '#c6d0f5' }
+#selection={ background  = '#585d73', text = '#c6d0f5' }
 vi_mode_cursor={ cursor = '#626880', text = '#c6d0f5' }
+cursor = { cursor='#626880', text = '#c6d0f5' }
 
 [colors.search]
 focused_match = {background = "#ff6a19",foreground = "#ffffff"}
@@ -73,15 +74,17 @@ bindings=[
 { key="g", mods="Shift|Alt", action="ToggleViMode"},
 { key="f", mods="Shift|Alt", action="SearchForward"},
 { key="b", mods="Shift|Alt", action="SearchBackward"},
-# { key="s", mods="Alt", chars = "\u003A\u0077\u0071\u000D"},
+#{ key="a", mods="Control", chars = "\u003A\u0078\u000A"},
 ]
 
 [mouse]
 hide_when_typing = true
 
-#[shell]
-#program = "wsl.exe"
-#args=["--cd","~","--exec","tmux", "attach-session", "-t", "home"]
-
 [env]
 TERM="xterm-256color"
+
+#[terminal]
+#shell = { program = "wsl.exe", args = ["--cd", "~", "--exec", "tmux"] }
+#shell = { program = "wsl.exe", args = ["--cd", "~"] }
+
+

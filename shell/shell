@@ -15,9 +15,40 @@ New-Alias -Name fr -Value ffprobe
 # echo -ne "\x1b[2 q" #bash zsh
 # echo -ne "\x1b[2 q\033]12;#ffff00\0x7"
 alias bat='bat --style="header" --paging=never --theme=TwoDark'
-
 alias sysnogui="sudo systemctl set-default multi-user.target"
 alias sysgui="sudo systemctl set-default graphical.target"
 
 
+export EDITOR=vim
+export VISUAL=vim
+export FZF_DEFAULT_OPTS='--border=rounded'
 
+#eval "$(starship init zsh)"
+# bindkey '^O' edit-command-line
+
+bindkey '^[k' forward-char   #移动字符 alt-k
+bindkey '^[j' backward-char          
+bindkey '^k' forward-word  #移动单词
+bindkey '^j' backward-word
+
+# 删除单词（左右）
+bindkey '^[d' delete-char           #删除一个字符
+bindkey '^[w' backward-delete-char
+bindkey '^d' kill-word            #删除一个单词
+#bindkey '^d' backward-kill-word
+
+# 删除整行的左右段
+bindkey '^b' backward-kill-line # Ctrl-b 删除到行首
+bindkey '^f' kill-line          # Ctrl-f 删除到行尾
+
+# 清空整行（使用自定义函数）
+zle-kill-whole-line() {
+  zle beginning-of-line
+  zle kill-line
+}
+zle -N zle-kill-whole-line
+bindkey '^u' zle-kill-whole-line    # Ctrl-h 清空整行
+
+by() {
+    nohup "$@" > /dev/null 2>&1 &
+}
