@@ -1,43 +1,24 @@
-# vim and neovim config
-install ripgrep fzf bat silversearcher-ag
-
-pip3 install pynvim  msgpack-python  
+# install Install the required tools
+```bash
+# Debian
+sudo apt-get install ripgrep silversearcher-ag fd-find fzf bat python3-pynvim command-not-found # msgpack-python python3-u-msgpack
+# ArchLinux
+sudo pacman -S ripgrep the_silver_searcher fd fzf bat python-pynvim pkgfile
+```
 
 # build vim
+```bash
 ./configure --with-features=huge --with-python3-command=/usr/bin/python3 --enable-python3interp --enable-luainterp --enable-multibyte --enable-cscope --prefix=/usr/local/vim
-
-## vim config
-1. install plug.vim
-file pos windows ~/vimfiles/autoload/plug.vim  linux ~/.vim/autoload/plug.vim
-
-linux
-``` shell
-curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 ```
 
-windows
-``` shell
-iwr -useb https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim |`
-    ni $HOME/vimfiles/autoload/plug.vim -Force
+# install font
+```bash
+sudo apt-get install xfonts-utils fontconfig
+sudo mkdir -p /usr/share/fonts/myfonts
+cd /usr/share/fonts/myfonts
+sudo cp /home/deb/vimconfig/font/* ./
+
+sudo mkfontscale　　 # 生产字体索引
+sudo mkfontdir　　　 #
+sudo fc-cache　　　　# 更新字体缓存
 ```
-2. windows file pos ~/_vimrc 
-linux file pos ~/.vimrc
-3. PlugInstall
-
-## nvim config
-4. windows   ~/AppData\Local\nvim\init.lua
-5. linux     ~/.config/nvim/init.lua
-6. Lazy
-# install font  
-RedHatMono Nerd Font Mono
-SauceCodePro Nerd Font Mono  
-sudo apt-get install xfonts-utils fontconfig  
-sudo mkdir -p /usr/share/fonts/myfonts  
-cd /usr/share/fonts/myfonts  
-sudo cp /home/deb/vimconfig/font/* ./  
-
-sudo mkfontscale　　 # 生产字体索引  
-sudo mkfontdir　　　 #   
-sudo fc-cache　　　　# 更新字体缓存  
-

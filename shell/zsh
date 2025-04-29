@@ -1,0 +1,60 @@
+
+# ~/.zshrc config
+#export LC_ALL=C.UTF-8
+#export LANG=C.UTF-8
+eval "$(zoxide init zsh)"
+
+# -- export 
+
+# -- alias
+alias ls="lsd --icon never"
+alias ll="ls --icon never -all"
+
+#  archlinux  pkgfile --update  Debian update-command-not-found
+# source ~/.zprezto/modules/command-not-found/init.zsh # zimfw eable
+source /usr/share/doc/fzf/examples/completion.zsh
+source /usr/share/doc/fzf/examples/key-bindings.zsh
+source ~/vimconfig/shell/setting.zsh
+
+
+
+
+# To be deleted
+function format_path {
+  local current_path=${PWD/#$HOME/\~}
+  local segments=(${(s:/:)current_path})
+  local count=${#segments[@]}
+  if (( count <= 2 )); then
+    print -r -- "$current_path"
+    echo "$current_path"
+  else
+    echo "~/${segments[-2]}/${segments[-1]}"
+  fi
+}
+
+function proxystatus {
+  if [[ -z $http_proxy && -z $https_proxy ]]; then
+    echo ""
+  else
+    echo ""
+  fi
+}
+
+local FG1="%{%F{#414559}%}"
+local BG1="%{%K{#A0819D}%}"
+local FG2="%{%F{#A0819D}%}"
+local BG2="%{%K{#749395}%}"
+local FG3="%{%F{#749395}%}"
+local BG3="%{%K{#7F81AF}%}"
+local ff3="%{%F{#7F81AF}%}"
+local FG4="%{%F{#A0819D}%}"
+local BG4="%{%K{NONE}%}"
+local RESET="%{%f%k%}"
+setopt PROMPT_SUBST
+PROMPT='
+${FG1}${BG1} $(format_path) ${RESET}${BG2}${FG2}${FG3}${BG3}${BG3}${FG1} $(proxystatus) ${ff3}%k${RESET} '
+
+setopt PROMPT_SUBST
+PROMPT='%F{#414559}%K{#A0819D}
+ $(format_path) %K{#749395}%F{#A0819D}%F{#749395}%K{#7F81AF}%K{#7F81AF}%F{#414559} $(proxystatus) %K{NONE}%F{#7F81AF}%k%f '
+

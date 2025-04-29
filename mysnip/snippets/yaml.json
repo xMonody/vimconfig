@@ -1,0 +1,13 @@
+{
+  "clang": {
+    "prefix": "clang",
+    "body": [
+      "CompileFlags:",
+      "\tAdd: [-std=c++23, -stdlib=libc++, -xc++, -Wall, -fmodule-file=std=std.pcm]",
+      "\tCompiler: clang++"
+    ],
+    "description": "clangd compile snippet"
+  }
+
+}
+

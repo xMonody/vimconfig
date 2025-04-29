@@ -1,5 +1,9 @@
 .wslconfig
+# .host:/ /mnt/hgfs fuse.vmhgfs-fuse allow_other,defaults,uid=1000,gid=1000,umask=022 0 0 #挂载共享文件夹
+
 [wsl2]
+# kernel=D:\\Wsl\\bzImage
+guiApplications = false
 vmIdleTimeout = -1
 memory = 5G
 swap = 10G
@@ -8,11 +12,16 @@ autoProxy = true
 
 [experimental]
 hostAddressLoopback = true
-autoMemoryReclaim = gradual  # dropcache
+autoMemoryReclaim = dropcache
 
 /etc/wsl.conf
+
 [interop]
-enabled = false
+enabled = true
 appendWindowsPath = false
+
 [boot]
 systemd = true
+
+#[user] #默认启动用户名
+#default = user_name

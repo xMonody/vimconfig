@@ -1,0 +1,16 @@
+#export LC_ALL=C.UTF-8
+#export LANG=C.UTF-8
+
+#/c/Windows/system32/chcp.com 65001 > /dev/null
+#set -x /d/Edit/nvim/bin $PATH
+zoxide init fish | source
+
+# -- export
+
+#-- alias
+alias ls "lsd --icon never"
+alias ll "ls --icon never -all"
+
+#  archlinux  pkgfile --update  Debian update-command-not-found
+source ~/vimconfig/shell/setting.fish
+source /usr/share/doc/fzf/examples/key-bindings.fish
