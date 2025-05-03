@@ -3,8 +3,8 @@ if has("win32")||has("win64")
     let data_dir=$HOME.'/vimfiles'
 else
     let g:python3_host_prog=('python3')
-    "let data_dir='~/.vim'
-    let data_dir='~/.config/vim'
+    let data_dir='~/.vim'
+    "let data_dir='~/.config/vim'
 endif
 
 if empty(glob(data_dir.'/autoload/plug.vim'))
@@ -62,11 +62,13 @@ endif
 call plug#begin(data_dir.'/plug')
 Plug 'neoclide/coc.nvim',{'branch':'release'} "代码补全
 
-Plug 'Shougo/defx.nvim'"目录树"
-Plug 'roxma/nvim-yarp'
-Plug 'roxma/vim-hug-neovim-rpc'
-Plug 'kristijanhusak/defx-icons'
-Plug 'kristijanhusak/defx-git'
+"Plug 'Shougo/defx.nvim'"目录树"
+"Plug 'roxma/nvim-yarp'
+"Plug 'roxma/vim-hug-neovim-rpc'
+"Plug 'kristijanhusak/defx-icons'
+"Plug 'kristijanhusak/defx-git'
+Plug 'lambdalisue/vim-fern'
+Plug 'lambdalisue/vim-fern-renderer-nerdfont'
 
 Plug 'itchyny/lightline.vim'
 Plug 'itchyny/vim-gitbranch'
@@ -235,113 +237,103 @@ vnoremap <silent><nowait><expr> <C-u> coc#float#has_scroll() ? coc#float#scroll(
 noremap <silent><C-m>o :CocOutline<CR>
 
 "------------------------------------------------------------------------------------
-"let g:fern#renderer="nerdfont"
-"let g:fern#mark_symbol                       = '●'
-"let g:fern#renderer#default#collapsed_symbol = '▷ '
-"let g:fern#renderer#default#expanded_symbol  = '▼ '
-"let g:fern#renderer#default#leading          = ' '
-"let g:fern#renderer#default#leaf_symbol      = ' '
-"let g:fern#renderer#default#root_symbol      = '~ '
-"nnoremap  <silent><C-s> :Fern . -drawer -width=30 -toggle<CR>
-"----------------------------------------------------------------------------------
-call defx#custom#column('git', 'indicators', {
-  \ 'Modified'  : '󰠠',
-  \ 'Staged'    : '',
-  \ 'Untracked' : '',
-  \ 'Renamed'   : '',
-  \ 'Unmerged'  : '',
-  \ 'Ignored'   : '',
-  \ 'Deleted'   : '',
-  \ 'Unknown'   : '󰋗'
-  \ })
+" call defx#custom#column('git', 'indicators', {
+"   \ 'Modified'  : '󰠠',
+"   \ 'Staged'    : '',
+"   \ 'Untracked' : '',
+"   \ 'Renamed'   : '',
+"   \ 'Unmerged'  : '',
+"   \ 'Ignored'   : '',
+"   \ 'Deleted'   : '',
+"   \ 'Unknown'   : '󰋗'
+"   \ })
 
-call defx#custom#column('git', 'column_length', 2)
-"Defx 目录树
-let g:defx_icons_enable_syntax_highlight = 1
-let g:defx_icons_column_length = 2
-let g:defx_icons_directory_icon = ''
-let g:defx_icons_mark_icon = '*'
-let g:defx_icons_copy_icon = '󰆏'
-let g:defx_icons_link_icon = ''
-let g:defx_icons_move_icon = ''
-let g:defx_icons_parent_icon = ''
-let g:defx_icons_default_icon = ''
-let g:defx_icons_directory_symlink_icon = ''
+" call defx#custom#column('git', 'column_length', 2)
+" Defx 目录树
+" let g:defx_icons_enable_syntax_highlight = 1
+" let g:defx_icons_column_length = 2
+" let g:defx_icons_directory_icon = ''
+" let g:defx_icons_mark_icon = '*'
+" let g:defx_icons_copy_icon = '󰆏'
+" let g:defx_icons_link_icon = ''
+" let g:defx_icons_move_icon = ''
+" let g:defx_icons_parent_icon = ''
+" let g:defx_icons_default_icon = ''
+" let g:defx_icons_directory_symlink_icon = ''
+" let g:defx_icons_root_opened_tree_icon = ''
+" let g:defx_icons_nested_opened_tree_icon = ''
+" let g:defx_icons_nested_closed_tree_icon = ''
+" 
+" call defx#custom#column('icon', {
+"             \ 'directory_icon': '▸ ',
+"             \ 'file_icon': '  ',
+"             \ 'opened_icon': '▾ ',
+"             \ 'root_icon': '  ',
+"             \ })
+" call defx#custom#column('mark', {
+"             \ 'readonly_icon': '✗',
+"             \ 'selected_icon': '✓',
+"             \ })
+" call defx#custom#option('_', {
+"             \ 'columns': 'indent:git:icons:filename',
+"             \ 'winwidth': 30,
+"             \ 'split': 'vertical',
+"             \ 'direction': 'topleft',
+"             \ 'show_ignored_files': 0,
+"             \ 'root_marker': '≡ ',
+"             \ 'ignored_files':
+"             \     '.mypy_cache,.pytest_cache,.git,.hg,.svn,.*,.stversions'
+"             \   . ',__pycache__,.sass-cache,*.egg-info,.DS_Store,*.pyc,*.swp'
+"             \ })
+" nnoremap <silent> <C-s>
+"             \ :<C-u>Defx -resume -toggle -buffer-name=tab`tabpagenr()` <CR>
+" autocmd FileType defx call s:defx_my_settings()
+" function! s:defx_my_settings() abort
+"     nnoremap <silent><buffer><expr> <CR>
+"                 \ defx#is_directory() ?
+"                 \ defx#do_action('open_tree', 'toggle') :
+"                 \ defx#do_action('multi', ['drop'])
+"     nnoremap <silent><buffer><expr> l
+"                 \ defx#is_directory() ?
+"                 \ defx#do_action('open_tree', 'toggle') :
+"                 \ defx#do_action('multi', ['drop'])
+"     nnoremap <silent><buffer><expr> a
+"                 \ defx#do_action('new_file')
+"     nnoremap <silent><buffer><expr> d
+"                 \ defx#do_action('remove')
+"     nnoremap <silent><buffer><expr> r
+"                 \ defx#do_action('rename')
+"     nnoremap <silent><buffer><expr> .
+"                 \ defx#do_action('toggle_ignored_files')
+"     nnoremap <silent><buffer><expr> A
+"                 \ defx#do_action('new_directory')
+"     nnoremap <silent><buffer><expr> q
+"                 \ defx#do_action('quit')
+" endfunction
 
-let g:defx_icons_root_opened_tree_icon = ''
-let g:defx_icons_nested_opened_tree_icon = ''
-let g:defx_icons_nested_closed_tree_icon = ''
 
-call defx#custom#column('icon', {
-            \ 'directory_icon': '▸ ',
-            \ 'file_icon': '  ',
-            \ 'opened_icon': '▾ ',
-            \ 'root_icon': '  ',
-            \ })
+let g:fern#renderer = "nerdfont"
+noremap <silent><C-s> :Fern . -drawer -width=30 -toggle<CR>
+function! s:init_fern() abort
+  " Define NERDTree like mappings
+  nmap <buffer> <cr> <Plug>(fern-action-open-or-expand)
+  nmap <buffer> l <Plug>(fern-action-open-or-expand)
 
-call defx#custom#column('mark', {
-            \ 'readonly_icon': '✗',
-            \ 'selected_icon': '✓',
-            \ })
+  nmap <buffer> i <Plug>(fern-action-hidden:toggle)
 
-call defx#custom#option('_', {
-            \ 'columns': 'indent:git:icons:filename',
-            \ 'winwidth': 30,
-            \ 'split': 'vertical',
-            \ 'direction': 'topleft',
-            \ 'show_ignored_files': 0,
-            \ 'root_marker': '≡ ',
-            \ 'ignored_files':
-            \     '.mypy_cache,.pytest_cache,.git,.hg,.svn,.*,.stversions'
-            \   . ',__pycache__,.sass-cache,*.egg-info,.DS_Store,*.pyc,*.swp'
-            \ })
+  nmap <buffer> A <Plug>(fern-action-new-dir)
+  nmap <buffer> a <Plug>(fern-action-new-file)
 
-nnoremap <silent> <C-s>
-            \ :<C-u>Defx -resume -toggle -buffer-name=tab`tabpagenr()` <CR>
+  nmap <buffer> r <Plug>(fern-action-rename)
+  nmap <buffer> d <Plug>(fern-action-remove)
 
-"nnoremap <silent> <LocalLeader>a
-            "\ :<C-u>Defx -resume -buffer-name=tab`tabpagenr()` -search=`expand('%:p')`<CR>
-
-autocmd FileType defx call s:defx_my_settings()
-function! s:defx_my_settings() abort
-    "nnoremap <silent><buffer><expr> l
-                "\ defx#is_directory() ?
-                "\ defx#do_action('open_tree') :
-                "\ defx#do_action('multi', ['drop'])
-
-    "nnoremap <silent><buffer><expr> <CR>
-                "\ defx#is_directory() ?
-                "\ defx#do_action('open_or_close_tree') :
-                "\ defx#do_action('multi', ['drop'])
-
-    nnoremap <silent><buffer><expr> <CR>
-                \ defx#is_directory() ?
-                \ defx#do_action('open_tree', 'toggle') :
-                \ defx#do_action('multi', ['drop'])
-
-    nnoremap <silent><buffer><expr> l
-                \ defx#is_directory() ?
-                \ defx#do_action('open_tree', 'toggle') :
-                \ defx#do_action('multi', ['drop'])
-
-    nnoremap <silent><buffer><expr> a
-                \ defx#do_action('new_file')
-
-    nnoremap <silent><buffer><expr> d
-                \ defx#do_action('remove')
-
-    nnoremap <silent><buffer><expr> r
-                \ defx#do_action('rename')
-
-    nnoremap <silent><buffer><expr> .
-                \ defx#do_action('toggle_ignored_files')
-
-    nnoremap <silent><buffer><expr> A
-                \ defx#do_action('new_directory')
-
-    nnoremap <silent><buffer><expr> q
-                \ defx#do_action('quit')
+  nmap <buffer> q :<C-u>quit<CR>
 endfunction
+
+augroup fern-custom
+  autocmd! *
+  autocmd FileType fern call s:init_fern()
+augroup END
 
 
 "-----------------------------------------------------------------------------------
