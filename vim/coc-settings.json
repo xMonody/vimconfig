@@ -58,10 +58,10 @@
 
     "semanticTokens.enable": true,//语义令牌
     "suggest.labelMaxLength": 40,
-    "diagnostic.floatConfig": {"border": true,"rounded": true,"highlight": "255"},
-    "suggest.floatConfig": {"border": true,"rounded": true,"highlight": "255"},
-    "signature.floatConfig": {"border": true,"rounded": true,"highlight": "255,"},
-    "hover.floatConfig": {"border": true,"rounded": true,"highlight": "255"},
+    "diagnostic.floatConfig": {"border": true,"rounded": true,"highlight": "100"},
+    "suggest.floatConfig": {"border": true,"rounded": true,"highlight": "100"},
+    "signature.floatConfig": {"border": true,"rounded": true,"highlight": "100,"},
+    "hover.floatConfig": {"border": true,"rounded": true,"highlight": "100"},
     "dialog.floatHighlight": "NONE",
     "dialog.rounded":true,
     "dialog.floatBorderHighlight":"NONE",
@@ -83,6 +83,13 @@
         "usePlaceholders": true
     },
 
+    "languageserver": {
+        "glsl": {
+            "command": "glsl_analyzer",
+            "filetypes": ["glsl", "vert", "tecs", "tese", "frag", "geom", "comp", "vs", "fs"]
+        }
+    },
+
     "clangd.arguments": ["--header-insertion=never"],
 
     //rust
@@ -91,7 +98,7 @@
 
     
     "snippets.textmateSnippetsRoots": ["~/vimconfig/mysnip/snippets"],
-    //"snippets.textmateSnippetsRoots": ["D:/gitdir/vimconfig/mysnip/snippets"],
+    //"snippets.textmateSnippetsRoots": ["D:/vimconfig/mysnip/snippets"],
     
     "suggest.formatItems": [
         "kind",
