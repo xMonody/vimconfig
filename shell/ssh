@@ -1,0 +1,26 @@
+Host Way Sql Arc Deb 10.10.17.*
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
+#    ServerAliveInterval 60
+#    ServerAliveCountMax 3
+#    TCPKeepAlive yes
+
+Host Way
+    HostName 10.10.17.2
+    User way
+    Port 23
+
+Host Sql
+    HostName 10.10.17.3
+    User sql
+    Port 23
+
+Host Arc
+    HostName 10.10.17.4
+    User arc
+    Port 23
+
+Host Deb
+    HostName 10.10.17.5
+    User deb
+    Port 23

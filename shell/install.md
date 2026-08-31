@@ -44,17 +44,3 @@ zmodule zsh-users/zsh-autosuggestions
 
 HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND='fg=green'
 ```
-# Visual Studio Code set default shell
-```json
-    "terminal.integrated.profiles.windows": {
-        "MSYS2 UCRT": {
-            "path": "cmd.exe",
-            "args": [
-                "/c",
-                "C:\\msys64\\msys2_shell.cmd -defterm -here -no-start -ucrt64 -shell bash"
-            ]
-        }
-    },
-    "terminal.integrated.initialHint": false,
-    "terminal.integrated.defaultProfile.windows": "MSYS2 UCRT",
-```

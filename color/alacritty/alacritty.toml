@@ -90,8 +90,5 @@
 #  working_directory = "C:/msys64/home/xx/"
 
 #[terminal]
+  #shell = { program = "tmux" }
   #shell = { program = "wsl.exe", args = ["--cd", "~", "--exec", "tmux"] }
-  #shell={program="C:/msys64/msys2_shell.cmd",args=["-defterm","-here","-no-start","-ucrt64","-shell","fish"]}
-  #shell = { program = "wsl.exe", args = ["--cd", "~"] }
-
-
