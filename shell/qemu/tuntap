@@ -1,0 +1,264 @@
+#!/usr/bin/env zsh
+#
+# QEMU 网桥 + TAP + nftables + dnsmasq 一键启动脚本（多架构）
+#
+# 特性:
+#   - 创建 br0 网桥 + tap0，配置 NAT 上网
+#   - 用 dnsmasq 给客户机分配 IP / 网关 / DNS（不写死客户机 IP）
+#   - 按 MAC 绑定 DHCP 租约，保证端口映射目标 IP 稳定
+#   - 支持多个端口映射 (host:guest,host:guest,...)
+#   - 按架构自动选择 QEMU 二进制、machine、加速方式、UEFI 固件
+#   - 脚本退出 (Ctrl+C / QEMU 结束) 自动清理网络与 dnsmasq
+#   - 用普通用户运行，网络命令通过 sudo 提权
+#
+
+set -u
+
+# ============ 配置区（按需修改） ============
+BRIDGE_DEV="br0"
+TAP_DEV="tap0"
+BR_IP="10.0.0.1"                # 宿主机网桥 IP = 客户机网关
+BR_NET="10.0.0.0/24"
+DHCP_RANGE_START="10.0.0.100"
+DHCP_RANGE_END="10.0.0.200"
+DHCP_LEASE_TIME="12h"
+
+GUEST_MAC="52:54:00:12:34:56" # 客户机网卡 MAC（用于 DHCP 静态绑定，保证端口映射目标稳定）
+GUEST_IP="10.0.0.2"           # dnsmasq 中为该 MAC 绑定的固定 IP（端口映射 DNAT 指向它）
+PORT_FORWARDS="2222:22,3307:3306" # 宿主机端口:客户机端口，逗号分隔
+
+UEFI=( -drive if=pflash,format=raw,readonly=on,file=./OVMF.fd -drive if=pflash,format=raw,file=./VARS.fd )
+#UEFI=( -bios ./OVMF.fd )
+
+QEMU_COMMAND="x86"  # x86 / arm / loong
+
+# dnsmasq 运行时文件
+DNSMASQ_CONF=""
+DNSMASQ_PIDFILE=""
+DNSMASQ_PID=""
+SUDO_KEEPALIVE_PID=""
+
+# ============ 按架构派生参数 ============
+case "$QEMU_COMMAND" in
+    x86)
+        QEMU_BIN=(qemu-system-x86_64 -accel kvm -machine q35 -cpu host -smp 8 -m 6G)
+        ;;
+    arm)
+        QEMU_BIN=(qemu-system-aarch64 -accel kvm -machine virt,gic-version=3 -cpu host -smp 8 -m 6G)
+        # QEMU_BIN=(qemu-system-aarch64 -accel tcg,thread=multi -machine virt -cpu cortex-a72 -smp 4 -m 6G)
+        ;;
+    loong)
+        QEMU_BIN=(qemu-system-loongarch64 -accel kvm -machine virt -cpu host -smp 8 -m 6G)
+        # QEMU_BIN=(qemu-system-loongarch64 -accel tcg,thread=multi -machine virt -cpu host -smp 4 -m 6G)
+        ;;
+    *)
+        echo "[-] 未知架构: $QEMU_COMMAND" >&2
+        exit 1
+        ;;
+esac
+
+# ============ 主流程 ============
+main() {
+    # ---------- 0. 切到脚本目录 ----------
+    local SCRIPT_DIR
+    SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+    cd "$SCRIPT_DIR" || { echo "[-] 无法进入 $SCRIPT_DIR" >&2; exit 1 }
+    echo "[*] 工作目录: $SCRIPT_DIR"
+
+    for cmd in nft dnsmasq sudo; do
+        command -v "$cmd" >/dev/null 2>&1 || {
+            echo "[-] 未安装 $cmd，请先安装：sudo apt install $cmd" >&2
+            exit 1
+        }
+    done
+
+    # 预先获取 sudo 凭证（供下面的预清理使用）
+    sudo -v || {
+        echo "[-] 获取 sudo 权限失败" >&2
+        exit 1
+    }
+
+    # ---------- 端口映射解析 ----------
+    local -a FORWARD_PAIRS
+    FORWARD_PAIRS=(${(s:,:)PORT_FORWARDS})
+    if (( ${#FORWARD_PAIRS[@]} == 0 )); then
+        echo "[-] 错误: PORT_FORWARDS 未配置有效映射！" >&2
+        exit 1
+    fi
+
+    local pair hport gport
+    for pair in "${FORWARD_PAIRS[@]}"; do
+        hport="${pair%%:*}"; gport="${pair##*:}"
+        [[ "$pair" == *:* && "$hport" =~ ^[0-9]+$ && "$gport" =~ ^[0-9]+$ ]] || {
+            echo "[-] 端口映射格式错误: '$pair'（应为 host:guest）" >&2
+            exit 1
+        }
+    done
+
+    # ---------- 外网网卡 ----------
+    local WAN_IF
+    WAN_IF=$(ip -4 route show default \
+        | awk '{for(i=1;i<=NF;i++) if($i=="dev"){print $(i+1); exit}}' | head -n1)
+    [[ -n "${WAN_IF:-}" ]] || { echo "[-] 未找到默认外网网卡" >&2; exit 1 }
+    echo "[*] 外网出口网卡: $WAN_IF"
+
+    # ---------- 记录原始 ip_forward ----------
+    local OLD_FORWARD
+    OLD_FORWARD=$(sysctl -n net.ipv4.ip_forward 2>/dev/null || echo 0)
+
+    # ---------- 清理函数 ----------
+    cleanup() {
+        trap - EXIT INT TERM
+        # 先停掉 sudo 时间戳保活子进程
+        [[ -n "${SUDO_KEEPALIVE_PID:-}" ]] && kill "$SUDO_KEEPALIVE_PID" 2>/dev/null
+        echo ""
+        echo "[*] 清理网络配置、dnsmasq 与 nftables..."
+
+        # 刷新 sudo 凭证；失败也继续（命令会各自报错，不会卡死）
+        sudo -v || true
+
+        # 停 dnsmasq：不能用普通用户 kill -0 做前置判断（对 root 进程会 EPERM 返回非 0）
+        [[ -n "${DNSMASQ_PID:-}" ]] && sudo kill "$DNSMASQ_PID" 2>/dev/null
+        # 兜底：按命令行特征清理可能残留的 dnsmasq
+        sudo pkill -f "dnsmasq.*qemu-tuntap" 2>/dev/null
+        [[ -n "${DNSMASQ_CONF:-}" && -f "$DNSMASQ_CONF" ]] && rm -f "$DNSMASQ_CONF"
+        [[ -n "${DNSMASQ_PIDFILE:-}" ]] && sudo rm -f "$DNSMASQ_PIDFILE"
+
+        sudo nft delete table ip qemu_nat 2>/dev/null
+        sudo ip link set "$TAP_DEV" down 2>/dev/null
+        sudo ip tuntap del dev "$TAP_DEV" mode tap 2>/dev/null
+        sudo ip link set "$BRIDGE_DEV" down 2>/dev/null
+        sudo ip link delete "$BRIDGE_DEV" type bridge 2>/dev/null
+        sudo sysctl -w net.ipv4.ip_forward="$OLD_FORWARD" >/dev/null 2>&1
+
+        echo "[+] 清理完成。"
+    }
+
+    # ---------- 预清理（上次异常退出的残留） ----------
+    if sudo ip link show "$BRIDGE_DEV" &>/dev/null; then
+        echo "[*] 清理已存在的 $BRIDGE_DEV..."
+        sudo ip link set "$BRIDGE_DEV" down 2>/dev/null
+        sudo ip link delete "$BRIDGE_DEV" type bridge 2>/dev/null
+    fi
+    if sudo ip link show "$TAP_DEV" &>/dev/null; then
+        echo "[*] 清理已存在的 $TAP_DEV..."
+        sudo ip link set "$TAP_DEV" down 2>/dev/null
+        sudo ip tuntap del dev "$TAP_DEV" mode tap 2>/dev/null
+    fi
+    sudo nft delete table ip qemu_nat 2>/dev/null
+    sudo pkill -f "dnsmasq.*qemu-tuntap" 2>/dev/null
+
+    # 注册清理钩子
+    trap cleanup EXIT INT TERM
+
+    # 后台刷新 sudo 时间戳，避免虚拟机长时间运行后退出时清理被密码提示拦住
+    (
+        trap - EXIT INT TERM
+        while sudo -n true 2>/dev/null; do sleep 60; done
+    ) &
+    SUDO_KEEPALIVE_PID=$!
+
+    # ---------- 创建网桥 ----------
+    echo "[*] 创建网桥 $BRIDGE_DEV ($BR_IP/24)..."
+    sudo ip link add name "$BRIDGE_DEV" type bridge || {
+        echo "[-] 创建网桥失败" >&2; exit 1
+    }
+    sudo ip addr add "${BR_IP}/24" dev "$BRIDGE_DEV"
+    sudo ip link set "$BRIDGE_DEV" up
+
+    # ---------- 创建 TAP ----------
+    echo "[*] 创建 TAP 设备 $TAP_DEV..."
+    local TAP_USER="${SUDO_USER:-${USER:-root}}"
+    sudo ip tuntap add dev "$TAP_DEV" mode tap user "$TAP_USER" || {
+        echo "[-] 创建 TAP 失败" >&2; exit 1
+    }
+    sudo ip link set "$TAP_DEV" master "$BRIDGE_DEV"
+    sudo ip link set "$TAP_DEV" up
+
+    # ---------- 启动 dnsmasq ----------
+    echo "[*] 启动 dnsmasq（DHCP: $DHCP_RANGE_START-$DHCP_RANGE_END，网关 $BR_IP）..."
+    DNSMASQ_CONF="$(mktemp /tmp/qemu-tuntap-dnsmasq.XXXXXX.conf)"
+    cat >"$DNSMASQ_CONF" <<EOF
+# qemu-tuntap 专用 dnsmasq 配置
+interface=$BRIDGE_DEV
+bind-interfaces
+except-interface=lo
+dhcp-range=$DHCP_RANGE_START,$DHCP_RANGE_END,$DHCP_LEASE_TIME
+dhcp-option=option:router,$BR_IP
+dhcp-option=option:dns-server,$BR_IP
+# 按 MAC 绑定固定租约，保证端口映射目标 IP 稳定
+dhcp-host=$GUEST_MAC,$GUEST_IP,infinite
+# 不读系统 resolv.conf，避免污染
+no-resolv
+server=223.5.5.5
+server=8.8.8.8
+log-dhcp
+EOF
+
+    # 用唯一的 pid 文件路径，避免固定路径被上次残留污染
+    # 注意：不要同时在配置里写 pid-file=（配置文件会覆盖命令行，导致不写 pid 文件）
+    DNSMASQ_PIDFILE="$(mktemp /tmp/qemu-tuntap-dnsmasq.XXXXXX.pid)"
+    rm -f "$DNSMASQ_PIDFILE"
+    sudo dnsmasq --conf-file="$DNSMASQ_CONF" --pid-file="$DNSMASQ_PIDFILE"
+    sleep 0.5
+    DNSMASQ_PID=$(sudo cat "$DNSMASQ_PIDFILE" 2>/dev/null || true)
+    if [[ -z "${DNSMASQ_PID:-}" ]]; then
+        echo "[-] dnsmasq 启动失败" >&2
+        exit 1
+    fi
+    echo "[+] dnsmasq 已启动 (PID $DNSMASQ_PID)"
+
+    # ---------- 配置 nftables ----------
+    echo "[*] 开启内核转发并配置 nftables..."
+    sudo sysctl -w net.ipv4.ip_forward=1 >/dev/null
+
+    sudo nft add table ip qemu_nat
+    sudo nft add chain ip qemu_nat prerouting \
+        '{ type nat hook prerouting priority dstnat; policy accept; }'
+    sudo nft add chain ip qemu_nat postrouting \
+        '{ type nat hook postrouting priority srcnat; policy accept; }'
+    sudo nft add chain ip qemu_nat forward \
+        '{ type filter hook forward priority filter; policy accept; }'
+
+    # 端口映射（DNAT 到 dnsmasq 绑定的固定 IP）
+    for pair in "${FORWARD_PAIRS[@]}"; do
+        hport="${pair%%:*}"; gport="${pair##*:}"
+        echo "    映射: $WAN_IF:$hport -> $GUEST_IP:$gport"
+        sudo nft add rule ip qemu_nat prerouting \
+            iifname "$WAN_IF" tcp dport "$hport" \
+            dnat ip to "${GUEST_IP}:${gport}"
+    done
+
+    # SNAT / MASQUERADE
+    sudo nft add rule ip qemu_nat postrouting \
+        ip saddr "$BR_NET" oifname "$WAN_IF" masquerade
+
+    # FORWARD 放行
+    sudo nft add rule ip qemu_nat forward \
+        iifname "$BRIDGE_DEV" oifname "$WAN_IF" accept
+    sudo nft add rule ip qemu_nat forward \
+        iifname "$WAN_IF" oifname "$BRIDGE_DEV" ct state established,related accept
+
+    echo "[+] 网络配置完成。"
+    echo "    宿主机网关: $BR_IP"
+    echo "    DHCP 范围:  $DHCP_RANGE_START - $DHCP_RANGE_END"
+    echo "    固定租约:   $GUEST_MAC -> $GUEST_IP"
+    echo "    客户机请把网卡设为 DHCP。"
+    echo ""
+
+    # ---------- 启动 QEMU ----------
+    echo "[+] 启动 QEMU（Ctrl+C 退出并自动清理网络）..."
+    echo ""
+
+    "${QEMU_BIN[@]}" -drive file=./disk.qcow2,format=qcow2,if=virtio \
+        -device virtio-balloon-pci ${UEFI[@]} \
+        -netdev tap,id=net0,ifname="$TAP_DEV",script=no,downscript=no,vhost=on \
+        -device virtio-net-pci,netdev=net0,mac="$GUEST_MAC" \
+        #-device qemu-xhci -device usb-kbd  -device usb-tablet" \
+        -vga none -device virtio-gpu-pci,hostmem=2G,blob=on \
+        -display sdl,gl=on
+
+    # QEMU 退出后，trap EXIT 会自动触发 cleanup
+}
+
+main "$@"

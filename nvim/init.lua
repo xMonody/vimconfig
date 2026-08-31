@@ -76,53 +76,32 @@ require("lazy").setup(plugins,{
     },
 })
 
-local win32yank_available = vim.fn.executable('win32yank') == 1
-if win32yank_available then -- 统一 win32yank 配置
-  vim.g.clipboard = {
-    name = 'win32yank',
-    copy = {
-      ['+'] = 'win32yank -i --crlf',
-      ['*'] = 'win32yank -i --crlf',
-    },
-    paste = {
-      ['+'] = 'win32yank -o --lf',
-      ['*'] = 'win32yank -o --lf',
-    },
-    cache_enabled = true,
-  }
-else -- Linux 环境检测
-  local is_wayland = vim.env.WAYLAND_DISPLAY ~= nil
-    or vim.env.XDG_SESSION_TYPE == 'wayland'
-  local is_x11 = vim.env.DISPLAY ~= nil
-    and (vim.env.XDG_SESSION_TYPE == nil or vim.env.XDG_SESSION_TYPE ~= 'wayland')
-
-  if is_wayland and vim.fn.executable('wl-copy') == 1 then --Wayland优先 即使同时安装了xclip
+if vim.fn.executable('win32yank') == 1 then -- Windows/WSL环境 使用win32yank访问系统剪贴板
     vim.g.clipboard = {
-      name = 'wl-clipboard',
-      copy = {
-        ['+'] = 'wl-copy',
-        ['*'] = 'wl-copy',
-      },
-      paste = {
-        ['+'] = 'wl-paste',
-        ['*'] = 'wl-paste',
-      },
-      cache_enabled = true,
+        name = 'win32yank',
+        copy = {
+            ['+'] = 'win32yank -i --crlf',
+            ['*'] = 'win32yank -i --crlf',
+        },
+        paste = {
+            ['+'] = 'win32yank -o --lf',
+            ['*'] = 'win32yank -o --lf',
+        },
+        cache_enabled = true,
     }
-  elseif is_x11 and vim.fn.executable('xclip') == 1 then -- X11环境
+elseif vim.fn.executable('wl-copy') == 1 then -- Wayland环境
     vim.g.clipboard = {
-      name = 'xclip',
-      copy = {
-        ['+'] = 'xclip -selection clipboard',
-        ['*'] = 'xclip -selection primary',
-      },
-      paste = {
-        ['+'] = 'xclip -selection clipboard -o',
-        ['*'] = 'xclip -selection primary -o',
-      },
-      cache_enabled = true,
+        name = 'wl-clipboard',
+        copy = {
+            ['+'] = 'wl-copy',
+            ['*'] = 'wl-copy',
+        },
+        paste = {
+            ['+'] = 'wl-paste',
+            ['*'] = 'wl-paste',
+        },
+        cache_enabled = true,
     }
-  end
 end
 
 vim.o.tabstop = 4
@@ -158,7 +137,7 @@ vim.o.backspace = "indent,eol,start" --设置back键
 vim.opt.completeopt = "menu,menuone,noinsert"
 
 if vim.g.guicursor ~= "" then
-    vim.o.guifont = "SauceCodePro NFM:h15"
+    vim.o.guifont = "SauceCodePro Nont Font Mono:h16"
 end
 if vim.g.neovide then
     vim.g.neovide_floating_shadow = false
@@ -197,14 +176,6 @@ vim.api.nvim_create_autocmd("BufReadPost", {
     pattern = "*",
     command = "silent! normal! g`\""
 })
---[[ vim.api.nvim_create_autocmd("ModeChanged", {
-    pattern = "*",
-    callback = function()
-        vim.schedule(function()
-            vim.cmd("redraw")
-        end)
-    end
-}) ]]
 
 local function redraw_safe()
     vim.schedule(vim.cmd.redraw)

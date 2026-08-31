@@ -8,7 +8,7 @@ sudo pacman -S ripgrep the_silver_searcher fd fzf bat python-pynvim pkgfile
 
 # build vim
 ```bash
-./configure --with-features=huge --with-python3-command=/usr/bin/python3 --enable-python3interp --enable-luainterp --enable-multibyte --enable-cscope --prefix=/usr/local/vim
+./configure --with-features=huge --enable-python3interp --enable-multibyte --enable-cscope --enable-gtk4 --enable-fail-if-missing --prefix=/usr/local/vim
 ```
 
 # install font

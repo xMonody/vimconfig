@@ -12,7 +12,7 @@ if empty(glob(data_dir.'/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall --sync | source %
 endif
 
-if executable('win32yank') "优先使用 win32yank
+if executable('win32yank') " Windows 环境，优先使用 win32yank
   let g:clipboard = {
         \   'name': 'win32yank',
         \   'copy': {
@@ -25,36 +25,18 @@ if executable('win32yank') "优先使用 win32yank
         \    },
         \   'cache_enabled': 1,
         \ }
-else " Linux环境
-
-  let s:wayland_active = !empty($WAYLAND_DISPLAY) || $XDG_SESSION_TYPE ==# 'wayland'
-  let s:x11_active = !empty($DISPLAY) && $XDG_SESSION_TYPE !=# 'wayland'
-
-  if s:wayland_active && executable('wl-copy') " Wayland 环境（即使同时安装了 X11 工具）
-    let g:clipboard = {
-          \   'name': 'wl-clipboard',
-          \   'copy': {
-          \      '+': 'wl-copy',
-          \      '*': 'wl-copy',
-          \    },
-          \   'paste': {
-          \      '+': 'wl-paste',
-          \      '*': 'wl-paste',
-          \    },
-          \ }
-  elseif s:x11_active && executable('xclip') "明确处于 X11 会话时使用 xclip
-    let g:clipboard = {
-          \   'name': 'xclip',
-          \   'copy': {
-          \      '+': 'xclip -selection clipboard',
-          \      '*': 'xclip -selection primary',
-          \    },
-          \   'paste': {
-          \      '+': 'xclip -selection clipboard -o',
-          \      '*': 'xclip -selection primary -o',
-          \    },
-          \ }
-  endif
+elseif executable('wl-copy') " Linux Wayland 环境
+  let g:clipboard = {
+        \   'name': 'wl-clipboard',
+        \   'copy': {
+        \      '+': 'wl-copy',
+        \      '*': 'wl-copy',
+        \    },
+        \   'paste': {
+        \      '+': 'wl-paste',
+        \      '*': 'wl-paste',
+        \    },
+        \ }
 endif
 
 call plug#begin(data_dir.'/plug')
@@ -80,7 +62,7 @@ Plug 'junegunn/fzf.vim'
 
 Plug 'jiangmiao/auto-pairs' "补全括号
 Plug '907th/vim-auto-save'
-Plug 'Yggdroot/indentLine' "对其线
+"Plug 'Yggdroot/indentLine' "对其线
 Plug 'preservim/nerdcommenter' "注释
 "Plug 'rhysd/clever-f.vim'
 "Plug 'mg979/vim-visual-multi', {'branch': 'master'} "多光标
@@ -148,9 +130,6 @@ set nowritebackup
 set noswapfile
 set noundofile
 set signcolumn=yes
-let &t_SI = "\e[6 q" "SI = INSERT mode
-let &t_SR = "\e[4 q" "SR = REPLACE mode
-let &t_EI = "\e[2 q" "EI = NORMAL mode (ELSE)
 
 autocmd BufNewFile,BufRead *.vs,*.fs,*.frag,*.vert set ft=glsl
 autocmd BufNewFile,BufRead .clangd set ft=yaml
@@ -293,6 +272,8 @@ if has("gui_running")
         set rop=type:directx
     else
         set guifont=SauceCodePro\ NFM\ 16
+        set lines=27
+        set columns=85
     endif
     " hi Normal guifg=NONE guibg=#fff0f5
 endif
@@ -458,9 +439,18 @@ nnoremap <silent>q :nohl<CR>
 "nnoremap zh 5<C-w>><CR>
 "nnoremap <C-w>c :if winnr('$') == 1 \| tabclose \| else \| close \| endif<CR>
 
-
 set numberwidth=1
-set guicursor+=a:blinkon0
+if has('gui_running') "GUI 环境 (gvim)
+    hi Cursor guifg=#c6d0f5 guibg=#626880
+    set guicursor=n-v-c:block-blinkon0   " 普通/可视/命令模式 -> 方块
+    set guicursor+=i:ver15-blinkon0      " 插入模式 -> 竖条
+    set guicursor+=r-cr:hor10-blinkon0   " 替换模式 -> 水平条
+else " 终端环境
+    let &t_SI = "\e[6 q"  " 插入模式 -> 竖条
+    let &t_SR = "\e[4 q"  " 替换模式 -> 下划线
+    let &t_EI = "\e[2 q"  " 普通模式 -> 方块
+endif
+
 "hi Normal guibg=NONE guifg=NONE ctermfg=NONE ctermbg=NONE "设置透明
 
 hi SignColumn  ctermbg=NONE ctermfg=NONE guibg=NONE guifg=NONE
@@ -485,7 +475,7 @@ hi LineNr       guibg=NONE  guifg=#494d64 "设置行号颜色
 hi CursorLineNr guifg=#b7bdf8  guibg=NONE
 
 "hi CocVirtualText        guifg=#676e95 guibg=NONE gui=NONE "不知道干嘛的
-autocmd CursorHold *  hi CocHoverRange guibg=NONE gui=NONE "按下大K的时候 有一点点问题"
+"autocmd CursorHold *  hi CocHoverRange guibg=NONE gui=NONE "按下大K的时候 有一点点问题"
 hi CocPumShortcut        guifg=#686e95 guibg=NONE gui=NONE "lsp snipp来源
 hi CocPumSearch          guifg=#4683C1 guibg=NONE gui=NONE " 补全匹配字符
 hi CocInlayHint          guifg=#1a1c26 guibg=NONE gui=NONE "hint 提示

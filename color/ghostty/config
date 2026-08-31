@@ -1,0 +1,71 @@
+# ~/.config/ghostty/config
+
+font-family="SauceCodePro NFM"
+font-size=16
+
+shell-integration-features=no-cursor
+cursor-style-blink=false
+cursor-style=block
+mouse-hide-while-typing=true
+
+window-padding-x=0
+window-padding-y=0
+
+window-decoration=none
+gtk-titlebar=false
+gtk-toolbar-style=raised-border
+
+keybind=ctrl+shift+c=copy_to_clipboard
+keybind=ctrl+shift+v=paste_from_clipboard
+
+keybind=shift+alt+o=new_tab
+keybind=shift+alt+u=previous_tab
+keybind=shift+alt+n=next_tab
+keybind=shift+alt+c=close_tab
+
+keybind=shift+alt+a=increase_font_size:1
+keybind=shift+alt+z=decrease_font_size:1
+keybind=shift+alt+r=reset_font_size
+
+keybind=shift+alt+u=scroll_page_lines:-1
+keybind=shift+alt+d=scroll_page_lines:1
+keybind=shift+ctrl+u=scroll_page_lines:-10
+keybind=shift+ctrl+d=scroll_page_lines:10
+
+keybind=alt+enter=toggle_fullscreen
+keybind=shift+alt+v=new_split:right
+keybind=shift+alt+s=new_split:down
+keybind=shift+alt+k=goto_split:up
+keybind=shift+alt+j=goto_split:down
+keybind=shift+alt+h=goto_split:left
+keybind=shift+alt+l=goto_split:right
+keybind=shift+alt+m=toggle_split_zoom
+
+keybind=shift+alt+f=start_search
+keybind=ctrl+p=navigate_search:next
+keybind=ctrl+n=navigate_search:previous
+keybind=escape=end_search
+
+palette = 0=#51576d
+palette = 1=#e78284
+palette = 2=#a6d189
+palette = 3=#e5c890
+palette = 4=#8caaee
+palette = 5=#f4b8e4
+palette = 6=#81c8be
+palette = 7=#b5bfe2
+palette = 8=#626880
+palette = 9=#eda0a2
+palette = 10=#b9dba2
+palette = 11=#ecd7ae
+palette = 12=#adc2f3
+palette = 13=#f38ed8
+palette = 14=#98d2ca
+palette = 15=#a5adce
+
+background = #303446
+foreground = #c6d0f5
+cursor-color = #626880
+cursor-text = #c6d0f5
+selection-background = #414559
+selection-foreground = #303446
