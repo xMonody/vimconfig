@@ -1,5 +1,3 @@
-# (macos and linux: ~/.config/rio/config.toml)
-# (windows: C:\Users\USER\AppData\Local\rio\config.toml)
 padding-x = 0
 padding-y = [0,0]
 line-height = 1
@@ -7,6 +5,14 @@ hide-mouse-when-typing = true
 ignore-selection-foreground-color = true
 confirm-before-quit = false
 #working-dir = "d:"
+
+[effects]
+custom-mouse-cursor = true
+trail-cursor = true
+trail-cursor-color = "#626880"
+trail-cursor-opacity = 0.6
+trail-cursor-decay = [100, 400]
+trail-cursor-start-threshold = 2
 
 [cursor]
   shape = 'block'
@@ -59,10 +65,12 @@ confirm-before-quit = false
 
 [navigation]
 # Bookmark TopTab BottomTab (Macos)CollapsedTab
-  mode = "Bookmark"
+#mode = "Plain"
+  mode = "Tab"
   clickable = false
   use-current-path = false
   color-automation = []
+  hide-if-single = true
 
 [bindings]
   keys = [
@@ -70,27 +78,27 @@ confirm-before-quit = false
     { key = "d", with = "Alt | Shift", action = "Scroll(-3)"},
     { key = "u", with = "Control | Shift", action = "ScrollHalfPageUp"},
     { key = "d", with = "Control | Shift", action = "ScrollHalfPageDown"},
-    
+
     { key = "a", with = "Alt | Shift", action = "IncreaseFontSize"},
     { key = "z", with = "Alt | Shift", action = "DecreaseFontSize"},
     { key = "r", with = "Alt | Shift", action = "ResetFontSize"},
-    
+
     { key = "v", with = "Alt", action = "Paste"},
     { key = "c", with = "Alt", action = "Copy"},
     { key = "g", with = "Alt|Shift", action = "ToggleVIMode"},
-    
+
     { key = "o", with = "Alt | Shift", action = "CreateTab"},
     { key = "n", with = "Alt | Shift", action = "SelectNextTab"},
     { key = "p", with = "Alt | Shift", action = "SelectPrevTab"},
     { key = "w", with = "Alt | Shift", action = "CloseTab"},
     { key = "q", with = "Alt | Shift", action = "CloseUnfocusedTabs"},
-    
+
     { key = "k", with = "Alt | Shift", action = "SelectNextSplit"},
     { key = "j", with = "Alt | Shift", action = "SelectPrevSplit"},
     { key = "v", with = "Alt | Shift", action = "SplitRigh"},
     { key = "s", with = "Alt | Shift", action = "SplitDown"},
     { key = "c", with = "Alt | Shift", action = "CloseSplitOrTab"},
-    
+
     { key = "f", with = "Alt | Shift", action = "SearchBackward"},
     { key = "b", with = "Alt | Shift", action = "SearchForward"},
     { key = "Enter", with = "Alt", action = "ToggleFullscreen"},
@@ -101,18 +109,16 @@ confirm-before-quit = false
   #Navigation
   tabs            = '#494c62'
   tabs-active     = '#6a6e8e'
-  tabs-foreground = '#1d202f'
-  tabs-active-highlight  = '#6a6e8e'
-  tabs-active-foreground = '#1d202f'
-  bar = '#494c62'
-  
+  bar = '#ff0000'
+  split = "#ff0000"
+
   selection-background = '#414559'
   #selection-background = '#585d73'
   selection-foreground = '#c6d0f5'
-  
+
   background = '#303446'
   foreground = '#c6d0f5'
-  
+
   vi-cursor = '#626880'
   cursor = '#626880'
   # Search
@@ -120,7 +126,7 @@ confirm-before-quit = false
   search-match-foreground = '#ffffff'# 前景色
   search-focused-match-background = '#ff6a19'# 当前颜色
   search-focused-match-foreground = '#FFFFFF'# 背景色
-  
+
   black = '#51576d'
   red = '#e78284'
   green = '#a6d189'
@@ -129,7 +135,7 @@ confirm-before-quit = false
   magenta = '#f4b8e4'
   cyan = '#81c8be'
   white = '#a5adce'
-  
+
   light_black = '#626880'
   light_red = '#e67172'
   light_green = '#8ec772'

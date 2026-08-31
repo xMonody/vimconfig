@@ -1,25 +1,51 @@
+
+# typeset -U path
+# path=(/usr/local/bin $path)
+# export LD_LIBRARY_PATH="/usr/local/lib:${LD_LIBRARY_PATH:-}"
+# export LIBRARY_PATH="/usr/local/lib:${LIBRARY_PATH:-}"
+# export PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:${PKG_CONFIG_PATH:-}"
+
+echo -ne "\x1b[2 q" #  "\x1b[2 q\033]12;#7C73B0\0x7"
+unsetopt beep        # 禁用 zsh 内置的 beep
+unsetopt hist_beep   # 禁用历史搜索时的 beep
+unsetopt list_beep   # 禁用自动补全时的 beep
+
+export EDITOR='vim -u NONE'
+export VISUAL='vim -u NONE'
+
+alias cls=reset
+#alias ls="lsd --icon never"
+#alias ll="lsd --icon never -all"
+(( $+commands[lsd] )) && alias ll='lsd -all'
+(( $+commands[lsd] )) && alias ls=lsd
+(( $+commands[lazygit] )) && alias lg=lazygit
+(( $+commands[bat] )) && alias bat='bat --style="header" --paging=never --theme=TwoDark'
+
 fzf_zsh="$HOME/.config/fzf/fzf.zsh"
-zoxide_zsh="$HOME/.config/fzf/zoxide.zsh"
+zoxide_zsh="$HOME/.config/zoxide/zoxide.zsh"
 if [[ -f "$fzf_zsh" ]]; then
     source "$fzf_zsh"
 else
-    if type fzf >/dev/null 2>&1; then
+    if (( $+commands[fzf] )); then
         mkdir -p "$HOME/.config/fzf"
         fzf --zsh > "$fzf_zsh"
         source "$fzf_zsh"
-    else
-        echo "Warning: fzf command not found, skip fzf integration" >&2
+        export FZF_COMPLETION_TRIGGER=".."
+        export FZF_DEFAULT_OPTS=" --border=rounded --preview 'bat --style=numbers --color=always {}' \
+            --preview-window=right:60%:border-left --color=border:#565f89,pointer:#7C73B0,\
+            current-bg:#585d73,current-fg:-1:regular"
+        export FZF_CTRL_R_OPTS="--preview-window=hidden --color=border:#565f89,\
+            pointer:#7C73B0,current-bg:#585d73,current-fg:-1:regular"
     fi
 fi
+
 if [[ -f "$zoxide_zsh" ]]; then
     source "$zoxide_zsh"
 else
-    if type zoxide >/dev/null 2>&1; then
-        mkdir -p "$HOME/.config/fzf"
+    if (( $+commands[zoxide] )); then
+        mkdir -p "$HOME/.config/zoxide"
         zoxide init zsh > "$zoxide_zsh"
         source "$zoxide_zsh"
-    else
-        echo "Warning: zoxide command not found, skip zoxide integration" >&2
     fi
 fi
 
@@ -30,23 +56,23 @@ abbreviations=(
     gstdmodules "g++ -std=c++23 -fmodules -c -fmodule-only -fsearch-include-path bits/std.cc"
     gmodules    "g++ -std=c++23 -fmodules "
     cstdmodules "clang++ -std=c++23 -stdlib=libc++ --precompile -Wno-reserved-identifier $cstdmodules"
-    cmodules    "clang++ -std=c++23 -stdlib=libc++ -fmodule-file=std=std.pcm std.pcm "
-    tgz 'tar -tzvf '
-    txz 'tar -tJvf '
-    tbz 'tar -tjvf '
-    tzst 'tar --zstd -tvf '
-    t7z '7z l '
-    tzip 'unzip -l'
+#    cmodules    "clang++ -std=c++23 -stdlib=libc++ -fmodule-file=std=std.pcm std.pcm "
+#    tgz 'tar -tzvf '
+#    txz 'tar -tJvf '
+#    tbz 'tar -tjvf '
+#    tzst 'tar --zstd -tvf '
+#    t7z '7z l '
+#    tzip 'unzip -l'
 #clang -x c++-header -emit-pch -o xxx.h.pch 
 #clang main.c++ -include-pch xxx.h.pch -o 
 #gcc -x c-header -c -o xxx.h.gch
 #g++ -x c++-header -o xxx.hpp.gch
-    xgz 'tar -xzvf '
-    xxz 'tar -xJvf '
-    xbz 'tar -xjvf '
-    xzst 'tar --zstd -xvf '
-    x7z '7z x '
-    xzip 'unzip '
+#    xgz 'tar -xzvf '
+#    xxz 'tar -xJvf '
+#    xbz 'tar -xjvf '
+#    xzst 'tar --zstd -xvf '
+#    x7z '7z x '
+#    xzip 'unzip '
 )
 expand-abbrev() {
     local word=${LBUFFER##*[[:space:]]}
