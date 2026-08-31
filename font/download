@@ -1,0 +1,10 @@
+#!/bin/sh
+#wget https://raw.githubusercontent.com/lxgw/LxgwWenKai/main/fonts/TTF/LXGWWenKaiMono-Regular.ttf
+wget https://raw.githubusercontent.com/lxgw/LxgwWenKai/main/fonts/TTF/LXGWWenKai-Regular.ttf
+
+FontLink="https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master" # master v3.5.1
+
+wget $FontLink/patched-fonts/SourceCodePro/SauceCodeProNerdFontMono-Regular.ttf
+wget $FontLink/patched-fonts/SourceCodePro/SauceCodeProNerdFontMono-Italic.ttf
+wget $FontLink/patched-fonts/SourceCodePro/SauceCodeProNerdFontMono-Bold.ttf
+wget $FontLink/patched-fonts/SourceCodePro/SauceCodeProNerdFontMono-BoldItalic.ttf
