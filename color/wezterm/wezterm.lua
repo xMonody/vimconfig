@@ -308,20 +308,18 @@ if wezterm.target_triple == 'x86_64-pc-windows-msvc' then
     config.default_prog = { 'pwsh.exe', '-NoLogo' }
     config.default_cwd = "D:/"
     config.launch_menu = {
-        { label = "Pwsh", args = {'pwsh.exe', '-NoLogo', '-NoLogo'}, },
-        { label = 'Ucrt Fish', args = { msys, '-defterm', '-here', '-no-start', '-ucrt64', '-shell', 'fish'}},
         { label = 'Ucrt Zsh', args = { msys, '-defterm', '-here', '-no-start', '-ucrt64', '-shell', 'zsh'}},
+        { label = 'Ssh Wlr',       args = { 'pwsh', '-c', 'ssh', 'wlr@192.168.1.102', '-p', '22' } },
+        { label = "Pwsh", args = {'pwsh.exe', '-NoLogo' } },
         --[[ { label = 'Wsl', args = {'wsl', '--cd', '~'} }, ]]
-        --[[ { label = 'Tmux', args = {'wsl.exe', '--cd', '~', '--exec', 'tmux'} }, ]]
-        { label = 'Powershell', args = { 'powershell.exe' } },
-        { label = 'Nushell', args = { 'nu.exe' } },
-        { label = 'Mingw64', args = { msys, '-defterm', '-here', '-no-start', '-mingw64','-shell','zsh'}},
     } config.win32_system_backdrop = 'Acrylic' --Mica Acrylic Tabbed Auto Disable
 else
     --Linux for Macos
     config.launch_menu = {
+      { label = 'Ssh Wlr',       args = { 'bash', '-c', 'ssh wlr@10.10.17.2 -p 2222' } },
+      { label = 'Ssh Sql',       args = { 'bash', '-c', 'ssh sql@10.10.17.3 -p 2222' } },
+      { label = 'Ssh Arc',       args = { 'bash', '-c', 'ssh arc@10.10.17.4 -p 2222' } },
       { label = 'Fish Shell',    args = { 'fish', '-l' } },
-      { label = 'Nushell Shell', args = { 'nu', '-l'   } },
       { label = 'Zsh Shell',     args = { 'zsh', '-l'  } },
       { label = 'Bash Shell',    args = { 'bash', '-l' } },
     }

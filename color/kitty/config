@@ -1,0 +1,21 @@
+Host *
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
+    TCPKeepAlive yes
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
+
+Host Way
+    HostName 10.10.17.2
+    User way
+    Port 2222
+
+Host Sql
+    HostName 10.10.17.3
+    User sql
+    Port 2222
+
+Host Arc
+    HostName 10.10.17.4
+    User arc
+    Port 2222

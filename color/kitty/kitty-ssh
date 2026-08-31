@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+host=$(grep -E '^Host ' ~/.ssh/config | awk '{print $2}' | grep -v '\*' | fzf)
+[ -z "$host" ] && exit 0
+kitty @ launch --type=tab --tab-title "$host" --hold ssh "$host"
