@@ -34,10 +34,10 @@
 
 # SauceCodePro NFM CN
 [font]
-  normal = { family = "SauceCodePro NFM", style =  "Regular"}
-  italic = { family = "SauceCodePro NFM", style =  "Italic"}
-  bold =  { family = "SauceCodePro NFM", style =  "Bold"}
-  bold_italic = { family = "SauceCodePro NFM", style =  "Bold Italic"}
+  normal = { family = "SauceCodePro Nerd Font Mono", style =  "Regular"}
+  italic = { family = "SauceCodePro Nerd Font Mono", style =  "Italic"}
+  bold =  { family = "SauceCodePro Nerd Font Mono", style =  "Bold"}
+  bold_italic = { family = "SauceCodePro Nerd Font Mono", style =  "Bold Italic"}
   offset = { x = 0, y = 0 }
   glyph_offset= { x = 0, y = 0 }
   builtin_box_drawing = false
@@ -83,15 +83,12 @@
 [mouse]
   hide_when_typing = true
 
-[env]
-  TERM = "xterm-256color"
+# [env]
+#  TERM = "xterm-256color"
 
 #[general]
 #  working_directory = "C:/msys64/home/xx/"
 
 #[terminal]
+  #shell = { program = "tmux" }
   #shell = { program = "wsl.exe", args = ["--cd", "~", "--exec", "tmux"] }
-  #shell={program="C:/msys64/msys2_shell.cmd",args=["-defterm","-here","-no-start","-ucrt64","-shell","fish"]}
-  #shell = { program = "wsl.exe", args = ["--cd", "~"] }
-
-

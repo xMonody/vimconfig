@@ -1,0 +1,35 @@
+#!/bin/zsh
+set -e
+cd "$(dirname "$0")"
+command -v passt >/dev/null || { printf '\e[31mpasst not install\e[0m\n' >&2; exit 1; }
+
+#QNET=(-netdev user,id=net,hostfwd=tcp::23-:22 -device virtio-net-device,netdev=net)
+#SOCK="/tmp/$(basename "$PWD").socket"; passt -f -s "$SOCK" -t 23:22,3307:3306 & PASST_PID=$!
+#trap 'kill "$PASST_PID" 2>/dev/null; wait "$PASST_PID" 2>/dev/null; rm -f "$SOCK"' EXIT
+#QNET=(-device virtio-net-device,netdev=s -netdev stream,id=s,server=off,addr.type=unix,addr.path="$SOCK")
+QNET=(-netdev passt,id=net,tcp-ports=23:22 -device virtio-net-pci,netdev=net)
+
+QGPU=(-vga none -display sdl,gl=on -device virtio-gpu-gl,hostmem=1G,blob=on) #venus=true,drm_native_context=on
+#QGPU=(-vga none -display none) # -nographic -show-cursor=on  -device VGA,edid=on,xres=1280,yres=720
+
+QAIO=(-audiodev pipewire,id=pw -device ich9-intel-hda -device hda-duplex,audiodev=pw) #hda-micro hda-output
+
+QROM=(); if [[ -n "$1" ]]; then
+QROM=(-device ide-cd,drive=cdrom,bootindex=0 -drive if=none,id=cdrom,format=raw,file="$1"); fi
+UEFI=(-drive if=pflash,format=raw,readonly=on,file=OVMF.fd -drive if=pflash,format=raw,file=VARS.fd)
+
+QEMU_BIN=(qemu-system-x86_64 -accel kvm -machine q35 -cpu host -smp 4,threads=1 -m 5G)
+#QEMU_BIN=(qemu-system-aarch64 -accel kvm -machine virt,gic-version=3 -cpu host -smp 4 -m 5G)
+#QEMU_BIN=(qemu-system-loongarch64 -accel tcg,thread=multi -machine virt -cpu la464 -smp 4 -m 5G)
+
+#swtpm socket --tpm2 --tpmstate dir=./stpm --ctrl type=unixio,path=./stpm/tpm-sock &
+#TPM_PID=$!
+#trap 'kill "$TPM_PID" 2>/dev/null; wait "$TPM_PID" 2>/dev/null' EXIT
+#SWTPM=(-chardev socket,id=t,path=./stpm/tpm-sock -tpmdev emulator,id=p,chardev=t -device tpm-tis,tpmdev=p)
+
+"${QEMU_BIN[@]}" -drive if=virtio,format=qcow2,file=disk.qcow2 "${UEFI[@]}" \
+    -device virtio-balloon-pci,free-page-reporting=on "${QNET[@]}" \
+    "${QGPU[@]}" "${QROM[@]}" "${QAIO[@]}"  #-device qemu-xhci -device usb-kbd -device usb-tablet
+
+# mkdir swtpm && swtpm_setup --tpm2 --tpmstate ./stpm
+# qemu-img create -f qcow2 disk.qcow2 100G

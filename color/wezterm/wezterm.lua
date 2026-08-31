@@ -1,17 +1,15 @@
 local wezterm = require("wezterm")
 local act = wezterm.action
 
-local font_list = {'SauceCodePro NFM', '霞鹜文楷等宽' , 'Segoe UI Emoji'} -- 霞鹜文楷等宽|Maple Mono NF CN
-
+local font_list = { 'SauceCodePro Nerd Font Mono', 'LXGW Wenkai Mono', 'Segoe UI Emoji' }
 local msys = "C:/msys64/msys2_shell.cmd"
 local opacity = 1
-local fontsize = 15
-local fontmask = 0
+local fontsize = 16
+local tab_style = 2 -- 1    1    2  
 
 local nf = wezterm.nerdfonts
 local function nerdfont_icon(mask)
     if mask == 0 then
-        --0'', ' '..'' 1'', '' 2'', ''
         return nf.ple_right_half_circle_thick, ' '.. nf.ple_left_half_circle_thick
     elseif mask == 1 then
         return nf.ple_upper_left_triangle, nf.ple_lower_right_triangle
@@ -21,62 +19,15 @@ local function nerdfont_icon(mask)
         return nf.ple_right_half_circle_thick, ' '.. nf.ple_left_half_circle_thick
     end
 end
-local SOLID_RIGHT_ARROW, SOLID_LEFT_ARROW = nerdfont_icon(fontmask)
+local SOLID_RIGHT_ARROW, SOLID_LEFT_ARROW = nerdfont_icon(tab_style)
 
 local colors = {
     default   = { bg = '#494c62', fg = '#111119' },
     is_active = { bg = '#6a6e8e', fg = '#111119' },
     hover     = { bg = '#6a6e8e', fg = '#111119' },
-    zoom      = { bg = '#6a6e8e', fg = '#111119' }
+    zoom      = { bg = '#6a6e8e', fg = '#111119' },
+    tab_bg    = "#24273a"
 }
-
--- wezterm.on('format-window-title', function(tab, pane, tabs, panes, config)
-wezterm.on('format-window-title', function(_, _, _, _, _) --窗口标题
-    return "Wezterm"
-end)
-
---[[ wezterm.on('window-resized', function(window, _) -- 窗口全屏是否隐藏tabs
-    local dims = window:get_dimensions()
-    local overrides = window:get_config_overrides() or {}
-    overrides.enable_tab_bar = not dims.is_full_screen
-    window:set_config_overrides(overrides)
-end) ]]
-
-wezterm.on('toggle_fullscreen', function(window, pane) -- 切换全屏
-    local overrides = window:get_config_overrides() or {}
-    local current = overrides.enable_tab_bar
-    if current == nil then
-        current = true
-    end
-    local new_value = not current
-    overrides.enable_tab_bar = new_value
-    window:set_config_overrides(overrides)
-    window:perform_action(wezterm.action.ToggleFullScreen, pane)
-end)
-
-wezterm.on('toggle_tabs', function(window, _) -- 专注模式
-    local overrides = window:get_config_overrides() or {}
-    local is_focus = overrides.enable_tab_bar == false
-    if is_focus then
-        overrides.enable_tab_bar = true
-    else
-        overrides.enable_tab_bar = false
-    end
-    window:set_config_overrides(overrides)
-end)
-
-wezterm.on("toggle_maximize", function(window, _)
-    local overrides = window:get_config_overrides() or {}
-    if overrides._is_maximized then
-        window:restore()
-        overrides._is_maximized = false
-    else
-        window:maximize()
-        overrides._is_maximized = true
-    end
-
-    window:set_config_overrides(overrides)
-end)
 
 local function basename(s)
     return string.gsub(s, "(.*[/\\])(.*)", "%2")
@@ -84,7 +35,7 @@ end
 
 -- wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
 wezterm.on("format-tab-title", function(tab, _, _, _, hover, _)
-    local edge_background = "#2A3441"
+    local edge_background = colors.tab_bg
     local bg, fg, attr
     if tab.is_active then
         attr = { Italic = true } bg = colors.is_active.bg fg = colors.is_active.fg
@@ -141,21 +92,37 @@ wezterm.on("format-tab-title", function(tab, _, _, _, hover, _)
     }
 end)
 
+-- wezterm.on('format-window-title', function(tab, pane, tabs, panes, config)
+wezterm.on('format-window-title', function(_, _, _, _, _) -- 窗口标题
+    return "Wezterm"
+end)
+
+wezterm.on('toggle_tabs', function(window, _) -- 专注模式
+    local overrides = window:get_config_overrides() or {}
+    local is_focus = overrides.enable_tab_bar == false
+    if is_focus then
+        overrides.enable_tab_bar = true
+    else
+        overrides.enable_tab_bar = false
+    end
+    window:set_config_overrides(overrides)
+end)
+
 local config = {
     scrollback_lines = 5000,
     initial_cols = 100,
     initial_rows = 29,
 
-    --exit_behavior='Hold',
+    -- exit_behavior='Hold',
     audible_bell = "Disabled", --铃声 SystemBeep
-    window_close_confirmation = "NeverPrompt", --不用确认关闭
+    window_close_confirmation = "NeverPrompt", -- 不用确认关闭
     enable_tab_bar = true, --bar是否被启用
-    hide_tab_bar_if_only_one_tab = false,--只有一个tab是否隐藏
-    use_fancy_tab_bar = false, --是否使用系统原始标签页
-    window_decorations = "INTEGRATED_BUTTONS|RESIZE", --配置窗口是否有标题栏和/或可调整大小的边框
+    hide_tab_bar_if_only_one_tab = false, -- 只有一个tab是否隐藏
+    use_fancy_tab_bar = false, -- 是否使用系统原始标签页
+    window_decorations = "INTEGRATED_BUTTONS|RESIZE", -- 配置窗口是否有标题栏和/或可调整大小的边框
     enable_scroll_bar = false, --不显示滚动条
 
-    window_padding = { left = 0, right = 0, top = 0, bottom = 0 }, --窗口边距
+    window_padding = { left = 0, right = 0, top = 0, bottom = 0 }, -- 窗口边距
     integrated_title_button_alignment = "Right",
     integrated_title_button_color = "Auto",
     integrated_title_button_style = "Windows",
@@ -166,19 +133,20 @@ local config = {
 
     --freetype_load_flags = 'NO_HINTING|MONOCHROME',
     freetype_load_target = "Light", -- 'HorizontalLcd'|'Normal'|'VerticalLcd'|'Mono'
-    freetype_render_target = "Normal", --HorizontalLcd Normal 
+    freetype_render_target = "Normal", -- HorizontalLcd Normal 
 
     adjust_window_size_when_changing_font_size = false,
     hide_mouse_cursor_when_typing = true,
-    custom_block_glyphs = false, --控制nerd font符号
+    default_cursor_style = "SteadyBlock" -- BlinkingBlock SteadyUnderline BlinkingUnderline SteadyBar BlinkingBar
+    custom_block_glyphs = false, -- 控制nerd font符号
 
     --[[ color_scheme = "catppuccin-frappe", ]]
     colors = {
         tab_bar = {
-            background    =             "#2A3441",
-            new_tab       = {bg_color = "#2A3441", fg_color = "#494c62", intensity = "Bold"},
-            new_tab_hover = {bg_color = "#2A3441", fg_color = "#6a6e8e", intensity = "Bold"},
-            --[[ active_tab    = {bg_color = "#2A3441", fg_color = "#FCE8C3"}, ]]
+            background    = colors.tab_bg,
+            new_tab       = { bg_color = colors.tab_bg, fg_color = "#494c62", intensity = "Bold" },
+            new_tab_hover = { bg_color = colors.tab_bg, fg_color = "#6a6e8e", intensity = "Bold" },
+            -- active_tab    = { bg_color = "#2A3441", fg_color = "#FCE8C3" },
         },
         cursor_bg     = "#626880",
         cursor_border = "#626880",
@@ -257,10 +225,10 @@ local config = {
         { key = 'k', mods = 'SHIFT|CTRL', action = act.AdjustPaneSize { 'Up', 5 } },
         { key = 'l', mods = 'SHIFT|CTRL', action = act.AdjustPaneSize { 'Right', 5 } },
         { key = 'p', mods = 'SHIFT|CTRL', action = act.ShowLauncherArgs { flags='LAUNCH_MENU_ITEMS' } },
+        --{ key = 'p', mods = 'SHIFT|CTRL', action = act.ShowLauncherArgs { flags='LAUNCH_MENU_ITEMS|DOMAINS' } },
 
         { key = 'e', mods = 'SHIFT|ALT',     action = act.EmitEvent 'toggle_tabs' },
-        { key = 'Enter', mods = 'ALT',       action = act.EmitEvent 'toggle_fullscreen' },
-        --{ key = 'Enter', mods = 'SHIFT|ALT', action = act.EmitEvent 'toggle_maximize' },
+        { key = 'Enter', mods = 'ALT',       action = act.ToggleFullScreen, },
 
         --{ key = 'a', mods = 'CTRL',       action = act.SendString '\x3a\x78\x0a' }, -- :x<cr>
         {
@@ -304,26 +272,36 @@ local config = {
     },
 }
 
+--[[ local ssh_domains = {}
+for host, _ in pairs(wezterm.enumerate_ssh_hosts()) do
+    table.insert(ssh_domains, {
+        name = host,
+        remote_address = host,
+        multiplexing = "None",
+        assume_shell = 'Posix',
+    })
+end ]]
+
 if wezterm.target_triple == 'x86_64-pc-windows-msvc' then
+    --config.win32_system_backdrop = 'Acrylic' -- Mica Acrylic Tabbed Auto Disable
     config.default_prog = { 'pwsh.exe', '-NoLogo' }
     config.default_cwd = "D:/"
     config.launch_menu = {
-        { label = "Pwsh", args = {'pwsh.exe', '-NoLogo', '-NoLogo'}, },
-        { label = 'Ucrt Fish', args = { msys, '-defterm', '-here', '-no-start', '-ucrt64', '-shell', 'fish'}},
-        { label = 'Ucrt Zsh', args = { msys, '-defterm', '-here', '-no-start', '-ucrt64', '-shell', 'zsh'}},
+        { label = 'Ucrt Zsh',   args = { msys, '-defterm', '-here', '-no-start', '-ucrt64', '-shell', 'zsh'}},
+        { label = 'Ssh Wlr',    args = { 'pwsh', '-c', 'ssh', 'wlr@192.168.1.102', '-p', '22' } },
+        { label = "Pwsh Shell", args = { 'pwsh.exe', '-NoLogo' } },
         --[[ { label = 'Wsl', args = {'wsl', '--cd', '~'} }, ]]
-        --[[ { label = 'Tmux', args = {'wsl.exe', '--cd', '~', '--exec', 'tmux'} }, ]]
-        { label = 'Powershell', args = { 'powershell.exe' } },
-        { label = 'Nushell', args = { 'nu.exe' } },
-        { label = 'Mingw64', args = { msys, '-defterm', '-here', '-no-start', '-mingw64','-shell','zsh'}},
-    } config.win32_system_backdrop = 'Acrylic' --Mica Acrylic Tabbed Auto Disable
-else
-    --Linux for Macos
-    config.launch_menu = {
-      { label = 'Fish Shell',    args = { 'fish', '-l' } },
-      { label = 'Nushell Shell', args = { 'nu', '-l'   } },
-      { label = 'Zsh Shell',     args = { 'zsh', '-l'  } },
-      { label = 'Bash Shell',    args = { 'bash', '-l' } },
     }
+    -- ssh_domains = ssh_domains
+else
+    config.launch_menu = { --Linux for Macos
+      { label = 'Ssh Wlr',       args = { 'bash', '-c', 'ssh Wlr' } },
+      { label = 'Ssh Sql',       args = { 'bash', '-c', 'ssh Sql' } },
+      { label = 'Ssh Arc',       args = { 'bash', '-c', 'ssh Arc' } },
+      { label = 'Ssh Deb',       args = { 'bash', '-c', 'ssh Deb' } },
+      { label = 'Fish Shell',    args = { 'fish', '-l' } },
+      { label = 'Zsh Shell',     args = { 'zsh',  '-l' } },
+    }
+    -- ssh_domains = ssh_domains
 end
 return config
