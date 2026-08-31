@@ -1,3 +1,10 @@
+# install Install the required tools
+```bash
+# Debian
+sudo apt-get install ripgrep silversearcher-ag fd-find fzf zoxide bat python3-pynvim command-not-found
+# ArchLinux
+sudo pacman -S ripgrep the_silver_searcher fd fzf zoxide bat python-pynvim pkgfile
+```
 
 # install prezto
 ```bash
@@ -43,18 +50,4 @@ zmodule zsh-users/zsh-syntax-highlighting
 zmodule zsh-users/zsh-autosuggestions
 
 HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND='fg=green'
-```
-# Visual Studio Code set default shell
-```json
-    "terminal.integrated.profiles.windows": {
-        "MSYS2 UCRT": {
-            "path": "cmd.exe",
-            "args": [
-                "/c",
-                "C:\\msys64\\msys2_shell.cmd -defterm -here -no-start -ucrt64 -shell bash"
-            ]
-        }
-    },
-    "terminal.integrated.initialHint": false,
-    "terminal.integrated.defaultProfile.windows": "MSYS2 UCRT",
 ```

@@ -1,3 +1,65 @@
+[window]
+  dimensions = { columns = 100, lines = 30 }
+  dynamic_title = false
+  title = "Alacritty"
+  padding = { x = 0, y = 0}
+  dynamic_padding = false
+  opacity = 1
+
+[scrolling]
+  history = 5000
+  multiplier = 5
+
+# SauceCodePro NFM CN
+[font]
+  normal = { family = "SauceCodePro Nerd Font Mono", style =  "Regular"}
+  italic = { family = "SauceCodePro Nerd Font Mono", style =  "Italic"}
+  bold =  { family = "SauceCodePro Nerd Font Mono", style =  "Bold"}
+  bold_italic = { family = "SauceCodePro Nerd Font Mono", style =  "Bold Italic"}
+  offset = { x = 0, y = 0 }
+  glyph_offset= { x = 0, y = 0 }
+  builtin_box_drawing = false
+  size = 15
+
+[keyboard]
+  bindings = [
+    { key = "c", mods = "Alt", action = "Copy" },
+    { key = "v", mods = "Alt", action = "Paste" },
+    { key = "c", mods = "Shift|Control", action="Copy" },
+    { key = "v", mods = "Shift|Control", action="Paste" },
+    
+    { key = "a", mods = "Shift|Alt", action= "IncreaseFontSize" },
+    { key = "z", mods = "Shift|Alt", action= "DecreaseFontSize" },
+    { key = "r", mods = "Shift|Alt", action= "ResetFontSize" },
+    
+    { key = "u", mods = "Shift|Alt", action= "ScrollLineUp" },
+    { key = "d", mods = "Shift|Alt", action= "ScrollLineDown" },
+    { key = "u", mods = "Shift|Control", action= "ScrollPageUp" },
+    { key = "d", mods = "Shift|Control", action= "ScrollPageDown" },
+    
+    { key = "g", mods = "Shift|Alt", action = "ToggleViMode" },
+    { key = "f", mods = "Shift|Alt", action = "SearchForward" },
+    { key = "b", mods = "Shift|Alt", action = "SearchBackward" },
+    
+    { key = "Enter", mods = "Alt",       action = "ToggleFullscreen" },
+    # { key = "Enter", mods = "Shift|Alt", action = "ToggleMaximized" },
+    #{ key = "a", mods = "Control", chars = "\u003A\u0078\u000A" },
+  ]
+
+[mouse]
+  hide_when_typing = true
+
+# [env]
+#  TERM = "xterm-256color"
+
+#[general]
+#  working_directory = "C:/msys64/home/xx/"
+
+[terminal]
+  osc52 = "CopyPaste"
+  # shell = { program = "/usr/bin/fish", args = ["-l"] }
+  # shell = { program = "wsl.exe", args = ["--cd", "~", "--exec", "tmux"] }
+
 [colors]
   selection={ background = '#414559', text = '#c6d0f5' }
   #selection={ background  = '#585d73', text = '#c6d0f5' }
@@ -31,67 +93,3 @@
   red = '#e78284'
   white = '#a5adce'
   yellow = '#e5c890'
-
-# SauceCodePro NFM CN
-[font]
-  normal = { family = "SauceCodePro NFM", style =  "Regular"}
-  italic = { family = "SauceCodePro NFM", style =  "Italic"}
-  bold =  { family = "SauceCodePro NFM", style =  "Bold"}
-  bold_italic = { family = "SauceCodePro NFM", style =  "Bold Italic"}
-  offset = { x = 0, y = 0 }
-  glyph_offset= { x = 0, y = 0 }
-  builtin_box_drawing = false
-  size = 15
-
-[window]
-  dimensions = { columns = 100, lines = 30 }
-  dynamic_title = false
-  title = "Alacritty"
-  padding = { x = 0, y = 0}
-  dynamic_padding = false
-  opacity = 1
-
-[scrolling]
-  history = 5000
-  multiplier = 5
-
-[keyboard]
-  bindings = [
-    { key = "c", mods = "Alt", action = "Copy" },
-    { key = "v", mods = "Alt", action = "Paste" },
-    { key = "c", mods = "Shift|Control", action="Copy" },
-    { key = "v", mods = "Shift|Control", action="Paste" },
-    
-    { key = "a", mods = "Shift|Alt", action= "IncreaseFontSize" },
-    { key = "z", mods = "Shift|Alt", action= "DecreaseFontSize" },
-    { key = "r", mods = "Shift|Alt", action= "ResetFontSize" },
-    
-    { key = "u", mods = "Shift|Alt", action= "ScrollLineUp" },
-    { key = "d", mods = "Shift|Alt", action= "ScrollLineDown" },
-    { key = "u", mods = "Shift|Control", action= "ScrollPageUp" },
-    { key = "d", mods = "Shift|Control", action= "ScrollPageDown" },
-    
-    { key = "g", mods = "Shift|Alt", action = "ToggleViMode" },
-    { key = "f", mods = "Shift|Alt", action = "SearchForward" },
-    { key = "b", mods = "Shift|Alt", action = "SearchBackward" },
-    
-    { key = "Enter", mods = "Alt",       action = "ToggleFullscreen" },
-    # { key = "Enter", mods = "Shift|Alt", action = "ToggleMaximized" },
-    #{ key = "a", mods = "Control", chars = "\u003A\u0078\u000A" },
-  ]
-
-[mouse]
-  hide_when_typing = true
-
-[env]
-  TERM = "xterm-256color"
-
-#[general]
-#  working_directory = "C:/msys64/home/xx/"
-
-#[terminal]
-  #shell = { program = "wsl.exe", args = ["--cd", "~", "--exec", "tmux"] }
-  #shell={program="C:/msys64/msys2_shell.cmd",args=["-defterm","-here","-no-start","-ucrt64","-shell","fish"]}
-  #shell = { program = "wsl.exe", args = ["--cd", "~"] }
-
-
