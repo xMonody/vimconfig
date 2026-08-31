@@ -1,0 +1,40 @@
+{
+    "qemu": {
+        "prefix": "qemu",
+        "body": [
+            "#!/bin/zsh",
+            "set -e",
+            "cd \"$(dirname \"\\$0\")\"",
+            "SOCK=\"/tmp/\\$(basename \"\\$PWD\").socket\"",
+            "command -v passt >/dev/null || { echo \"not install passt\" >&2; exit 1; }\n",
+
+            "rm -f \"\\$SOCK\"",
+            "passt -f --vhost-user -s \"\\$SOCK\" &",
+            "PASST_PID=\\$!",
+            "trap 'kill \"\\$PASST_PID\" 2>/dev/null; rm -f \"\\$SOCK\"' EXIT\n",
+
+            "for i in {1..40}; do",
+                "\t[[ -S \"\\$SOCK\" ]] && break",
+                "\tsleep 0.05",
+            "done\n",
+            "if [[ ! -S \"\\$SOCK\" ]]; then",
+                "\techo \"passt start error：socket \\$SOCK passt not create\" >&2",
+                "\texit 1",
+            "fi\n",
+
+            "qemu-system-x86_64 -accel kvm -machine q35 -cpu host -smp 6 -m 6G \\",
+            "-device virtio-balloon-pci,free-page-reporting=on \\",
+            "-drive if=pflash,format=raw,readonly=on,file=OVMF.fd -drive if=pflash,format=raw,file=VARS.fd \\",
+            "-drive file=./disk.qcow2,format=qcow2,if=virtio -device virtio-gpu-gl,hostmem=1G,blob=on \\",
+            "-object memory-backend-memfd,id=memfd0,share=on,size=6G -numa node,memdev=memfd0 \\",
+            "-chardev socket,id=chr0,path=\"\\$SOCK\" -netdev vhost-user,id=netdev0,chardev=chr0 \\",
+            "-device virtio-net,netdev=netdev0 \\",
+            "-vga none -display gtk,gl=on,show-cursor=on"
+        ],
+        "description": "create qemu x86_64"
+    }
+}
+
+
+
+

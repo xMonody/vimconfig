@@ -1,0 +1,45 @@
+#!/bin/bash
+set -e
+cd "$(dirname "$0")"
+command -v passt >/dev/null || { printf '\033[31mpasst not install\033[0m\n' >&2; exit 1; }
+[ -e ./qemu.log ] && : > ./qemu.log || true
+
+CDROM="" GUI=1 GL3D=1 BACK=1 SNAP=0 SHAR=0 TPM=0 # back启用守护 snap启用快照 tpm启用tpm shar启动共享
+
+OVMF="/usr/share/OVMF/OVMF_CODE_4M.fd" VARS="./OVMF_VARS_4M.fd" QFILE="$HOME/virtual/shared" # 共享
+QCOW="${1:-base.qcow2}" # [threads native io_uring]
+DISK=(-drive file="$QCOW",if=virtio,format=qcow2,aio=io_uring); if (( SNAP )); then DISK+=(-snapshot); fi
+
+if (( GUI )); then if (( GL3D )); then
+    QGPU=(-vga none -display sdl,gl=on -device virtio-gpu-gl,hostmem=1G,blob=on,venus=true)
+    else QGPU=(-vga none -display sdl -device virtio-gpu); fi # drm_native_context=on
+else QGPU=(-vga none -display none); fi
+
+QAIO=(); if (( GUI )); then # hda-micro hda-output
+    QAIO=(-audiodev pipewire,id=pw -device ich9-intel-hda -device hda-duplex,audiodev=pw); fi
+
+FILE=(); if (( SHAR )); then
+    FILE=(-virtfs local,path="$QFILE",mount_tag=hostshare,security_model=mapped-xattr); fi
+
+QTPM=()
+if (( TPM )); then swtpm socket --tpm2 --tpmstate dir=./stpm --ctrl type=unixio,path=./stpm/tpm.sock -d
+QTPM=(-chardev socket,id=t,path=./stpm/tpm.sock -tpmdev emulator,id=p,chardev=t -device tpm-tis,tpmdev=p); fi
+
+QROM=(); if [[ -n "$CDROM" ]]; then QROM=(-boot order=dc -cdrom "$CDROM"); fi
+QDAE=(); if (( BACK )); then QDAE=(-D ./qemu.log -daemonize); fi
+UEFI=(-drive if=pflash,format=raw,readonly=on,file="$OVMF" -drive if=pflash,format=raw,file="$VARS")
+QDEV=(-device virtio-balloon-pci,free-page-reporting=on -device qemu-xhci -device usb-tablet -device usb-kbd)
+QNET=(-netdev passt,id=net,tcp-ports=2222:22 -device virtio-net-pci,netdev=net)
+QEMU_BIN=(qemu-system-x86_64 -accel kvm -machine q35 -cpu host -smp 4,sockets=1,cores=4,threads=1 -m 5G)
+#QEMU_BIN=(qemu-system-aarch64 -accel kvm -machine virt,gic-version=3,acpi=on -cpu host -smp 4 -m 5G)
+#QEMU_BIN=(qemu-system-loongarch64 -accel tcg,thread=multi -machine virt -cpu la464 -smp 4 -m 5G)
+#QNET=(-netdev user,id=net,hostfwd=tcp::2222-:22 -device virtio-net-device,netdev=net)
+"${QEMU_BIN[@]}" "${DISK[@]}" "${QDEV[@]}" "${FILE[@]}" "${QNET[@]}" "${UEFI[@]}" \
+    "${QROM[@]}" "${QGPU[@]}" "${QAIO[@]}" "${QTPM[@]}" "${QDAE[@]}"
+
+# mkdir stpm && swtpm_setup --tpm2 --tpm-state ./stpm # tpm2芯片
+# sudo mount -t 9p -o trans=virtio,version=9p2000.L,cache=loose hostshare /mnt
+# qemu-img create -f qcow2 base.qcow2 100G # raw
+# qemu-img create -f qcow2 -b base.qcow2 -F qcow2 kde.qcow2
+# qemu-img commit kde.qcow2
+# virt-diff -a base.qcow2 -A kde.qcow2 # You need to install guestfs-tools
