@@ -1,23 +1,131 @@
-#export LC_ALL=C.UTF-8
-#export LANG=C.UTF-8
-if set -q MSYSTEM
-    source /d/vimconfig/shell/setting.fish
-else
-    source ~/vimconfig/shell/setting.fish
-end
+# ------- Fish shell config
+# 配置文件路径
+#  archlinux  pkgfile --update   Debian update-command-not-found
 
-#-- alias
-alias lg lazygit
-alias bat='bat --style="header" --paging=never --theme=TwoDark'
-#alias ls 'lsd --icon never'
-#alias ll 'lsd --icon never -all'
-alias ls lsd
-alias ll 'lsd -all'
+# set -x NATPROXY 1  # nat on
+command -q lazygit; and alias lg lazygit
+command -q bat; and alias bat "bat --style=header --paging=never --theme=TwoDark"
+command -q lsd; and alias ls lsd
+command -q lsd; and alias ll lsd
 alias cls reset
-
-#-- export
 
 set -x EDITOR 'vim -u NONE'
 set -x VISUAL 'vim -u NONE'
 
-#  archlinux  pkgfile --update  Debian update-command-not-found
+set cxstdmodules "clang++ -std=c++23 -stdlib=libc++ --precompile -Wno-reserved-identifier \
+-Wno-reserved-module-identifier (fd std.cppm /usr) -o std.pcm "
+abbr --add gstdmodules 'g++ -std=c++23 -fmodules -c -fmodule-only -fsearch-include-path bits/std.cc'
+abbr --add gmodules 'g++ -std=c++23 -fmodules '
+abbr --add cstdmodules $cxstdmodules
+abbr --add cmodules 'clang++ -std=c++23 -stdlib=libc++ -fmodule-file=std=std.pcm std.pcm '
+#clang -x c++-header -emit-pch -o xxx.h.pch
+#clang main.c++ -include-pch xxx.h.pch -o
+#gcc -x c-header -c -o xxx.h.gch
+#g++ -x c++-header -o xxx.hpp.gch
+
+set fish_color_normal           white
+set fish_color_comment          black   # comment
+set fish_color_valid_path       white   # path
+set fish_color_command          yellow  # d5855a 2E8B57  # 008267 009374
+set fish_color_keyword          4683C1  # if, else, for
+set fish_color_end	            white   #  |, ;, &, &&
+set fish_color_option           white   #  option
+set fish_color_param            white   # set param
+set fish_color_autosuggestion   black   #  autosuggestion
+set fish_color_error            red     # error
+set fish_color_cancel           red     # ctrl-c
+set fish_color_redirection      white   # 重定向符号 >, >>, <, 2>
+set fish_color_search_match     green
+set fish_color_operator	        B766AD  #  =, ~, ? $variable
+set fish_color_quote	        676E95  # 字符串颜色 "...",'...'
+set fish_pager_color_completion white   # tab option
+
+set -x FZF_DEFAULT_OPTS "--border=rounded --preview 'bat --style=numbers --color=always {}' \
+--preview-window=right:60%:border-left --color=border:#565f89,pointer:#7C73B0,\
+current-bg:#585d73,current-fg:-1:regular"
+
+set -x FZF_CTRL_R_OPTS "--preview-window=hidden --color=border:#565f89,\
+pointer:#7C73B0,current-bg:#585d73,current-fg:-1:regular"
+
+set fzf_fish $HOME/.config/fzf/fzf.fish
+set zoxide_fish $HOME/.config/zoxide/zoxide.fish
+
+if test -f $fzf_fish
+    source $fzf_fish
+else if type -q fzf              # 用 else if 减少嵌套
+    mkdir -p $HOME/.config/fzf
+    fzf --fish > $fzf_fish
+    source $fzf_fish
+else
+#echo "Warning: fzf command not found, skip fzf integration" >&2
+end
+
+if test -f $zoxide_fish
+    source $zoxide_fish
+else if type -q zoxide           # 用 else if 减少嵌套
+    mkdir -p $HOME/.config/zoxide
+    zoxide init fish > $zoxide_fish
+    source $zoxide_fish
+else
+#echo "Warning: zoxide command not found, skip zoxide integration" >&2
+end
+
+function my_cancel_commandline
+    #if test -z "$(commandline)"
+        #commandline -f repaint
+        #else
+        commandline -f cancel-commandline
+        #end
+end
+bind \cc my_cancel_commandline
+
+function toggle_proxy --description "toggle HTTP/HTTPS proxy"
+    set -l default_ip "127.0.0.1"
+    set -l port "10809"
+    set -l toggle_var "__PROXY_ENABLED"
+
+    if set -q NATPROXY
+        set -l gateway (ip route show default 2>/dev/null \
+            | string match -r 'via (\S+)' \
+            | string replace -r '.*via ' '' \
+            | head -n 1)
+        if test -n "$gateway"
+            set default_ip "$gateway"
+        end
+    end
+
+    set -l custom_ip $argv[1]
+    if set -q $toggle_var
+        set -e HTTP_PROXY HTTPS_PROXY http_proxy https_proxy
+        set -e $toggle_var
+        return 0
+    end
+    set -l target_ip
+    if test -z "$custom_ip"
+        set target_ip "http://$default_ip:$port"
+    else
+        set target_ip "http://192.168.$custom_ip:$port"
+    end
+    set -gx HTTP_PROXY  $target_ip
+    set -gx HTTPS_PROXY $target_ip
+    set -gx http_proxy  $target_ip
+    set -gx https_proxy $target_ip
+    set -gx $toggle_var 1
+end
+alias proxy toggle_proxy
+
+if status is-interactive
+# printf "\x1b[2 q"
+    set fish_greeting      ""       # 取消欢迎提示
+    function fish_right_prompt      # 清空右侧提示符（如果有）
+    end
+    function fish_mode_prompt       # 取消vi模式显示
+    end
+    function fish_prompt
+        if test -z "$http_proxy$https_proxy"
+            printf '%s ❯ %s' (set_color 7C73B0) (set_color normal)
+        else
+            printf '%s ❯ %s' (set_color D55F6F) (set_color normal)
+        end
+    end
+end

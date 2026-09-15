@@ -583,7 +583,7 @@ cmp.setup({
         { name = "buffer" },
         { name = "crates" },
         { name = 'nvim_lsp_signature_help' },
-        { name = 'dictionary', keyword_length = 2 },
+        --{ name = 'dictionary', keyword_length = 2 },
     },
 
     formatting = {
@@ -625,10 +625,10 @@ cmp.setup.cmdline(":", {
     sources = cmp.config.sources({ { name = "path" } }, { { name = "cmdline" } }),
 })
 
-require("cmp_dictionary").setup({
+--[[ require("cmp_dictionary").setup({
     paths = { "~/vimconfig/mysnip/10k.txt" },
     exact_length = 2
-})
+}) ]]
 
 -------------------------------------------------------------------------------------------------
 --gotoconfig

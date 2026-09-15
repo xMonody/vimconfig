@@ -1,0 +1,34 @@
+#!/bin/zsh
+
+set -e
+cd "$(dirname "$0")"
+command -v passt >/dev/null || { echo "\e[31mpasst not install\e[0m" >&2; exit 1; }
+
+#UEFI=( -bios OVMF.fd )
+UEFI=( -drive if=pflash,format=raw,readonly=on,file=OVMF.fd -drive if=pflash,format=raw,file=VARS.fd )
+QNET=(-netdev passt,id=s,address=10.10.17.2/24,gateway=10.10.17.1,tcp-ports=2222:22 \
+    -device virtio-net-pci,netdev=s )
+
+QGPU=( -vga none -device virtio-gpu-pci,hostmem=2G,blob=on -display sdl,gl=on )
+#QGPU=( -vga virtio -display sdl )
+#QGPU=( -vga none -display none )
+
+QEMU_BIN=(qemu-system-x86_64 -accel kvm -machine q35 -cpu host -smp 4,threads=1 -m 5G)
+#QEMU_BIN=(qemu-system-aarch64 -accel kvm -machine virt,gic-version=3 -cpu host -smp 4 -m 5G)
+#QEMU_BIN=(qemu-system-aarch64 -accel tcg,thread=multi -machine virt -cpu cortex-a72 -smp 4 -m 5G)
+#QEMU_BIN=(qemu-system-loongarch64 -accel kvm -machine virt -cpu host -smp 4 -m 5G)
+#QEMU_BIN=(qemu-system-loongarch64 -accel tcg,thread=multi -machine virt -cpu la464 -smp 4 -m 5G)
+
+#SWTPM=( -chardev socket,id=chrtpm,path=./swtpm/swtpm-sock \
+#    -tpmdev emulator,id=tpm0,chardev=chrtpm -device tpm-tis,tpmdev=tpm0 )
+#swtpm socket --tpm2 --tpmstate dir=./swtpm --ctrl type=unixio,path=./swtpm/swtpm-sock &
+#TPM_PID=$!
+#trap 'kill "$TPM_PID" 2>/dev/null; wait "$TPM_PID" 2>/dev/null; rm -f "$SOCK"' EXIT
+
+"${QEMU_BIN[@]}" -drive file=./disk.qcow2,format=qcow2,if=virtio \
+    virtio-balloon-pci,free-page-reporting=on ${UEFI[@]} ${QNET[@]} \
+    ${QGPU[@]}
+    #-device qemu-xhci -device usb-kbd  -device usb-tablet
+
+# qemuimg qemu-img create -f qcow2 disk.qcow2 100G
+# mkdir swtpm && swtpm_setup --tpm2 --tpmstate ./swtpm

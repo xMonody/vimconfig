@@ -1,9 +1,9 @@
 # install Install the required tools
 ```bash
 # Debian
-sudo apt-get install ripgrep silversearcher-ag fd-find fzf bat python3-pynvim command-not-found # msgpack-python python3-u-msgpack
+sudo apt-get install ripgrep silversearcher-ag fd-find fzf zoxide bat python3-pynvim command-not-found # msgpack-python python3-u-msgpack
 # ArchLinux
-sudo pacman -S ripgrep the_silver_searcher fd fzf bat python-pynvim pkgfile
+sudo pacman -S ripgrep the_silver_searcher fd fzf zoxide bat python-pynvim pkgfile
 ```
 
 # build vim
