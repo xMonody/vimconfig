@@ -215,7 +215,7 @@ let g:coc_global_extensions = [
     \ 'coc-json',
     \ 'coc-toml',
     \ 'coc-dictionary',
-    \ 'coc-word'
+    "\ 'coc-word'
 \]
 
 nnoremap <silent><nowait><expr> <C-d> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"

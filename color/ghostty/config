@@ -1,5 +1,4 @@
 # ~/.config/ghostty/config
-
 font-family="SauceCodePro NFM"
 font-size=16
 
@@ -46,6 +45,7 @@ keybind=ctrl+p=navigate_search:next
 keybind=ctrl+n=navigate_search:previous
 keybind=escape=end_search
 
+custom-shader = shaders/cursor-smear.glsl
 palette = 0=#51576d
 palette = 1=#e78284
 palette = 2=#a6d189

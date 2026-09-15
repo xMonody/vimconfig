@@ -9,3 +9,4 @@
 #export NATPROXY=1 # nat网络 虚拟机里开启
 
 source ~/vimconfig/shell/setting.zsh
+source ~/vimconfig/shell/theme0.zsh
