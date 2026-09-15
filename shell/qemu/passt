@@ -1,4 +1,5 @@
 #!/bin/zsh
+
 set -e
 cd "$(dirname "$0")"
 SOCK="/tmp/qemu_$(basename "$PWD").socket"
@@ -8,25 +9,23 @@ rm -f "$SOCK"
 #UEFI=( -bios OVMF.fd )
 UEFI=( -drive if=pflash,format=raw,readonly=on,file=OVMF.fd -drive if=pflash,format=raw,file=VARS.fd )
 
+#QGPU=( -vga none -device virtio-gpu-pci,hostmem=2G,blob=on -display sdl,gl=on )
+QGPU=( -vga virtio -display gtk )
+#QGPU=( -vga none -display none )
+
 QEMU_COMMAND="x86"  # x86 / arm / loong
-case "$QEMU_COMMAND" in
-    x86)
-        QEMU_BIN=(qemu-system-x86_64 -accel kvm -machine q35 -cpu host -smp 8 -m 6G)
-        ;;
-    arm)
-        QEMU_BIN=(qemu-system-aarch64 -accel kvm -machine virt,gic-version=3 -cpu host -smp 8 -m 6G)
-        # QEMU_BIN=(qemu-system-aarch64 -accel tcg,thread=multi -machine virt -cpu cortex-a72 -smp 4 -m 6G)
-        ;;
-    loong)
-        QEMU_BIN=(qemu-system-loongarch64 -accel kvm -machine virt -cpu host -smp 8 -m 6G)
-        # QEMU_BIN=(qemu-system-loongarch64 -accel tcg,thread=multi -machine virt -cpu la464 -smp 4 -m 6G)
-        ;;
-    *)
-        echo "\e[31mUnknown architecture: $QEMU_COMMAND\e[0m" >&2
-    exit 1 ;; esac
+if [[ $QEMU_COMMAND == x86 ]]; then
+    QEMU_BIN=(qemu-system-x86_64 -accel kvm -machine q35 -cpu host -smp 8 -m 6G)
+elif [[ $QEMU_COMMAND == arm ]]; then
+    QEMU_BIN=(qemu-system-aarch64 -accel kvm -machine virt,gic-version=3 -cpu host -smp 8 -m 6G)
+    # QEMU_BIN=(qemu-system-aarch64 -accel tcg,thread=multi -machine virt -cpu cortex-a72 -smp 4 -m 6G)
+elif [[ $QEMU_COMMAND == loong ]]; then
+    # QEMU_BIN=(qemu-system-loongarch64 -accel kvm -machine virt -cpu host -smp 8 -m 6G)
+    QEMU_BIN=(qemu-system-loongarch64 -accel tcg,thread=multi -machine virt -cpu la464 -smp 4 -m 6G)
+else
+    printf '\e[31mUnknown architecture: %s\e[0m\n' "$QEMU_COMMAND" >&2 exit 1
+fi
 
-
-# 使用标准 socket 模式启动 passt
 passt -f -s "$SOCK" -t 2222:22,3307:3306 -a 10.10.17.2/24 -g 10.10.17.1 &
 PASST_PID=$!
 trap 'kill "$PASST_PID" 2>/dev/null; wait "$PASST_PID" 2>/dev/null; rm -f "$SOCK"' EXIT
@@ -45,6 +44,5 @@ fi
 "${QEMU_BIN[@]}" -drive file=./disk.qcow2,format=qcow2,if=virtio \
     -device virtio-balloon-pci ${UEFI[@]} \
     -netdev stream,id=netdev0,server=off,addr.type=unix,addr.path="$SOCK" \
-    -device virtio-net-pci,netdev=netdev0 \
-    #-device qemu-xhci -device usb-kbd  -device usb-tablet \
-    -vga none -device virtio-gpu-pci,hostmem=2G,blob=on -display sdl,gl=on
+    -device virtio-net-pci,netdev=netdev0 ${QGPU[@]} \
+    #-device qemu-xhci -device usb-kbd  -device usb-tablet
